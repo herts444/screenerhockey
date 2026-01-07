@@ -6,6 +6,19 @@ from urllib.parse import urlparse, parse_qs
 from datetime import datetime, timedelta, timezone
 import httpx
 
+# Kyiv timezone (UTC+2, or UTC+3 during DST - using +2 for winter)
+KYIV_TZ = timezone(timedelta(hours=2))
+
+
+def to_kyiv_time(dt):
+    """Convert datetime to Kyiv timezone"""
+    if dt is None:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(KYIV_TZ)
+
+
 # Team names
 TEAM_NAMES_RU = {
     "ANA": "Анахайм Дакс", "ARI": "Аризона Койотс", "BOS": "Бостон Брюинз",
@@ -48,7 +61,8 @@ async def get_nhl_schedule(days: int):
     games = []
     async with httpx.AsyncClient(timeout=30.0) as client:
         for i in range(days):
-            date = (datetime.now() + timedelta(days=i)).strftime("%Y-%m-%d")
+            # Use Kyiv timezone for date calculation
+            date = (datetime.now(KYIV_TZ) + timedelta(days=i)).strftime("%Y-%m-%d")
             try:
                 response = await client.get(f"https://api-web.nhle.com/v1/schedule/{date}")
                 response.raise_for_status()
@@ -59,7 +73,8 @@ async def get_nhl_schedule(days: int):
                         for game in day.get("games", []):
                             game_date_str = game.get("startTimeUTC", "")
                             try:
-                                game_date = datetime.fromisoformat(game_date_str.replace("Z", "+00:00"))
+                                game_date_utc = datetime.fromisoformat(game_date_str.replace("Z", "+00:00"))
+                                game_date = to_kyiv_time(game_date_utc)
                             except:
                                 game_date = None
 
@@ -98,7 +113,8 @@ async def get_ahl_schedule(days: int):
 
     async with httpx.AsyncClient(timeout=30.0) as client:
         for i in range(days):
-            date = (datetime.now() + timedelta(days=i)).strftime("%Y-%m-%d")
+            # Use Kyiv timezone for date calculation
+            date = (datetime.now(KYIV_TZ) + timedelta(days=i)).strftime("%Y-%m-%d")
             try:
                 url = f"{base_url}?feed=modulekit&view=schedule&key=50c2cd9b5e18e390&fmt=json&client_code=ahl&lang=en&season_id=90&date={date}"
                 response = await client.get(url)
@@ -115,7 +131,8 @@ async def get_ahl_schedule(days: int):
                     seen_ids.add(game_id)
                     game_date_str = game.get("GameDateISO8601", "")
                     try:
-                        game_date = datetime.fromisoformat(game_date_str.replace("Z", "+00:00"))
+                        game_date_utc = datetime.fromisoformat(game_date_str.replace("Z", "+00:00"))
+                        game_date = to_kyiv_time(game_date_utc)
                     except:
                         game_date = None
 
@@ -151,8 +168,9 @@ async def get_liiga_schedule(days: int):
         response.raise_for_status()
         all_games = response.json()
 
-    now_utc = datetime.now(timezone.utc)
-    start = datetime(now_utc.year, now_utc.month, now_utc.day)
+    # Use Kyiv time for date calculations
+    now_kyiv = datetime.now(KYIV_TZ)
+    start = datetime(now_kyiv.year, now_kyiv.month, now_kyiv.day, tzinfo=KYIV_TZ)
     end = start + timedelta(days=days + 1)
 
     result = []
@@ -168,9 +186,9 @@ async def get_liiga_schedule(days: int):
             continue
 
         try:
-            game_date = datetime.fromisoformat(game_start.replace("Z", "+00:00"))
-            game_date_naive = game_date.replace(tzinfo=None)
-            if not (start <= game_date_naive < end):
+            game_date_utc = datetime.fromisoformat(game_start.replace("Z", "+00:00"))
+            game_date = to_kyiv_time(game_date_utc)
+            if not (start <= game_date < end):
                 continue
         except:
             continue

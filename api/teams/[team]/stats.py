@@ -4,8 +4,11 @@ import json
 import asyncio
 from urllib.parse import urlparse, parse_qs
 import re
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from dataclasses import dataclass
+
+# Kyiv timezone (UTC+2, or UTC+3 during DST)
+KYIV_TZ = timezone(timedelta(hours=2))  # Winter time, DST handled manually if needed
 from typing import List, Dict, Tuple
 import math
 import httpx
