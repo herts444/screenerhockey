@@ -33,8 +33,15 @@ class LiigaApiService:
         """Get upcoming games for the next 7 days"""
         games = await self.get_games()
 
-        start = datetime.strptime(start_date, "%Y-%m-%d") if start_date else datetime.now()
-        end = start + timedelta(days=7)
+        # Используем начало текущего дня в UTC
+        if start_date:
+            start = datetime.strptime(start_date, "%Y-%m-%d")
+        else:
+            from datetime import timezone
+            now_utc = datetime.now(timezone.utc)
+            start = datetime(now_utc.year, now_utc.month, now_utc.day)
+
+        end = start + timedelta(days=8)  # +8 чтобы включить весь 7-й день
 
         upcoming = []
         for game in games:
@@ -44,7 +51,8 @@ class LiigaApiService:
 
             try:
                 game_date = datetime.fromisoformat(game_start.replace("Z", "+00:00"))
-                if start <= game_date.replace(tzinfo=None) <= end:
+                game_date_naive = game_date.replace(tzinfo=None)
+                if start <= game_date_naive < end:
                     # Only include non-finished games
                     if not game.get("ended", False):
                         upcoming.append(game)

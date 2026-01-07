@@ -2,7 +2,7 @@
   <div id="app">
     <header class="header">
       <div class="header-left">
-        <h1>{{ selectedLeague }} Screener</h1>
+        <h1>{{ selectedLeagueName }} Screener</h1>
         <div class="league-switcher">
           <button
             v-for="league in leagues"
@@ -10,7 +10,7 @@
             :class="['league-btn', { active: selectedLeague === league.code }]"
             @click="switchLeague(league.code)"
           >
-            {{ league.code }}
+            {{ league.name }}
           </button>
         </div>
       </div>
@@ -195,12 +195,16 @@ export default {
       leagues: [
         { code: 'NHL', name: 'NHL', name_ru: 'НХЛ' },
         { code: 'AHL', name: 'AHL', name_ru: 'АХЛ' },
-        { code: 'LIIGA', name: 'Liiga', name_ru: 'Лиига' }
+        { code: 'LIIGA', name: 'Финляндия', name_ru: 'Финляндия' }
       ]
     }
   },
   computed: {
     // Current league data shortcuts
+    selectedLeagueName() {
+      const league = this.leagues.find(l => l.code === this.selectedLeague)
+      return league?.name || this.selectedLeague
+    },
     games() {
       return this.leagueData[this.selectedLeague]?.games || []
     },
@@ -245,6 +249,9 @@ export default {
 
     await this.loadStatus()
     await this.loadGames()
+
+    // Если нет матчей на выбранную дату, выбираем первую дату с матчами
+    this.selectFirstAvailableDate()
   },
   methods: {
     async loadStatus() {
@@ -356,26 +363,54 @@ export default {
         await this.loadStatus()
         await this.loadGames()
       }
+
+      // Выбираем первую доступную дату с матчами для новой лиги
+      this.selectFirstAvailableDate()
+    },
+
+    selectFirstAvailableDate() {
+      // Если на текущую дату есть матчи — оставляем
+      if (this.filteredGames.length > 0) return
+
+      // Иначе ищем первую дату с матчами
+      for (const dateOption of this.availableDates) {
+        const gamesOnDate = this.games.filter(game => {
+          if (!game.date_iso) return false
+          return game.date_iso.split('T')[0] === dateOption.value
+        })
+        if (gamesOnDate.length > 0) {
+          this.selectedDate = dateOption.value
+          return
+        }
+      }
     },
 
     getAwayIndividualTotal(game, threshold) {
       const stats = this.statsCache[game.away_team.abbrev]
-      return stats?.stats?.away?.individual_totals?.[`${threshold}+`] || null
+      const data = stats?.stats?.away?.individual_totals?.[`${threshold}+`]
+      if (!data) return null
+      return { ...data, total_matches: stats?.stats?.away?.total_matches }
     },
 
     getHomeIndividualTotal(game, threshold) {
       const stats = this.statsCache[game.home_team.abbrev]
-      return stats?.stats?.home?.individual_totals?.[`${threshold}+`] || null
+      const data = stats?.stats?.home?.individual_totals?.[`${threshold}+`]
+      if (!data) return null
+      return { ...data, total_matches: stats?.stats?.home?.total_matches }
     },
 
     getAwayMatchTotal(game, threshold) {
       const stats = this.statsCache[game.away_team.abbrev]
-      return stats?.stats?.away?.match_totals?.[`${threshold}+`] || null
+      const data = stats?.stats?.away?.match_totals?.[`${threshold}+`]
+      if (!data) return null
+      return { ...data, total_matches: stats?.stats?.away?.total_matches }
     },
 
     getHomeMatchTotal(game, threshold) {
       const stats = this.statsCache[game.home_team.abbrev]
-      return stats?.stats?.home?.match_totals?.[`${threshold}+`] || null
+      const data = stats?.stats?.home?.match_totals?.[`${threshold}+`]
+      if (!data) return null
+      return { ...data, total_matches: stats?.stats?.home?.total_matches }
     },
 
     showDetails(game, location, type, threshold) {

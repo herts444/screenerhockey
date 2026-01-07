@@ -1,7 +1,10 @@
 import axios from 'axios'
 
+// Use environment variable for API URL, fallback to relative path for dev proxy
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_BASE_URL,
   timeout: 30000
 })
 
@@ -39,20 +42,11 @@ export const hockeyApi = {
     return response.data
   },
 
-  // Sync teams from API
-  async syncTeams(league = 'NHL') {
-    const response = await api.post('/sync/teams', null, {
-      params: { league }
-    })
-    return response.data
-  },
-
-  // Sync all games
-  async syncGames(league = 'NHL', season = '20242025') {
-    const response = await api.post('/sync/games', null, {
-      params: { league, season }
-    })
-    return response.data
+  // Refresh data (for serverless, just returns success - data is always fresh)
+  async syncGames(league = 'NHL') {
+    // In serverless mode, data is fetched fresh from APIs
+    // This method exists for backwards compatibility
+    return { success: true, message: "Data refreshed from source APIs" }
   },
 
   // Get system status

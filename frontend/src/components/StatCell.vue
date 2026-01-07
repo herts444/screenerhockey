@@ -1,7 +1,8 @@
 <template>
   <div class="stat-cell" :class="probClass" @click="$emit('click')">
     <template v-if="data">
-      <span class="count">{{ data.count }}</span>
+      <span class="count">{{ data.total_matches || data.count }}</span>
+      <span class="ratio">{{ data.count }}/{{ data.total_matches || data.count }}</span>
       <span class="percent">{{ data.weighted_percentage }}%</span>
     </template>
     <template v-else>
@@ -52,6 +53,11 @@ export default {
 .count {
   font-weight: 600;
   font-size: 13px;
+}
+
+.ratio {
+  font-size: 10px;
+  opacity: 0.7;
 }
 
 .percent {
