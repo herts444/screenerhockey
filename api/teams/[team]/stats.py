@@ -127,7 +127,8 @@ async def get_nhl_team_stats(team_abbrev: str, last_n: int = 0):
         schedule = response.json()
 
     games = schedule.get("games", [])
-    finished = [g for g in games if g.get("gameState") in ["OFF", "FINAL"]]
+    # Filter only regular season games (gameType == 2), exclude preseason (1) and playoffs (3)
+    finished = [g for g in games if g.get("gameState") in ["OFF", "FINAL"] and g.get("gameType") == 2]
 
     home_matches, away_matches = [], []
     for game in finished:
