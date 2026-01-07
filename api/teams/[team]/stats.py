@@ -125,7 +125,7 @@ def get_full_team_stats(home_matches: List[GameResult], away_matches: List[GameR
 
 async def get_nhl_team_stats(team_abbrev: str, last_n: int = 0):
     async with httpx.AsyncClient(timeout=30.0) as client:
-        response = await client.get(f"https://api-web.nhle.com/v1/club-schedule-season/{team_abbrev}/20242025")
+        response = await client.get(f"https://api-web.nhle.com/v1/club-schedule-season/{team_abbrev}/20252026")
         response.raise_for_status()
         schedule = response.json()
 
