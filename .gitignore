@@ -1,0 +1,9 @@
+node_modules/
+__pycache__/
+*.pyc
+*.db
+.vite/
+dist/
+.env
+nul
+.claude/
