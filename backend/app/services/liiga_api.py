@@ -1,6 +1,16 @@
 import httpx
+import unicodedata
 from datetime import datetime, timedelta
 from typing import Optional, List
+
+
+def normalize_abbrev(text: str) -> str:
+    """Normalize abbreviation by removing diacritics (ä->A, ö->O, etc.)"""
+    # NFD decomposition separates base chars from combining marks
+    normalized = unicodedata.normalize('NFD', text)
+    # Remove combining marks (accents, umlauts, etc.)
+    ascii_text = ''.join(c for c in normalized if unicodedata.category(c) != 'Mn')
+    return ascii_text.upper()
 
 
 class LiigaApiService:
@@ -74,7 +84,9 @@ class LiigaApiService:
                 team_id = team_data.get("teamId", "")
                 if team_id and team_id not in teams:
                     # Parse team abbrev from teamId (format: "1234567:abbrev")
-                    abbrev = team_id.split(":")[-1].upper() if ":" in team_id else team_id
+                    raw_abbrev = team_id.split(":")[-1] if ":" in team_id else team_id
+                    # Normalize to remove Finnish diacritics (ä->A, etc.)
+                    abbrev = normalize_abbrev(raw_abbrev)
 
                     teams[team_id] = {
                         "id": team_id,

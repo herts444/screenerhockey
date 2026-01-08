@@ -3,7 +3,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from ..models.database import Team, Game, DataUpdate
-from .liiga_api import LiigaApiService, LIIGA_TEAM_NAMES_RU
+from .liiga_api import LiigaApiService, LIIGA_TEAM_NAMES_RU, normalize_abbrev
 from .stats_calculator import StatsCalculator, GameResult
 
 
@@ -254,8 +254,11 @@ class LiigaDataService:
             home_id = home_data.get("teamId", "")
             away_id = away_data.get("teamId", "")
 
-            home_abbrev = home_id.split(":")[-1].upper() if ":" in home_id else home_id
-            away_abbrev = away_id.split(":")[-1].upper() if ":" in away_id else away_id
+            # Normalize abbreviations to remove Finnish diacritics
+            raw_home = home_id.split(":")[-1] if ":" in home_id else home_id
+            raw_away = away_id.split(":")[-1] if ":" in away_id else away_id
+            home_abbrev = normalize_abbrev(raw_home)
+            away_abbrev = normalize_abbrev(raw_away)
 
             home_team = db.query(Team).filter(
                 Team.league == self.LEAGUE,

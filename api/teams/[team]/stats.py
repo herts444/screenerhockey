@@ -2,6 +2,7 @@
 from http.server import BaseHTTPRequestHandler
 import json
 import asyncio
+import unicodedata
 from urllib.parse import urlparse, parse_qs
 import re
 from datetime import datetime, timezone, timedelta
@@ -12,6 +13,13 @@ KYIV_TZ = timezone(timedelta(hours=2))  # Winter time, DST handled manually if n
 from typing import List, Dict, Tuple
 import math
 import httpx
+
+
+def normalize_abbrev(text: str) -> str:
+    """Normalize abbreviation by removing diacritics (ä->A, ö->O, etc.)"""
+    normalized = unicodedata.normalize('NFD', text)
+    ascii_text = ''.join(c for c in normalized if unicodedata.category(c) != 'Mn')
+    return ascii_text.upper()
 
 # Team names
 TEAM_NAMES_RU = {
@@ -232,7 +240,8 @@ async def get_liiga_team_stats(team_abbrev: str, last_n: int = 0):
     for game in games:
         for team_data in [game.get("homeTeam", {}), game.get("awayTeam", {})]:
             tid = team_data.get("teamId", "")
-            abbrev = tid.split(":")[-1].upper() if ":" in tid else tid
+            raw_abbrev = tid.split(":")[-1] if ":" in tid else tid
+            abbrev = normalize_abbrev(raw_abbrev)
             if abbrev == team_abbrev:
                 team_id = tid
                 team_info = {"abbrev": abbrev, "name": team_data.get("teamName", ""), "name_ru": LIIGA_TEAM_NAMES_RU.get(abbrev), "logo_url": team_data.get("logos", {}).get("darkBg", "")}
@@ -262,7 +271,8 @@ async def get_liiga_team_stats(team_abbrev: str, last_n: int = 0):
             opp_id = home_data.get("teamId", "")
             opp_name = home_data.get("teamName", "")
 
-        opp_abbrev = opp_id.split(":")[-1].upper() if ":" in opp_id else opp_id
+        raw_opp = opp_id.split(":")[-1] if ":" in opp_id else opp_id
+        opp_abbrev = normalize_abbrev(raw_opp)
 
         try:
             game_date = datetime.fromisoformat(game.get("start", "").replace("Z", "+00:00")).replace(tzinfo=None)

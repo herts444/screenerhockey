@@ -2,9 +2,17 @@
 from http.server import BaseHTTPRequestHandler
 import json
 import asyncio
+import unicodedata
 from urllib.parse import urlparse, parse_qs
 from datetime import datetime, timedelta, timezone
 import httpx
+
+
+def normalize_abbrev(text: str) -> str:
+    """Normalize abbreviation by removing diacritics (ä->A, ö->O, etc.)"""
+    normalized = unicodedata.normalize('NFD', text)
+    ascii_text = ''.join(c for c in normalized if unicodedata.category(c) != 'Mn')
+    return ascii_text.upper()
 
 # Kyiv timezone (UTC+2, or UTC+3 during DST - using +2 for winter)
 KYIV_TZ = timezone(timedelta(hours=2))
@@ -199,8 +207,10 @@ async def get_liiga_schedule(days: int):
         away_data = game.get("awayTeam", {})
         home_id = home_data.get("teamId", "")
         away_id = away_data.get("teamId", "")
-        home_abbrev = home_id.split(":")[-1].upper() if ":" in home_id else home_id
-        away_abbrev = away_id.split(":")[-1].upper() if ":" in away_id else away_id
+        raw_home = home_id.split(":")[-1] if ":" in home_id else home_id
+        raw_away = away_id.split(":")[-1] if ":" in away_id else away_id
+        home_abbrev = normalize_abbrev(raw_home)
+        away_abbrev = normalize_abbrev(raw_away)
 
         result.append({
             "game_id": f"liiga_{game_id}",
