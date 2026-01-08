@@ -182,7 +182,8 @@ export default {
       leagueData: {
         NHL: { games: [], statsCache: {}, loaded: false },
         AHL: { games: [], statsCache: {}, loaded: false },
-        LIIGA: { games: [], statsCache: {}, loaded: false }
+        LIIGA: { games: [], statsCache: {}, loaded: false },
+        DEL: { games: [], statsCache: {}, loaded: false }
       },
       status: null,
       loading: false,
