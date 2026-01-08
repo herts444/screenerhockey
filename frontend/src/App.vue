@@ -195,7 +195,8 @@ export default {
       leagues: [
         { code: 'NHL', name: 'NHL', name_ru: 'НХЛ' },
         { code: 'AHL', name: 'AHL', name_ru: 'АХЛ' },
-        { code: 'LIIGA', name: 'Финляндия', name_ru: 'Финляндия' }
+        { code: 'LIIGA', name: 'Финляндия', name_ru: 'Финляндия' },
+        { code: 'DEL', name: 'Германия', name_ru: 'Германия' }
       ]
     }
   },

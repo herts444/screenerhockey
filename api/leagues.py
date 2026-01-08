@@ -15,7 +15,8 @@ class handler(BaseHTTPRequestHandler):
             "leagues": [
                 {"code": "NHL", "name": "NHL", "name_ru": "НХЛ", "cached": True},
                 {"code": "AHL", "name": "AHL", "name_ru": "АХЛ", "cached": True},
-                {"code": "LIIGA", "name": "Liiga", "name_ru": "Лиига (Финляндия)", "cached": True}
+                {"code": "LIIGA", "name": "Liiga", "name_ru": "Финляндия", "cached": True},
+                {"code": "DEL", "name": "DEL", "name_ru": "Германия", "cached": True}
             ]
         }
         self.wfile.write(json.dumps(leagues).encode())

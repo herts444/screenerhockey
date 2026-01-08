@@ -64,6 +64,21 @@ LIIGA_TEAM_NAMES_RU = {
     "KOOKOO": "Кукоо Коувола", "ÄSSÄT": "Ассат Пори", "KÄRPÄT": "Кярпят Оулу",
 }
 
+DEL_TEAM_NAMES_RU = {
+    "MAN": "Адлер Мангейм", "AEV": "Аугсбургер Пантерз", "EBB": "Айсберен Берлин",
+    "ING": "ЭРЦ Ингольштадт", "WOB": "Гриззлис Вольфсбург", "IEC": "Изерлон Рустерс",
+    "KEC": "Кёльнер Хайе", "FRA": "Лёвен Франкфурт", "NIT": "Нюрнберг Айс Тайгерс",
+    "BHV": "Пингвинс Бремерхафен", "RBM": "Ред Булл Мюнхен", "SWW": "Швеннингер Уайлд Уингс",
+    "STR": "Штраубинг Тайгерс", "Dresdner": "Дрезднер Айслёвен",
+}
+
+# DEL team ID to shortName mapping (from OpenLigaDB)
+DEL_TEAM_ID_MAP = {
+    338: "MAN", 348: "AEV", 332: "Dresdner", 641: "EBB", 345: "ING",
+    5042: "WOB", 347: "IEC", 344: "KEC", 5283: "FRA", 5450: "NIT",
+    5041: "BHV", 2773: "RBM", 2781: "SWW", 351: "STR",
+}
+
 
 async def get_nhl_schedule(days: int):
     games = []
@@ -234,6 +249,67 @@ async def get_liiga_schedule(days: int):
     return sorted(result, key=lambda g: g.get("date_iso", ""))
 
 
+async def get_del_schedule(days: int):
+    """Get DEL (German) schedule from OpenLigaDB"""
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        response = await client.get("https://api.openligadb.de/getmatchdata/del/2025")
+        response.raise_for_status()
+        all_games = response.json()
+
+    # Use Kyiv time for date calculations
+    now_kyiv = datetime.now(KYIV_TZ)
+    start = datetime(now_kyiv.year, now_kyiv.month, now_kyiv.day, tzinfo=KYIV_TZ)
+    end = start + timedelta(days=days + 1)
+
+    result = []
+    seen_ids = set()
+
+    for game in all_games:
+        game_id = game.get("matchID")
+        if game_id in seen_ids or game.get("matchIsFinished", False):
+            continue
+
+        match_time_utc = game.get("matchDateTimeUTC", "")
+        if not match_time_utc:
+            continue
+
+        try:
+            game_date_utc = datetime.fromisoformat(match_time_utc.replace("Z", "+00:00"))
+            game_date = to_kyiv_time(game_date_utc)
+            if not (start <= game_date < end):
+                continue
+        except:
+            continue
+
+        seen_ids.add(game_id)
+
+        team1 = game.get("team1", {})
+        team2 = game.get("team2", {})
+        home_abbrev = team1.get("shortName", "")
+        away_abbrev = team2.get("shortName", "")
+
+        result.append({
+            "game_id": f"del_{game_id}",
+            "date": game_date.strftime("%d.%m.%Y %H:%M"),
+            "date_iso": game_date.isoformat(),
+            "home_team": {
+                "abbrev": home_abbrev,
+                "name": team1.get("teamName", home_abbrev),
+                "name_ru": DEL_TEAM_NAMES_RU.get(home_abbrev, team1.get("teamName", home_abbrev)),
+                "logo_url": team1.get("teamIconUrl", "")
+            },
+            "away_team": {
+                "abbrev": away_abbrev,
+                "name": team2.get("teamName", away_abbrev),
+                "name_ru": DEL_TEAM_NAMES_RU.get(away_abbrev, team2.get("teamName", away_abbrev)),
+                "logo_url": team2.get("teamIconUrl", "")
+            },
+            "venue": game.get("location", {}).get("locationCity", "") if game.get("location") else ""
+        })
+
+    return sorted(result, key=lambda g: g.get("date_iso", ""))
+
+
 async def get_schedule(league: str, days: int):
     if league == "NHL":
         return await get_nhl_schedule(days)
@@ -241,6 +317,8 @@ async def get_schedule(league: str, days: int):
         return await get_ahl_schedule(days)
     elif league == "LIIGA":
         return await get_liiga_schedule(days)
+    elif league == "DEL":
+        return await get_del_schedule(days)
     return []
 
 

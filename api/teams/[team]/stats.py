@@ -58,6 +58,21 @@ LIIGA_TEAM_NAMES_RU = {
     "KOOKOO": "Кукоо Коувола", "ÄSSÄT": "Ассат Пори", "KÄRPÄT": "Кярпят Оулу",
 }
 
+DEL_TEAM_NAMES_RU = {
+    "MAN": "Адлер Мангейм", "AEV": "Аугсбургер Пантерз", "EBB": "Айсберен Берлин",
+    "ING": "ЭРЦ Ингольштадт", "WOB": "Гриззлис Вольфсбург", "IEC": "Изерлон Рустерс",
+    "KEC": "Кёльнер Хайе", "FRA": "Лёвен Франкфурт", "NIT": "Нюрнберг Айс Тайгерс",
+    "BHV": "Пингвинс Бремерхафен", "RBM": "Ред Булл Мюнхен", "SWW": "Швеннингер Уайлд Уингс",
+    "STR": "Штраубинг Тайгерс", "DRESDNER": "Дрезднер Айслёвен",
+}
+
+# DEL shortName to teamId mapping
+DEL_TEAM_ABBREV_MAP = {
+    "MAN": 338, "AEV": 348, "DRESDNER": 332, "EBB": 641, "ING": 345,
+    "WOB": 5042, "IEC": 347, "KEC": 344, "FRA": 5283, "NIT": 5450,
+    "BHV": 5041, "RBM": 2773, "SWW": 2781, "STR": 351,
+}
+
 
 @dataclass
 class GameResult:
@@ -294,6 +309,93 @@ async def get_liiga_team_stats(team_abbrev: str, last_n: int = 0):
     return {"team": team_info, "stats": get_full_team_stats(home_matches, away_matches)}
 
 
+async def get_del_team_stats(team_abbrev: str, last_n: int = 0):
+    """Get DEL team stats from OpenLigaDB"""
+    team_id = DEL_TEAM_ABBREV_MAP.get(team_abbrev.upper())
+    if not team_id:
+        return {}
+
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        response = await client.get("https://api.openligadb.de/getmatchdata/del/2025")
+        response.raise_for_status()
+        all_games = response.json()
+
+    # Filter finished games for this team
+    finished = [g for g in all_games if g.get("matchIsFinished", False)]
+    team_games = [g for g in finished if g.get("team1", {}).get("teamId") == team_id or g.get("team2", {}).get("teamId") == team_id]
+
+    home_matches, away_matches = [], []
+    team_info = None
+
+    for game in team_games:
+        team1 = game.get("team1", {})
+        team2 = game.get("team2", {})
+        is_home = team1.get("teamId") == team_id
+
+        # Get final score from matchResults
+        results = game.get("matchResults", [])
+        final_result = next((r for r in results if r.get("resultTypeID") == 2), None)
+        if not final_result:
+            continue
+
+        home_score = final_result.get("pointsTeam1", 0)
+        away_score = final_result.get("pointsTeam2", 0)
+
+        if is_home:
+            team_score, opp_score = home_score, away_score
+            opp_abbrev = team2.get("shortName", "")
+            opp_name = team2.get("teamName", "")
+            if not team_info:
+                team_info = {
+                    "abbrev": team1.get("shortName", team_abbrev),
+                    "name": team1.get("teamName", ""),
+                    "name_ru": DEL_TEAM_NAMES_RU.get(team_abbrev.upper()),
+                    "logo_url": team1.get("teamIconUrl", "")
+                }
+        else:
+            team_score, opp_score = away_score, home_score
+            opp_abbrev = team1.get("shortName", "")
+            opp_name = team1.get("teamName", "")
+            if not team_info:
+                team_info = {
+                    "abbrev": team2.get("shortName", team_abbrev),
+                    "name": team2.get("teamName", ""),
+                    "name_ru": DEL_TEAM_NAMES_RU.get(team_abbrev.upper()),
+                    "logo_url": team2.get("teamIconUrl", "")
+                }
+
+        try:
+            game_date = datetime.fromisoformat(game.get("matchDateTimeUTC", "").replace("Z", "+00:00")).replace(tzinfo=None)
+        except:
+            continue
+
+        result = GameResult(
+            str(game.get("matchID")),
+            game_date,
+            DEL_TEAM_NAMES_RU.get(opp_abbrev.upper(), opp_name),
+            opp_abbrev,
+            is_home,
+            team_score,
+            opp_score,
+            team_score + opp_score
+        )
+        if is_home:
+            home_matches.append(result)
+        else:
+            away_matches.append(result)
+
+    home_matches.sort(key=lambda x: x.date, reverse=True)
+    away_matches.sort(key=lambda x: x.date, reverse=True)
+    if last_n > 0:
+        home_matches = home_matches[:last_n]
+        away_matches = away_matches[:last_n]
+
+    if not team_info:
+        team_info = {"abbrev": team_abbrev, "name": team_abbrev, "name_ru": DEL_TEAM_NAMES_RU.get(team_abbrev.upper()), "logo_url": None}
+
+    return {"team": team_info, "stats": get_full_team_stats(home_matches, away_matches)}
+
+
 async def get_team_stats(league: str, team_abbrev: str, last_n: int = 0):
     if league == "NHL":
         return await get_nhl_team_stats(team_abbrev, last_n)
@@ -301,6 +403,8 @@ async def get_team_stats(league: str, team_abbrev: str, last_n: int = 0):
         return await get_ahl_team_stats(team_abbrev, last_n)
     elif league == "LIIGA":
         return await get_liiga_team_stats(team_abbrev, last_n)
+    elif league == "DEL":
+        return await get_del_team_stats(team_abbrev, last_n)
     return {}
 
 

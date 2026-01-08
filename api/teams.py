@@ -41,6 +41,14 @@ LIIGA_TEAM_NAMES_RU = {
     "KOOKOO": "Кукоо Коувола", "ÄSSÄT": "Ассат Пори", "KÄRPÄT": "Кярпят Оулу",
 }
 
+DEL_TEAM_NAMES_RU = {
+    "MAN": "Адлер Мангейм", "AEV": "Аугсбургер Пантерз", "EBB": "Айсберен Берлин",
+    "ING": "ЭРЦ Ингольштадт", "WOB": "Гриззлис Вольфсбург", "IEC": "Изерлон Рустерс",
+    "KEC": "Кёльнер Хайе", "FRA": "Лёвен Франкфурт", "NIT": "Нюрнберг Айс Тайгерс",
+    "BHV": "Пингвинс Бремерхафен", "RBM": "Ред Булл Мюнхен", "SWW": "Швеннингер Уайлд Уингс",
+    "STR": "Штраубинг Тайгерс", "Dresdner": "Дрезднер Айслёвен",
+}
+
 
 async def get_nhl_teams():
     async with httpx.AsyncClient(timeout=30.0) as client:
@@ -100,6 +108,25 @@ async def get_liiga_teams():
     return list(teams.values())
 
 
+async def get_del_teams():
+    """Get DEL teams from OpenLigaDB"""
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        response = await client.get("https://api.openligadb.de/getavailableteams/del/2025")
+        response.raise_for_status()
+        teams_data = response.json()
+
+    teams = []
+    for team in teams_data:
+        abbrev = team.get("shortName", "")
+        teams.append({
+            "abbrev": abbrev,
+            "name": team.get("teamName", ""),
+            "name_ru": DEL_TEAM_NAMES_RU.get(abbrev, team.get("teamName", "")),
+            "logo_url": team.get("teamIconUrl", "")
+        })
+    return teams
+
+
 async def get_teams(league: str):
     if league == "NHL":
         return await get_nhl_teams()
@@ -107,6 +134,8 @@ async def get_teams(league: str):
         return await get_ahl_teams()
     elif league == "LIIGA":
         return await get_liiga_teams()
+    elif league == "DEL":
+        return await get_del_teams()
     return []
 
 
