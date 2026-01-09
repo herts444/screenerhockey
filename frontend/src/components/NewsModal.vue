@@ -45,9 +45,9 @@
             <div class="news-date" v-if="article.date">
               {{ formatDate(article.date) }}
             </div>
-            <div class="news-title">{{ article.title_ru || article.title }}</div>
+            <div class="news-title">{{ cleanText(article.title_ru || article.title) }}</div>
             <div class="news-content" v-if="article.content_ru || article.content">
-              {{ truncateText(article.content_ru || article.content, 200) }}
+              {{ truncateText(article.content_ru || article.content, 300) }}
             </div>
           </div>
         </div>
@@ -132,10 +132,23 @@ export default {
         return dateStr
       }
     },
+    cleanText(text) {
+      if (!text) return ''
+      // Remove "Подробнее", "Mehr", etc. that got concatenated
+      return text
+        .replace(/\.{2,}Подробнее/g, '')
+        .replace(/Подробнее$/g, '')
+        .replace(/\.{2,}Mehr/g, '')
+        .replace(/Mehr$/g, '')
+        .replace(/weiterlesen$/gi, '')
+        .replace(/read more$/gi, '')
+        .trim()
+    },
     truncateText(text, maxLength) {
       if (!text) return ''
-      if (text.length <= maxLength) return text
-      return text.substring(0, maxLength).trim() + '...'
+      const cleaned = this.cleanText(text)
+      if (cleaned.length <= maxLength) return cleaned
+      return cleaned.substring(0, maxLength).trim() + '...'
     },
     openArticle(article) {
       if (article.link) {

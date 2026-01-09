@@ -180,14 +180,18 @@ async def fetch_article_content(url: str, client: httpx.AsyncClient) -> str:
 
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        # Remove scripts, styles, nav, footer
-        for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
+        # Remove scripts, styles, nav, footer, buttons
+        for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside', 'button']):
             tag.decompose()
+
+        # Remove "read more" links and similar
+        for el in soup.select('a.more-link, .read-more, .mehr-link, [class*="more"]'):
+            el.decompose()
 
         # Try common article content selectors
         content_selectors = [
             'article .content', 'article .entry-content', '.article-content',
-            '.news-content', '.post-content', '.single-content',
+            '.news-content', '.post-content', '.single-content', '.news-detail',
             'article p', '.content-main p', 'main p'
         ]
 
@@ -198,7 +202,18 @@ async def fetch_article_content(url: str, client: httpx.AsyncClient) -> str:
                 paragraphs = []
                 for el in elements:
                     text = el.get_text(strip=True)
+                    # Filter out junk text
                     if text and len(text) > 30:
+                        # Skip "read more" type text
+                        if text.lower() in ['mehr', 'mehr lesen', 'weiterlesen', 'podrobneje', 'подробнее', 'more', 'read more']:
+                            continue
+                        # Remove trailing "...Подробнее" or similar
+                        text = text.replace('...Подробнее', '').replace('...Mehr', '').replace('...mehr', '')
+                        text = text.rstrip('.')
+                        if text.endswith('Подробнее'):
+                            text = text[:-9].rstrip()
+                        if text.endswith('Mehr'):
+                            text = text[:-4].rstrip()
                         paragraphs.append(text)
                 if paragraphs:
                     content = "\n\n".join(paragraphs[:10])  # Max 10 paragraphs
