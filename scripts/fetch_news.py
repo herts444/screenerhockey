@@ -32,7 +32,7 @@ DEL_NEWS_SOURCES = {
     },
     "EBB": {
         "name": "Eisbären Berlin",
-        "news_url": "https://www.eisbaeren.de/aktuelle-nachrichten",
+        "news_url": "https://www.eisbaeren.de/news",
     },
     "ING": {
         "name": "ERC Ingolstadt",
