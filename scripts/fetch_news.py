@@ -181,47 +181,78 @@ async def fetch_article_content(url: str, client: httpx.AsyncClient) -> str:
         soup = BeautifulSoup(response.text, 'html.parser')
 
         # Remove scripts, styles, nav, footer, buttons
-        for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside', 'button']):
+        for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside', 'button', 'form']):
             tag.decompose()
 
         # Remove "read more" links and similar
-        for el in soup.select('a.more-link, .read-more, .mehr-link, [class*="more"]'):
+        for el in soup.select('a.more-link, .read-more, .mehr-link, [class*="more"], .social-share, .sharing'):
             el.decompose()
 
-        # Try common article content selectors
-        content_selectors = [
-            'article .content', 'article .entry-content', '.article-content',
-            '.news-content', '.post-content', '.single-content', '.news-detail',
-            'article p', '.content-main p', 'main p'
-        ]
-
         content = ""
-        for selector in content_selectors:
+
+        # Site-specific selectors
+        if 'eisbaeren.de' in url:
+            # Eisbären Berlin specific
+            selectors = ['.news-detail-text', '.news-text', '.detail-text', '.text-content',
+                        '.news-detail', 'article .text', '.content-text', 'main .text']
+        elif 'eisloewen.de' in url:
+            selectors = ['.entry-content', '.post-content', 'article .content']
+        else:
+            # Generic selectors
+            selectors = [
+                'article .content', 'article .entry-content', '.article-content',
+                '.news-content', '.post-content', '.single-content', '.news-detail',
+                '.entry-content', '.text-content', '.article-text',
+                'article p', '.content-main p', 'main p'
+            ]
+
+        for selector in selectors:
             elements = soup.select(selector)
             if elements:
                 paragraphs = []
                 for el in elements:
-                    text = el.get_text(strip=True)
-                    # Filter out junk text
-                    if text and len(text) > 30:
-                        # Skip "read more" type text
-                        if text.lower() in ['mehr', 'mehr lesen', 'weiterlesen', 'podrobneje', 'подробнее', 'more', 'read more']:
-                            continue
-                        # Remove trailing "...Подробнее" or similar
-                        text = text.replace('...Подробнее', '').replace('...Mehr', '').replace('...mehr', '')
-                        text = text.rstrip('.')
-                        if text.endswith('Подробнее'):
-                            text = text[:-9].rstrip()
-                        if text.endswith('Mehr'):
-                            text = text[:-4].rstrip()
-                        paragraphs.append(text)
+                    # Get all paragraphs within the element
+                    ps = el.find_all('p')
+                    if ps:
+                        for p in ps:
+                            text = p.get_text(strip=True)
+                            if text and len(text) > 20:
+                                paragraphs.append(text)
+                    else:
+                        # If no <p> tags, get text directly
+                        text = el.get_text(strip=True)
+                        if text and len(text) > 30:
+                            paragraphs.append(text)
+
                 if paragraphs:
-                    content = "\n\n".join(paragraphs[:10])  # Max 10 paragraphs
+                    content = "\n\n".join(paragraphs[:15])  # Max 15 paragraphs
                     break
 
+        # If still no content, try getting all <p> tags from main/article
+        if not content:
+            main_content = soup.select_one('main, article, .content, #content')
+            if main_content:
+                paragraphs = []
+                for p in main_content.find_all('p'):
+                    text = p.get_text(strip=True)
+                    if text and len(text) > 30:
+                        # Skip junk
+                        if any(junk in text.lower() for junk in ['cookie', 'datenschutz', 'impressum', 'newsletter']):
+                            continue
+                        paragraphs.append(text)
+                if paragraphs:
+                    content = "\n\n".join(paragraphs[:15])
+
+        # Clean up content
+        content = content.replace('...Подробнее', '').replace('...Mehr', '')
+        if content.endswith('Подробнее'):
+            content = content[:-9].rstrip()
+        if content.endswith('Mehr'):
+            content = content[:-4].rstrip()
+
         # Limit content length
-        if len(content) > 2000:
-            content = content[:2000] + "..."
+        if len(content) > 3000:
+            content = content[:3000] + "..."
 
         return content
     except Exception as e:
@@ -350,7 +381,7 @@ async def fetch_team_news(team_abbrev: str, source: dict, client: httpx.AsyncCli
                 # Translate title and content
                 article["title_ru"] = await translate_text(article["title"], client)
                 if content:
-                    article["content_ru"] = await translate_text(content[:1500], client)
+                    article["content_ru"] = await translate_text(content[:2500], client)
                 else:
                     article["content_ru"] = ""
 
