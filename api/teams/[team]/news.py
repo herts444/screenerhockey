@@ -7,7 +7,7 @@ from urllib.parse import urlparse, parse_qs
 from datetime import datetime
 import httpx
 from bs4 import BeautifulSoup
-from deep_translator import GoogleTranslator
+from googletrans import Translator
 
 # DEL team news sources
 DEL_NEWS_SOURCES = {
@@ -83,8 +83,8 @@ DEL_NEWS_SOURCES = {
     },
 }
 
-# Initialize translator (German to Russian)
-translator = GoogleTranslator(source='de', target='ru')
+# Initialize translator
+translator = Translator()
 
 
 def translate_text(text: str) -> str:
@@ -92,7 +92,8 @@ def translate_text(text: str) -> str:
     if not text or len(text.strip()) < 3:
         return text
     try:
-        return translator.translate(text)
+        result = translator.translate(text, src='de', dest='ru')
+        return result.text
     except Exception:
         return text
 
