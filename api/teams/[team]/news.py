@@ -8,12 +8,24 @@ from pathlib import Path
 
 def load_news_cache():
     """Load news from cache file"""
-    cache_file = Path(__file__).parent.parent.parent.parent / "data" / "news_cache.json"
-    try:
-        with open(cache_file, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except Exception:
-        return {"teams": {}}
+    import os
+
+    # Try multiple possible paths for Vercel compatibility
+    possible_paths = [
+        Path(__file__).parent.parent.parent.parent / "data" / "news_cache.json",
+        Path("/var/task/data/news_cache.json"),
+        Path(os.getcwd()) / "data" / "news_cache.json",
+    ]
+
+    for cache_file in possible_paths:
+        try:
+            if cache_file.exists():
+                with open(cache_file, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+        except Exception:
+            continue
+
+    return {"teams": {}, "error": "Cache file not found"}
 
 
 def get_team_news(team_abbrev: str, limit: int = 5) -> dict:
