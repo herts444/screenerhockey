@@ -3,7 +3,7 @@
     <template v-if="data">
       <span class="count">{{ data.total_matches || data.count }}</span>
       <span class="ratio">{{ data.count }}/{{ data.total_matches || data.count }}</span>
-      <span class="percent">{{ data.weighted_percentage }}%</span>
+      <span class="percent">{{ simplePercentage }}%</span>
     </template>
     <template v-else>
       <span class="no-data">-</span>
@@ -22,9 +22,15 @@ export default {
   },
   emits: ['click'],
   computed: {
+    simplePercentage() {
+      if (!this.data) return 0
+      const total = this.data.total_matches || this.data.count || 1
+      const count = this.data.count || 0
+      return Math.round((count / total) * 100 * 10) / 10
+    },
     probClass() {
       if (!this.data) return ''
-      const pct = this.data.weighted_percentage
+      const pct = this.simplePercentage
       if (pct >= 70) return 'prob-high'
       if (pct >= 50) return 'prob-medium'
       if (pct >= 30) return 'prob-low'
