@@ -35,12 +35,36 @@
           Нет новостей
         </div>
 
+        <!-- Article detail view -->
+        <div v-if="selectedArticle" class="article-detail">
+          <button class="back-btn" @click="selectedArticle = null">
+            ← Назад к списку
+          </button>
+          <div class="article-date" v-if="selectedArticle.date">
+            {{ formatDate(selectedArticle.date) }}
+          </div>
+          <h4 class="article-title">{{ cleanText(selectedArticle.title_ru || selectedArticle.title) }}</h4>
+          <div class="article-full-content">
+            {{ cleanText(selectedArticle.content_ru || selectedArticle.content) || 'Нет содержимого' }}
+          </div>
+          <a
+            v-if="selectedArticle.link"
+            :href="selectedArticle.link"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="source-link"
+          >
+            Открыть оригинал →
+          </a>
+        </div>
+
+        <!-- News list view -->
         <div v-else class="news-list">
           <div
             v-for="(article, index) in currentNews"
             :key="index"
             class="news-item"
-            @click="openArticle(article)"
+            @click="selectedArticle = article"
           >
             <div class="news-date" v-if="article.date">
               {{ formatDate(article.date) }}
@@ -81,6 +105,7 @@ export default {
       activeTab: 'away',
       loading: false,
       error: null,
+      selectedArticle: null,
       newsData: {
         home: null,
         away: null
@@ -97,6 +122,7 @@ export default {
     activeTab: {
       immediate: true,
       handler(tab) {
+        this.selectedArticle = null
         if (!this.newsData[tab]) {
           this.loadNews(tab)
         }
@@ -149,11 +175,6 @@ export default {
       const cleaned = this.cleanText(text)
       if (cleaned.length <= maxLength) return cleaned
       return cleaned.substring(0, maxLength).trim() + '...'
-    },
-    openArticle(article) {
-      if (article.link) {
-        window.open(article.link, '_blank', 'noopener,noreferrer')
-      }
     }
   }
 }
@@ -313,5 +334,58 @@ export default {
   font-size: 13px;
   color: var(--text-secondary);
   line-height: 1.6;
+}
+
+/* Article detail view */
+.article-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.back-btn {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--accent-blue);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+.article-date {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.article-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.article-full-content {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+.source-link {
+  align-self: flex-start;
+  color: var(--accent-blue);
+  font-size: 13px;
+  text-decoration: none;
+  margin-top: 8px;
+}
+
+.source-link:hover {
+  text-decoration: underline;
 }
 </style>
