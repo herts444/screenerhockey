@@ -48,20 +48,11 @@
               {{ formatDate(article.date) }}
             </div>
             <div class="news-title">{{ article.title_ru || article.title }}</div>
-            <div class="news-excerpt" v-if="article.excerpt_ru || article.excerpt">
-              {{ article.excerpt_ru || article.excerpt }}
-            </div>
-            <div class="news-original" v-if="article.title_ru">
+            <div class="news-original" v-if="article.title_ru && article.title_ru !== article.title">
               <span class="original-label">DE:</span> {{ article.title }}
             </div>
           </a>
         </div>
-      </div>
-
-      <div class="modal-footer" v-if="currentSourceUrl">
-        <a :href="currentSourceUrl" target="_blank" rel="noopener noreferrer" class="source-link">
-          Открыть источник →
-        </a>
       </div>
     </div>
   </div>
@@ -102,10 +93,6 @@ export default {
     currentNews() {
       const data = this.newsData[this.activeTab]
       return data?.articles || []
-    },
-    currentSourceUrl() {
-      const data = this.newsData[this.activeTab]
-      return data?.source_url || null
     }
   },
   watch: {
@@ -319,21 +306,5 @@ export default {
 .original-label {
   font-weight: 600;
   font-style: normal;
-}
-
-.modal-footer {
-  padding: 12px 20px;
-  border-top: 1px solid var(--border-color);
-  text-align: center;
-}
-
-.source-link {
-  color: var(--accent-blue);
-  text-decoration: none;
-  font-size: 13px;
-}
-
-.source-link:hover {
-  text-decoration: underline;
 }
 </style>

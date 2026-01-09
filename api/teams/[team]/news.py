@@ -20,7 +20,7 @@ DEL_NEWS_SOURCES = {
         "news_url": "https://www.aev-panther.de/panther/news.html",
         "parser": "generic",
     },
-    "DEL": {
+    "DRESDNER": {
         "name": "Dresdner Eislöwen",
         "news_url": "https://www.eisloewen.de/saison/news",
         "parser": "generic",
@@ -33,7 +33,7 @@ DEL_NEWS_SOURCES = {
     "EBB": {
         "name": "Eisbären Berlin",
         "news_url": "https://www.eisbaeren.de/aktuelle-nachrichten",
-        "parser": "generic",
+        "parser": "eisbaeren",
     },
     "ING": {
         "name": "ERC Ingolstadt",
@@ -81,6 +81,27 @@ DEL_NEWS_SOURCES = {
         "parser": "wordpress",
     },
 }
+
+# Words that indicate junk/navigation items (not real news)
+JUNK_WORDS = [
+    "newsletter", "anmeldung", "registrierung", "liveticker", "ticker",
+    "trainingszeiten", "training", "kontakt", "impressum", "datenschutz",
+    "cookies", "shop", "tickets", "fanshop", "login", "mehr laden",
+    "aktuelle nachrichten", "weitere", "alle news", "archiv"
+]
+
+
+def is_junk_title(title: str) -> bool:
+    """Check if title is navigation/junk item, not real news"""
+    title_lower = title.lower()
+    # Too short titles are usually junk
+    if len(title) < 15:
+        return True
+    # Check for junk words
+    for word in JUNK_WORDS:
+        if word in title_lower:
+            return True
+    return False
 
 async def translate_text(text: str, client: httpx.AsyncClient) -> str:
     """Translate text from German to Russian using Google Translate API"""
@@ -145,7 +166,7 @@ async def parse_wordpress_news(html: str, base_url: str, client: httpx.AsyncClie
     soup = BeautifulSoup(html, 'html.parser')
     articles = []
 
-    for card in soup.select('article, .post, .entry, [class*="post"]')[:10]:
+    for card in soup.select('article, .post, .entry, [class*="post"]')[:15]:
         try:
             title_el = card.select_one('h2, h3, .entry-title')
             link_el = card.select_one('a[href]')
@@ -156,20 +177,63 @@ async def parse_wordpress_news(html: str, base_url: str, client: httpx.AsyncClie
                 continue
 
             title = title_el.get_text(strip=True)
+
+            # Skip junk
+            if is_junk_title(title):
+                continue
+
             link = link_el.get('href', '') if link_el else ''
             date = parse_german_date(date_el.get_text(strip=True) if date_el else '')
             excerpt = desc_el.get_text(strip=True)[:300] if desc_el else ''
 
             title_ru = await translate_text(title, client)
-            excerpt_ru = await translate_text(excerpt, client) if excerpt else ''
 
             articles.append({
                 "title": title,
                 "title_ru": title_ru,
                 "link": link,
                 "date": date,
-                "excerpt": excerpt,
-                "excerpt_ru": excerpt_ru,
+            })
+        except Exception:
+            continue
+
+    return articles
+
+
+async def parse_eisbaeren_news(html: str, base_url: str, client: httpx.AsyncClient) -> list:
+    """Parse Eisbären Berlin news - specific structure"""
+    soup = BeautifulSoup(html, 'html.parser')
+    articles = []
+
+    # Look for news teasers with specific class
+    for card in soup.select('.news-teaser, .teaser-news, article.news, .news-item')[:15]:
+        try:
+            title_el = card.select_one('h2, h3, .headline, .news-title, a')
+            link_el = card.select_one('a[href*="news"]')
+            date_el = card.select_one('.date, time, [class*="date"]')
+
+            if not title_el:
+                continue
+
+            title = title_el.get_text(strip=True)
+
+            # Skip junk
+            if is_junk_title(title):
+                continue
+
+            link = link_el.get('href', '') if link_el else ''
+            if link and not link.startswith('http'):
+                link = base_url.rstrip('/') + link
+
+            date = parse_german_date(date_el.get_text(strip=True) if date_el else '')
+
+            title_ru = await translate_text(title, client)
+
+            articles.append({
+                "title": title,
+                "title_ru": title_ru,
+                "link": link,
+                "date": date,
             })
         except Exception:
             continue
@@ -196,23 +260,22 @@ async def parse_generic_news(html: str, base_url: str, client: httpx.AsyncClient
 
     cards = []
     for sel in selectors:
-        cards = soup.select(sel)[:10]
+        cards = soup.select(sel)[:15]
         if cards:
             break
 
     if not cards:
         links = soup.select('a[href*="news"], a[href*="aktuell"], a[href*="meldung"]')
-        for link in links[:10]:
+        for link in links[:15]:
             parent = link.find_parent(['article', 'div', 'li'])
             if parent and parent not in cards:
                 cards.append(parent)
 
-    for card in cards[:10]:
+    for card in cards[:15]:
         try:
             title_el = card.select_one('h2, h3, h4, .title, [class*="title"], [class*="headline"]')
             link_el = card.select_one('a[href]')
             date_el = card.select_one('time, .date, [class*="date"], [class*="datum"]')
-            desc_el = card.select_one('p:not(.date), .text, .excerpt, [class*="text"], [class*="teaser"]')
 
             if not title_el:
                 if link_el:
@@ -225,23 +288,23 @@ async def parse_generic_news(html: str, base_url: str, client: httpx.AsyncClient
             if not title or len(title) < 5:
                 continue
 
+            # Skip junk
+            if is_junk_title(title):
+                continue
+
             link = link_el.get('href', '') if link_el else ''
             if link and not link.startswith('http'):
                 link = base_url.rstrip('/') + '/' + link.lstrip('/')
 
             date = parse_german_date(date_el.get_text(strip=True) if date_el else '')
-            excerpt = desc_el.get_text(strip=True)[:300] if desc_el else ''
 
             title_ru = await translate_text(title, client)
-            excerpt_ru = await translate_text(excerpt, client) if excerpt else ''
 
             articles.append({
                 "title": title,
                 "title_ru": title_ru,
                 "link": link,
                 "date": date,
-                "excerpt": excerpt,
-                "excerpt_ru": excerpt_ru,
             })
         except Exception:
             continue
@@ -269,15 +332,15 @@ async def fetch_team_news(team_abbrev: str, limit: int = 5) -> dict:
 
         if parser_type == "wordpress":
             articles = await parse_wordpress_news(html, base_url, client)
+        elif parser_type == "eisbaeren":
+            articles = await parse_eisbaeren_news(html, base_url, client)
         else:
             articles = await parse_generic_news(html, base_url, client)
 
     return {
         "team": team_abbrev.upper(),
         "team_name": source["name"],
-        "source_url": news_url,
         "articles": articles[:limit],
-        "fetched_at": datetime.utcnow().isoformat(),
     }
 
 
