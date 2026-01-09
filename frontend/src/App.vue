@@ -59,6 +59,7 @@
         <thead>
           <tr>
             <th rowspan="2" class="th-match">Матч</th>
+            <th rowspan="2" class="th-news" v-if="selectedLeague === 'DEL'"></th>
             <th colspan="5" class="th-group">ИТ Гости</th>
             <th colspan="5" class="th-group">ИТ Хозяева</th>
             <th colspan="4" class="th-group">Тотал (гости)</th>
@@ -99,6 +100,18 @@
                 <img :src="game.home_team.logo_url" :alt="game.home_team.abbrev" class="team-logo">
                 <span class="team-home">{{ game.home_team.name_ru || game.home_team.abbrev }}</span>
               </div>
+            </td>
+
+            <!-- News button (DEL only) -->
+            <td class="td-news" v-if="selectedLeague === 'DEL'">
+              <button class="btn-news" @click="openNewsModal(game)" title="Новости команд">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
+                  <path d="M18 14h-8"/>
+                  <path d="M15 18h-5"/>
+                  <path d="M10 6h8v4h-8V6Z"/>
+                </svg>
+              </button>
             </td>
 
             <!-- Away team individual totals (away games stats) -->
@@ -164,17 +177,28 @@
       {{ error }}
       <button @click="error = null">×</button>
     </div>
+
+    <!-- News Modal -->
+    <NewsModal
+      v-if="newsModal"
+      :home-team="newsModal.homeTeam"
+      :away-team="newsModal.awayTeam"
+      :league="selectedLeague"
+      @close="newsModal = null"
+    />
   </div>
 </template>
 
 <script>
 import { hockeyApi } from './services/api.js'
 import StatCell from './components/StatCell.vue'
+import NewsModal from './components/NewsModal.vue'
 
 export default {
   name: 'App',
   components: {
-    StatCell
+    StatCell,
+    NewsModal
   },
   data() {
     return {
@@ -191,6 +215,7 @@ export default {
       error: null,
       lastN: 0,
       detailsModal: null,
+      newsModal: null,
       selectedDate: null,
       selectedLeague: 'NHL',
       leagues: [
@@ -444,6 +469,13 @@ export default {
       }
     },
 
+    openNewsModal(game) {
+      this.newsModal = {
+        homeTeam: game.home_team,
+        awayTeam: game.away_team
+      }
+    },
+
     async syncData() {
       this.syncing = true
       this.error = null
@@ -563,6 +595,34 @@ export default {
 .td-stat {
   text-align: center;
   padding: 4px !important;
+}
+
+.th-news {
+  width: 40px;
+}
+
+.td-news {
+  text-align: center;
+  padding: 4px !important;
+}
+
+.btn-news {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-news:hover {
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+  color: white;
 }
 
 /* Modal */

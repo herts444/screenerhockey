@@ -59,6 +59,14 @@ export const hockeyApi = {
   async getLeagues() {
     const response = await api.get('/leagues')
     return response.data
+  },
+
+  // Get team news
+  async getTeamNews(teamAbbrev, league = 'DEL', limit = 5) {
+    const response = await api.get(`/teams/${teamAbbrev}/news`, {
+      params: { league, limit }
+    })
+    return response.data
   }
 }
 
