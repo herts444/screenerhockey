@@ -225,7 +225,7 @@ async def parse_news_list(html: str, base_url: str) -> list:
 
 async def fetch_team_news(team_abbrev: str, source: dict, client: httpx.AsyncClient) -> dict:
     """Fetch news for a single team with full content"""
-    print(f"Fetching news for {source['name']}...")
+    print(f"Fetching news for {team_abbrev}...")
 
     news_url = source["news_url"]
     base_url = "/".join(news_url.split("/")[:3])
@@ -241,7 +241,7 @@ async def fetch_team_news(team_abbrev: str, source: dict, client: httpx.AsyncCli
         # Fetch full content and translate for each article
         for article in articles:
             if article["link"]:
-                print(f"  Fetching: {article['title'][:50]}...")
+                print(f"  Fetching article {articles.index(article) + 1}...")
                 content = await fetch_article_content(article["link"], client)
                 article["content"] = content
 
