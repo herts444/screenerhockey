@@ -1,5 +1,427 @@
 {
   "league": "DEL",
-  "updated_at": "2026-01-09T00:00:00",
-  "teams": {}
+  "updated_at": "2026-01-09T19:28:57.337160",
+  "teams": {
+    "MAN": {
+      "team": "MAN",
+      "team_name": "Adler Mannheim",
+      "articles": [
+        {
+          "title": "#Spieler des Monats",
+          "link": "https://www.adler-mannheim.de/./aktuelles/byCategory/Spieler%20des%20Monats",
+          "date": "",
+          "content": "",
+          "title_ru": "#Игрок месяца",
+          "content_ru": ""
+        }
+      ],
+      "updated_at": "2026-01-09T19:27:51.389347"
+    },
+    "AEV": {
+      "team": "AEV",
+      "team_name": "Augsburger Panther",
+      "articles": [
+        {
+          "title": "07.01.2026 | 11:30 UhrTopscorer Alex Blank im Interview",
+          "link": "https://www.aev-panther.de/panther/news_news,-Topscorer-Alex-Blank-im-Interview-_naid,4215.html",
+          "date": "",
+          "content": "",
+          "title_ru": "07.01.2026 | 11:30 Лучший бомбардир Алекс Бланк в интервью.",
+          "content_ru": ""
+        },
+        {
+          "title": "06.01.2026 | 21:41 UhrAEV verspielt Sieg gegen Roosters",
+          "link": "https://www.aev-panther.de/panther/news_news,-AEV-verspielt-Sieg-gegen-Roosters-_naid,4214.html",
+          "date": "",
+          "content": "",
+          "title_ru": "06.01.2026 | 21:41 AEV уступает «Петухам»",
+          "content_ru": ""
+        },
+        {
+          "title": "06.01.2026 | 08:00 UhrAm Dreikönigstag gegen Iserlohn",
+          "link": "https://www.aev-panther.de/panther/news_news,-Am-Dreik%C3%B6nigstag-gegen-Iserlohn-_naid,4213.html",
+          "date": "",
+          "content": "",
+          "title_ru": "06.01.2026 | В 8:00 на Крещение против Изерлона.",
+          "content_ru": ""
+        },
+        {
+          "title": "05.01.2026 | 16:00 UhrScheppach präsentiert sich im Rampenlicht",
+          "link": "https://www.aev-panther.de/panther/news_news,-Scheppach-pr%C3%A4sentiert-sich-im-Rampenlicht-_naid,4212.html",
+          "date": "",
+          "content": "",
+          "title_ru": "01.05.2026 | 16:00 Шеппах предстает в центре внимания.",
+          "content_ru": ""
+        },
+        {
+          "title": "04.01.2026 | 16:25 UhrKeine Punkte beim Meister",
+          "link": "https://www.aev-panther.de/panther/news_news,-Keine-Punkte-beim-Meister-_naid,4211.html",
+          "date": "",
+          "content": "",
+          "title_ru": "04.01.2026 | 16:25. Никаких очков чемпионам",
+          "content_ru": ""
+        }
+      ],
+      "updated_at": "2026-01-09T19:27:59.429877"
+    },
+    "DRESDNER": {
+      "team": "DRESDNER",
+      "team_name": "Dresdner Eislöwen",
+      "articles": [
+        {
+          "title": "Ausverkauft: Dresden bereit für das DEL WINTER GAME 2026",
+          "link": "https://www.eisloewen.de/2026/01/07/ausverkauft-dresden-bereit-fuer-das-del-winter-game-2026/",
+          "date": "07.01.26",
+          "content": "Die Dresdner Eislöwen vermelden wenige Tage vor dem DEL WINTER GAME 2026 – powered by MagentaSport ein ausverkauftes Rudolf-Harbig-Stadion. Am Samstag, 10. Januar 2026, treffen der DEL2-Meister und Aufsteiger aus Dresden und der amtierende PENNY DEL-Champion Eisbären Berlin vor über 32.000 Zuschauern unter freiem Himmel aufeinander. Der Aufbau im Stadion verlief planmäßig. Das Eröffnungsbully findet um 17:00 Uhr statt.\n\nMit dem DEL WINTER GAME 2026 – powered by MagentaSport schreiben die Dresdner Eislöwen nach den Open-Air-Spielen 2016 und 2020 ein weiteres Kapitel ihrer Clubgeschichte und machen das Rudolf-Harbig-Stadion bereits zum dritten Mal zu einer Eishockey-Bühne. Die Kombination aus sportlicher Herausforderung gegen den Rekordmeister, ausverkauften Rängen und einem abwechslungsreichen Rahmenprogramm sorgt schon im Vorfeld für eine besondere Atmosphäre in Stadt und Region.\n\nRund um das Spiel erwartet die Besucher ein vielseitiges Rahmenprogramm mit Ost-Duell-Charme: Die Einlaufshow inszeniert historische Meilensteine beider Clubs mit 100 Mitwirkenden und Musik von Sven Helbig. Vor dem ersten Bully heizen „Disco Dice“ – das kultige DJ-Duo aus der Region mit House-, Disco- und Funk-Beats sowie markanten Afro-Perücken – das Publikum ein. Der weltbekannte Bass und gebürtige Dresdner René Pape singt die Nationalhymne a cappella. In der ersten Drittelpause nimmt Comedian Olaf Schubert das Publikum mit auf eine Reise durch den Osten der Republik. Das Spektakel endet mit einem farbenfrohen Feuerwerk.\n\nDie Stadiontore öffnen ab 15:00 Uhr. Aufgrund von Bauarbeiten am Dresdner Hauptbahnhof (gesperrt vom 9. bis 12. Januar 2026) gelten angepasste Zugverbindungen mit Endhaltestellen in Dresden-Neustadt, -Reick, -Plauen oder -Friedrichstadt. Dennoch empfehlen die Organisatoren die Anreise mit öffentlichen Verkehrsmitteln, da ein entsprechender Ersatzverkehr geplant ist. Tickets gelten als Kombi-Tickets im VVO.\n\nDas DEL WINTER GAME 2026 – powered by MagentaSport gilt als ein...",
+          "title_ru": "Распродано: Дрезден готов к DEL WINTER GAME 2026",
+          "content_ru": "«Дрезденские ледяные львы» сообщают о аншлаговом стадионе имени Рудольфа Харбига за несколько дней до Зимней игры DEL WINTER GAME 2026, организованной MagentaSport. В субботу, 10 января 2026 года, чемпионы и новички DEL2 из Дрездена и действующий чемпион PENNY DEL Айсберен Берлин встретятся под открытым небом перед более чем 32 000 зрителей. Строительство стадиона шло по плану. Первое вбрасывание состоится в 17:00.\n\nБлагодаря DEL WINTER GAME 2026, организованному MagentaSport, «Дрезденские ледяные львы» пишут еще одну главу в истории своего клуба после игр под открытым небом в 2016 и 2020 годах и в третий раз превращают стадион Рудольфа Харбига в хоккейную арену. Сочетание спортивного соревнования с рекордсменами, аншлаговых трибун и разнообразной вспомогательной программы заранее обеспечивает особую атмосферу в городе и регионе.\n\nВо время игры посетителей ждет разнообразная вспомогательная программа с восточным дуэльным шармом: разминочное шоу демонстрирует исторические вехи обоих клубов с участием 100 исполнителей и музыкой Свена Хельбига. Перед первым поединком «Disco Dice» – культовый диджейский дуэт региона с хаус-, диско- и фанк-битами, а также яркими афро-париками – разогревает публику. Всемирно известный бас, уроженец Дрездена Рене Папе поет национальный гимн а капелла. В первой трети перерыва комик Олаф Шуберт отправляет зрителей в путешествие по востоку Республики. Спектакль заканчивается одним"
+        },
+        {
+          "title": "Auktionen der Sonderzug-Warm-up-Trikots enden heute",
+          "link": "https://www.eisloewen.de/2026/01/07/auktionen-der-sonderzug-warm-up-trikots-enden-heute/",
+          "date": "07.01.26",
+          "content": "Ein besonderes Trikot für einen besonderen Zweck: Noch bis heute, 7. Januar können die exklusiven Warm-up-Sonderzug-Trikots ersteigert werden. Der Erlös der Auktion kommt dem Para-Eishockey in Dresden zugute und fördert damit Inklusion, Teamgeist und sportliche Leidenschaft.\n\nWer sich also sein ganz besonderes Erinnerungsstück Dresdner Eishockey-Geschichte sichern möchte, hat dazu heute die Chance – die Trikotauktionen Enden der Reihe nach ab 15:00 Uhr\n\n31 – Berbner – GXL45 – Olkinuora – GXXL55 – Stocker – GXL62 – Schwendener – GXL\n\n3 – McCrea – XL23 – Granz – L24 – Karlsson – XL25 – Hammond – XL33 – Suvanto – XL56 – Krüger – L57 – Johansson – XL61 – Braun – XL75 – Riedl – XL\n\n8 – Ortega – L9 – LeBlanc – L12 – Yogan – XL14 – Chartier – XL15 – Suess – L17 – Bouma – XL19 – Postel – L20 – Pischoff – L27 – Fox – XL32 – Hendreschke – L47 – Gorcik – XL63 – Rundqvist – L73 – Korte – L74 – Sykora – XL84 – Parkes – XL91 – Turnbull – L92 – Andres – L\n\n2 – ohne Name – XL34 – ohne Name – GXXL68 – ohne Name – L97 – ohne Name – XL",
+          "title_ru": "Специальные аукционы по продаже трикотажных изделий для разминки поездов завершаются сегодня",
+          "content_ru": "Специальная футболка для особых целей: эксклюзивные футболки для разминки со специальными поездами все еще можно продать на аукционе до сегодняшнего дня, 7 января. Выручка от аукциона пойдет на пользу парахоккею в Дрездене и, таким образом, будет способствовать инклюзивности, командному духу и спортивному энтузиазму.\n\nТак что, если вы хотите сохранить свой особенный сувенир из истории хоккея Дрездена, у вас есть такая возможность сегодня — аукционы по продаже футболок заканчиваются один за другим в 15:00.\n\n31 – Бербнер – GXL45 – Олкинуора – GXXL55 – Штокер – GXL62 – Швенденер – GXL\n\n3 – МакКри – XL23 – Гранц – L24 – Карлссон – XL25 – Хаммонд – XL33 – Суванто – XL56 – Крюгер – L57 – Йоханссон – XL61 – Браун – XL75 – Ридль – XL\n\n8 - Ортега - L9 - Леблан - L12 - Йоган - XL14 - Шартье - XL15 - Зюсс - L17 - Боума - XL19 - Постель - L20 - Пишофф - L27 - Фокс - XL32 - Хендрешке - L47 - Горчик - XL63 - Рундквист - L73 - Корте - L74 - Сикора - XL84 - Паркс - XL91 - Тернбулл - L92 - Андрес - L\n\n2 – без названия – XL34 – без названия – GXXL68 – без названия – L97 – без названия – XL"
+        },
+        {
+          "title": "Knappe Niederlage gegen Bremerhaven",
+          "link": "https://www.eisloewen.de/2026/01/06/knappe-niederlage-gegen-bremerhaven/",
+          "date": "06.01.26",
+          "content": "Am 37. Spieltag gastierten die Fischtown Pinguins bei den Eislöwen. Dabei kam es zum Comeback von Oliver Granz, der nach seiner langen Verletzung wieder im Line-up stand. Nicht dabei waren Felix Krüger, Simon Karlsson, Connor Korte, Tomas Sykora, Jussi Olkinuora, Tomas Andres und Sebastian Gorcik. In der ersten Minute gab es die Chance für die Gäste, aber Emil Johansson warf sich in den Schuss. Danach musste er vom Eis, konnte aber wenig später weiterspielen. Kurz darauf folgte die erste Strafe und Bremerhavens Alexander Friesen pausierte nach einer Behinderung. Die Hausherren konnten das Powerplay jedoch nicht nutzen. In Folge hatten beide Teams ein paar Möglichkeiten, ein Treffer fiel aber nicht, sodass es torlos in die Pause ging.\n\nDie Pinguins hatten zu Beginn des Mitteldrittels zwei Chancen, doch Schwendener parierte. Wenig später landete die Scheibe im Tor der Sachsen. Es war Rayan Bettahar (26.), der seine Mannschaft in Front brachte. C. J. Suess hatte den schnellen Ausgleich auf der Kelle, aber der Puck ging am Tor vorbei. Lange Zeit blieb es bei dem Spielstand. Nach einer Spielverzögerung musste bei den Gästen Matthew Abt auf die Strafbank. Die Pinguins waren gerade wieder komplett, da hatten sie einen Alleingang, aber Schwendener war zur Stelle. Kurz darauf eine gute Möglichkeit für die Blau-Weißen, aber auch dieser Abschluss blieb ohne Erfolg. Bremerhavens Jan Urbas kassierte wegen Stockschlags eine Strafe, doch bis zur Pausensirene fiel kein Tor, sodass es mit der knappen. Gästeführung in die Kabinen ging.\n\nIm Schlussdrittel agierten die Sachsen noch 58 Sekunden mit einem Mann mehr, aber ohne Torerfolg. Kurz darauf musste Eislöwe Justin Braun wegen Beinstellens in die Kühlbox, die Pinguins nutzten das Powerplay und Miha Verlic (44.) baute die Führung aus. Die Blau-Weißen gaben sich nicht auf und Andrew Yogan traf in der 51. Minute zum Anschluss. Die Gäste stellten wenig später den alten Abstand durch den Treffer von Christian Wejse (53.) wieder her. Nach...",
+          "title_ru": "Минимальное поражение от Бремерхафена",
+          "content_ru": "В 37-м туре «Фиштаун Пингвинз» посетили «Айсловен». Это привело к возвращению Оливера Гранца, который вернулся в состав после длительной травмы. Феликса Крюгера, Симона Карлссона, Коннора Корте, Томаса Сикоры, Юсси Олкинуоры, Томаса Андреса и Себастьяна Горчика не было. У гостей был шанс на первой минуте, но в удар бросился Эмиль Юханссон. Затем ему пришлось покинуть лед, но вскоре после этого он смог продолжить игру. Вскоре после этого последовал первый пенальти, и Александр Фризен из Бремерхафена взял перерыв после того, как ему помешали. Однако воспользоваться преимуществом в большинстве хозяева поля не смогли. В итоге обе команды имели несколько моментов, но ни одного гола не было, поэтому перерыв остался безголевым.\n\nУ «Пингвинз» было два шанса в начале средней трети, но Швенденер отразил удар. Чуть позже диск угодил в ворота саксонцев. Именно Райан Беттахар (26-е место) вывел свою команду вперед. Си Джей Зюсс быстро сравнял счет, но шайба не попала в ворота. Счет долгое время оставался прежним. После задержки в игре Мэттью Абту пришлось отправиться на скамейку штрафников гостей. «Пингвинз» снова были почти готовы, когда у них была одиночная попытка, но Швенденер был там. Вскоре появилась хорошая возможность для сине-белых, но и этот гол оказался неудачным. Ян Урбас из Бремерхафена получил пенальти за клюшку, но гол не был забит до сирены перерыва, так что это был"
+        },
+        {
+          "title": "Job Bully: Industriemechaniker mit Elektrokenntnissen (m/w/d)",
+          "link": "https://www.eisloewen.de/2026/01/06/job-bully-industriemechaniker-mit-elektrokenntnissen-m-w-d/",
+          "date": "06.01.26",
+          "content": "Gemeinsam mit LOCAL.WORK bekommen Eislöwenpartner und Firmen die Möglichkeit über die Webseite der Eislöwen neue Mitarbeiter zu gewinnen.Das nutzt auch unser Partner, die HIGHVOLT Prüftechnik Dresden GmbH  auf der Suche nach einem Industriemechaniker mit Elektrokenntnissen (m/w/d). Das aktuelle Job-Angebot ist überStellenbeschreibungeinsehbar.\n\nFür unseren Standort in Dresden suchen wir Sie zum nächstmöglichen Eintrittsdatum als Industriemechaniker mit Elektrokenntnissen (m/w/d).\n\nFreuen Sie sich bei HIGHVOLT auf:",
+          "title_ru": "Работа Bully: Промышленный механик со знаниями в области электротехники (м/ж/д)",
+          "content_ru": "Вместе с LOCAL.WORK партнеры и компании Eislöwen имеют возможность нанимать новых сотрудников через веб-сайт Eislöwen. Наш партнер, HIGHVOLT Prüftechnik Dresden GmbH, также использует этот подход при поиске промышленного механика со знаниями в области электротехники (м/ж/д). Текущее предложение о работе можно просмотреть в описании вакансии.\n\nДля нашего офиса в Дрездене мы как можно скорее ищем вас в качестве промышленного механика со знаниями в области электротехники (м/ж/д).\n\nВ HIGHVOLT вас ждет:"
+        },
+        {
+          "title": "Warm-up Sonderzug-Trikot – jetzt ersteigern",
+          "link": "https://www.eisloewen.de/2026/01/05/warm-up-sonderzug-trikot-jetzt-ersteigern/",
+          "date": "05.01.26",
+          "content": "Ein besonderes Trikot für einen besonderen Zweck: Noch bis zum Mittwoch, 7. Januar können die exklusiven Warm-up-Sonderzug-Trikots ersteigert werden. Der Erlös der Auktion kommt dem Para-Eishockey in Dresden zugute und fördert damit Inklusion, Teamgeist und sportliche Leidenschaft. Das Startgebot pro Trikot beträgt 50 Euro.\n\nDie Versteigerung findet über eBay statt und ist unter folgendem Link erreichbar:https://ebay.us/m/uE1bxz\n\n31 – Berbner – GXL45 – Olkinuora – GXXL55 – Stocker – GXL62 – Schwendener – GXL\n\n3 – McCrea – XL23 – Granz – L24 – Karlsson – XL25 – Hammond – XL33 – Suvanto – XL56 – Krüger – L57 – Johansson – XL61 – Braun – XL75 – Riedl – XL\n\n8 – Ortega – L9 – LeBlanc – L12 – Yogan – XL14 – Chartier – XL15 – Suess – L17 – Bouma – XL19 – Postel – L20 – Pischoff – L27 – Fox – XL32 – Hendreschke – L47 – Gorcik – XL63 – Rundqvist – L73 – Korte – L74 – Sykora – XL84 – Parkes – XL91 – Turnbull – L92 – Andres – L\n\n2 – ohne Name – XL34 – ohne Name – GXXL68 – ohne Name – L97 – ohne Name – XL",
+          "title_ru": "Специальная футболка для разминки – сделайте ставку прямо сейчас",
+          "content_ru": "Специальная майка для особых целей: эксклюзивные футболки для разминки со специальными поездами можно будет продать на аукционе до среды, 7 января. Выручка от аукциона пойдет на пользу парахоккею в Дрездене и, таким образом, будет способствовать инклюзивности, командному духу и спортивному энтузиазму. Стартовая цена за футболку составляет 50 евро.\n\nАукцион будет проходить на eBay, доступ к нему можно получить по следующей ссылке: https://ebay.us/m/uE1bxz.\n\n31 – Бербнер – GXL45 – Олкинуора – GXXL55 – Штокер – GXL62 – Швенденер – GXL\n\n3 – МакКри – XL23 – Гранц – L24 – Карлссон – XL25 – Хаммонд – XL33 – Суванто – XL56 – Крюгер – L57 – Йоханссон – XL61 – Браун – XL75 – Ридль – XL\n\n8 - Ортега - L9 - Леблан - L12 - Йоган - XL14 - Шартье - XL15 - Зюсс - L17 - Боума - XL19 - Постель - L20 - Пишофф - L27 - Фокс - XL32 - Хендрешке - L47 - Горчик - XL63 - Рундквист - L73 - Корте - L74 - Сикора - XL84 - Паркс - XL91 - Тернбулл - L92 - Андрес - L\n\n2 – без названия – XL34 – без названия – GXXL68 – без названия – L97 – без названия – XL"
+        }
+      ],
+      "updated_at": "2026-01-09T19:28:07.100214"
+    },
+    "RBM": {
+      "team": "RBM",
+      "team_name": "EHC Red Bull München",
+      "articles": [
+        {
+          "title": "Mit GalerieDerby am Freitagabend: Red Bulls beim Tabellenzweiten Straubing gefordertDerby am Freitagabend: Red Bulls beim Tabellenzweiten Straubing gefordert// DEL - VORSCHAU// DEL - VORSCHAU",
+          "link": "https://www.redbullmuenchen.de/de/news/del-vorschau-38-spieltag-red-bull-muenchen-bei-den-straubing-tigers-zu-gast",
+          "date": "",
+          "content": "",
+          "title_ru": "С GalerieDerby в пятницу вечером: Red Bulls бросает вызов Straubing, занявшему второе местоDerby в пятницу вечером: Red Bulls бросает вызов Straubing, занявшему второе место// DEL - ПРЕДВАРИТЕЛЬНЫЙ ПРОСМОТР// DEL - ПРЕДВАРИТЕЛЬНЫЙ ПРОСМОТР",
+          "content_ru": ""
+        },
+        {
+          "title": "Mit GalerieNiederberger, Wagner und Rieder im OlympiakaderNiederberger, Wagner und Rieder im Olympiakader// NATIONALMANNSCHAFT// NATIONALMANNSCHAFT",
+          "link": "https://www.redbullmuenchen.de/de/news/olympische-winterspiele-2026-niederberger-rieder-und-wagner-im-deb-kader",
+          "date": "",
+          "content": "",
+          "title_ru": "С GalerieNiederberger, Вагнером и Ридером в олимпийской сборнойНидербергер, Вагнер и Ридер в олимпийской сборной// НАЦИОНАЛЬНАЯ СБОРНАЯ// НАЦИОНАЛЬНАЯ СБОРНАЯ",
+          "content_ru": ""
+        },
+        {
+          "title": "Red Bull München begrüßt GoSpring als neuen PartnerRed Bull München begrüßt GoSpring als neuen Partner// PARTNER// PARTNER",
+          "link": "https://www.redbullmuenchen.de/de/news/ehc-red-bull-muenchen-begruesst-gospring-als-neuen-partner",
+          "date": "",
+          "content": "",
+          "title_ru": "Red Bull Мюнхен приветствует GoSpring в качестве нового партнераRed Bull Мюнхен приветствует GoSpring в качестве нового партнера// ПАРТНЕР// ПАРТНЕР",
+          "content_ru": ""
+        }
+      ],
+      "updated_at": "2026-01-09T19:28:10.100843"
+    },
+    "EBB": {
+      "team": "EBB",
+      "team_name": "Eisbären Berlin",
+      "articles": [],
+      "updated_at": "2026-01-09T19:28:11.402438"
+    },
+    "ING": {
+      "team": "ING",
+      "team_name": "ERC Ingolstadt",
+      "articles": [],
+      "updated_at": "2026-01-09T19:28:12.909205"
+    },
+    "BHV": {
+      "team": "BHV",
+      "team_name": "Fischtown Pinguins",
+      "articles": [
+        {
+          "title": "Wichtige Information an die Fangemeinde der Fischtown Pinguins:",
+          "link": "https://fischtown-pinguins.de/wichtige-information-an-die-fangemeinde-der-fischtown-pinguins/",
+          "date": "",
+          "content": "",
+          "title_ru": "Важная информация для фанатов Fischtown Pinguins:",
+          "content_ru": ""
+        },
+        {
+          "title": "Wichtige Information an die Fangemeinde der Fischtown Pinguins:",
+          "link": "https://fischtown-pinguins.de/wichtige-information-an-die-fangemeinde-der-fischtown-pinguins/",
+          "date": "",
+          "content": "",
+          "title_ru": "Важная информация для фанатов Fischtown Pinguins:",
+          "content_ru": ""
+        },
+        {
+          "title": "Nürnberg zu Gast an der Nordseeküste – Pinguins wollen den 6. Sieg in Serie",
+          "link": "https://fischtown-pinguins.de/nuernberg-zu-gast-an-der-nordseekueste-pinguins-wollen-den-6-sieg-in-serie/",
+          "date": "",
+          "content": "",
+          "title_ru": "Нюрнберг – гость на побережье Северного моря – «Пингвины» хотят одержать шестую победу подряд",
+          "content_ru": ""
+        },
+        {
+          "title": "Vorverkauf für das Freundschaftsspiel am 20.02.2026 gegen die Iserlohn Roosters",
+          "link": "https://fischtown-pinguins.de/vorverkauf-fuer-das-freundschaftsspiel-am-20-02-2026-gegen-die-iserlohn-roosters/",
+          "date": "",
+          "content": "",
+          "title_ru": "Предварительная продажа товарищеского матча 20 февраля 2026 года против «Изерлон Рустерс».",
+          "content_ru": ""
+        },
+        {
+          "title": "Fünf Pinguins bei den Olympischen Spielen in Mailand vertreten",
+          "link": "https://fischtown-pinguins.de/fuenf-pinguins-bei-den-olympischen-spielen-in-mailand-vertreten/",
+          "date": "",
+          "content": "",
+          "title_ru": "Пять пингвинов представлены на Олимпиаде в Милане",
+          "content_ru": ""
+        }
+      ],
+      "updated_at": "2026-01-09T19:28:19.595687"
+    },
+    "WOB": {
+      "team": "WOB",
+      "team_name": "Grizzlys Wolfsburg",
+      "articles": [
+        {
+          "title": "Ganz wichtiges Duell mit den Panthern",
+          "link": "https://www.grizzlys.de/news_2659.html",
+          "date": "",
+          "content": "Die Reihe der Duelle mit direkten Konkurrenten setzt sich nahtlos fort – und zwar in der Eis Arena. Die Grizzlys haben am Freitag (19.30 Uhr) die Augsburger Panther zu Gast. Tickets für die im Kampf um die Playoffs so wichtige Partie gibt’shier,MagentaSportüberträgt live.\n\nDie wichtigen Duelle mit den Nürnberg Ice Tigers (2:4) und den Schwenninger Wild Wings (3:4 nach Penaltyschießen) liefen jeweils auf fremdem Eis nicht nach Wunsch für die Niedersachsen. Besonders bitter: Bei den Wild Wings sah es bis kurz vor Schluss nach den ersehnten drei Punkten aus, ehe die Hausherren ausglichen und den Zusatzpunkt holten.\n\nDurch den einen Zähler ist Schwarz-Orange aber wieder an den Nürnbergern vorbeigezogen und belegt Tabellenplatz acht. Der Vorsprung auf die Augsburger, die den ungeliebten elften Rang innehaben, beträgt sechs Punkte. „Keine Frage: Es ist ein ganz wichtiges Spiel, das auf uns wartet“, bringt es Grizzlys-Headcoach Mike Stewart auf den Punkt.\n\nDas Ziel ist ebenso klar: „Wir wollen den Abstand am Freitag vergrößern und dieses Spiel unbedingt gewinnen. Da gibt es kein Wenn und Aber“, unterstreicht Stewart. Der ehemalige Cheftrainer des AEV weiß aber: „Die Augsburger haben aber nichts zu verschenken. Es wird sicher ein harter Kampf.“\n\nDas erste Heimspiel gegen die Fuggerstädter ging mit 3:0 an die Grizzlys, in Augsburg gewannen die Panther mit 2:1 nach Overtime. Apropos Overtime: Sieben der vergangenen zehn Spiele mit ihrer Beteiligung waren nach 60 Minuten nicht entschieden. Stewart: „Das zeigt umso mehr, wie schwer sie zu schlagen sind.“",
+          "title_ru": "Очень важная дуэль с Пантерами",
+          "content_ru": "Серия поединков с прямыми конкурентами продолжается без проблем – на ледовой арене. В пятницу (19:30) «Гриззлис» примут «Аугсбург Пантерз». Билеты на игру, столь важную в борьбе за плей-офф, можно приобрести здесь, ведет прямую трансляцию MagentaSport.\n\nВажные поединки с «Нюрнбергскими ледяными тиграми» (2:4) и «Швеннингерскими дикими крыльями» (3:4 после серии пенальти) на чужом льду сложились для команды Нижней Саксонии не так, как хотелось бы. Особенно горько: казалось, что «Уайлд Уингз» наберут три очка, к которым стремились, незадолго до конца, прежде чем хозяева поля сравняли счет и получили дополнительное очко.\n\nБлагодаря одному очку «черно-оранжевые» вновь обошли Нюрнберг и находятся на восьмом месте в таблице. Отрыв от «Аугсбурга», идущего на непопулярном одиннадцатом месте, составляет шесть очков. «Нет сомнений: нас ждет очень важная игра», - говорит главный тренер «Гриззлис» Майк Стюарт.\n\nЦель столь же ясна: «Мы хотим увеличить отрыв в пятницу и обязательно выиграть эту игру. В этом нет никаких «если» и «но», — подчеркивает Стюарт. Но бывший главный тренер АЕВ знает: \"Аугсбургу нечего отдавать. Это определенно будет тяжелая борьба\".\n\nПервая домашняя игра против «Фуггерштедтера» досталась «Гриззлис» со счетом 3–0, в Аугсбурге «Пантеры» выиграли со счетом 2–1 после овертайма. Кстати, об овертайме: семь из десяти последних игр с ее участием не были решены по истечении 60 минут."
+        },
+        {
+          "title": "Die Augsburger Panther im Gegner-Check",
+          "link": "https://www.grizzlys.de/news_2658.html",
+          "date": "",
+          "content": "Die Augsburger Panther kommen zum zweiten Mal in dieser Saison in die Eis Arena. Vor dem Aufeinandertreffen am Freitag (19.30 Uhr | Tickets gibt’shier), das sportlich aufgrund des Kampfes um die Playoff-Teilnahme hochbrisant ist, nehmen wir den AEV einmal genauer unter die Lupe.",
+          "title_ru": "Аугсбургские Пантеры в проверке соперника",
+          "content_ru": "«Аугсбургские Пантеры» приедут на «Айс Арену» во второй раз в этом сезоне. Перед пятничным поединком (19:30 | Билеты здесь), который в спортивном плане является весьма взрывоопасным из-за борьбы за выход в плей-офф, мы присмотримся к AEV."
+        },
+        {
+          "title": "Niederlage nach Penaltyschießen",
+          "link": "https://www.grizzlys.de/news_2657.html",
+          "date": "",
+          "content": "Nach 65 Minuten war im Auswärtsspiel der Grizzlys gegen die Schwenninger Wild Wings keine Entscheidung gefallen, die musste im Penaltyschießen her. Hier hatten die Hausherren das bessere Ende und gewannen mit 4:3. Nun geht es für Schwarz-Orange mit einem Heimspiel-Doppelpack gegen die Augsburger Panther (Freitag | 19.30 Uhr) und die Löwen Frankfurt (Sonntag | 14 Uhr) weiter. Tickets für beide Begegnungen gibt’shier.\n\nDie ersten 20 Minuten waren spektakuläre: Nach 65 Sekunden bestraften die Gastgeber einen Fehlpass und eine Unachtsamkeit der Niedersachsen, Ex-Grizzly Phil Hungerecker fälschte die Scheibe entscheidend ab. Die Reaktion der Gäste folgte: Jacob Hayhurst bugsierte die Scheibe durch die Schoner von Goalie Joacim Eriksson, das Spielgerät überquerte die Torlinie so eben mit vollem Umfang – 1:1 (3.).\n\nAusgerechnet in Unterzahl überwand auch Fabio Pfohl den SERC-Schlussmann (7.), Spencer Machacek hätte im Powerplay nachlegen können (9.). Wenig später verhinderte der Pfosten beim Schuss von Keaton Thompson den dritten Wolfsburger Treffer (11.), kurze Zeit später erzielte Kyle Platzer das 2:2 (11.).\n\nEinen Shorthander hatte Platzer ebenfalls auf dem Schläger, er scheiterte aber im Eins-gegen-Eins an Dustin Strahlmeier (13.).\n\nDer Mittelabschnitt sollte im Vergleich deutlich unspektakulärer werden. Jordan Szwarz prüfte Strahlmeier (23.), Mirko Höfflin verfehlte sein Ziel nach hübscher Einzelleistung (35.). Die Grizzlys sendeten durch Jimmy Lambert ein offensives Lebenszeichen (33.) und schlugen dann zu: Tyler Gaudet bediente Luis Schinko, der wenig Mühe hatte (36.).\n\nDie Wolfsburger überstanden kurz vor Drittelende 37 Sekunden in doppelter Unterzahl und nahmen einen knappen Vorsprung mit in die Kabine.\n\nIm Schlussabschnitt hatte Sebastian Uvira die erste dicke Chance, der Pfosten rettete schließlich für Strahlmeier (46.). Es war der Auftakt zu einer Druckphase der Wild Wings. Aus der befreiten sich die Autostädter nach und nach, Justin Feser hätte erhöhen können ...",
+          "title_ru": "Поражение после серии пенальти",
+          "content_ru": "На 65-й минуте не было принято никакого решения в выездном матче «Гриззлис» против «Швеннингер Уайлд Уингз», решение которого пришлось решать в серии пенальти. Здесь хозяева поля сыграли лучше и выиграли со счетом 4:3. Теперь «черно-оранжевые» продолжают двойную домашнюю игру против «Аугсбургской Пантеры» (пятница | 19:30) и «Лёвен Франкфурт» (воскресенье | 14:00). Билеты на оба матча можно приобрести здесь.\n\nПервые 20 минут были зрелищными: на 65-й секунде хозяева наказали за неудачную передачу и недостаток внимания со стороны Нижней Саксонии, а экс-Гризли Фил Хунгерекер решительно отразил гол. Реакция гостей последовала: Якоб Хейхерст провел диском через щитки вратаря Йоакима Эрикссона, игровой аппарат точно пересек линию ворот в полную силу - 1:1 (3-е место).\n\nДаже когда он был в меньшинстве, Фабио Пфоль одолел вратаря SERC (7-е место), Спенсер Мачачек мог добавить больше в игре в большинстве (9-е место). Чуть позже штанга предотвратила удар Китона Томпсона по третьему голу «Вольфсбурга» (11-й), а вскоре Кайл Платцер сделал счет 2-2 (11-й).\n\nУ Платцера также был короткий игрок на ракетке, но он потерпел неудачу в матче один на один с Дастином Стралмайером (13-е место).\n\nСредняя часть по сравнению с этим должна быть значительно менее впечатляющей. Джордан Шварц протестировал Штральмайера (23-е место), Мирко Хёффлин пропустил гол после отличной индивидуальной игры (35-е место). «Гриззлис» послали оскорбительный признак жизни через Джимми Ламберта"
+        }
+      ],
+      "updated_at": "2026-01-09T19:28:30.256587"
+    },
+    "IEC": {
+      "team": "IEC",
+      "team_name": "Iserlohn Roosters",
+      "articles": [
+        {
+          "title": "Roosters im Sauerlandpark",
+          "link": "https://iserlohn-roosters.de/2026/01/09/januar-zu-gast-im-park-autogrammstunde-inklusive/",
+          "date": "09.Jan2026",
+          "content": "Kühe. Schweine. Iserlohn. präsentiert: Radio MK Roostershockeyshow | on ICE Gesamtes Roosters-Team am 12. Januar zu Gast im Park – Autogrammstunde inklusive\n\nHemer. Es ist eigentlich eine ganz besondere, jährliche Tradition. Immer zur Adventszeit präsentieren sich die Iserlohn Roosters im SPARKASSE Wintergartens des Sauerlandparks Hemer. Spaß auf der Eisfläche, anschließend eine kurze Autogrammstunde, das gehört normalerweise dazu. Problem nur, wenn man keinen Termin findet. Aufgrund der intensiven Phase rund ums Weihnachtsfest und den Start ins neue Jahr, mussten alle Fans im Winter 24/25 ganz darauf verzichten, im Januar 2026 bringen Radio MK, der Sauerlandpark und die Roosters ihre DEL-Mannschaft zurück nach Hemer. Das ist auch deshalb wichtig, weil sich die Menschen in der Felsenmeerstadt, insbesondere in Deilinghofen, noch immer als Geburtsstätte des Eishockeys im Sauerland verstehen. In diesem Jahr gehen die Roosters auf Einladung von Medienpartner Radio MK am Montag, 12. Januar, in Hemer aufs Eis.\n\nAb 17:00 Uhr steht zunächst auf der Eisfläche ein ganz besonderes Match an. Vier Roostersprofis treten stellvertretend für je einen Kandidaten aus dem Publikum an. Im Anschluss an das Eis-Event, das vom Kühe. Schweine. Iserlohn. Podcast-Team Felix Dötsch und Mirko Heintz moderiert wird, findet eine Autogrammstunde der Roosters in der Almhütte des Sauerlandparks statt. Dort steht die gesamte Mannschaft mit dem Trainerteam von Stefan Nyman nicht nur für Unterschriften, sondern auch für Fotos und Fragen der Fans zur Verfügung. Wie für so viele Roosterstrainer und Spieler in der Vergangenheit ist das Erlebnis, wieder einmal Open Air auf dem Eis zu stehen, eine ganz besondere Erinnerung. Das gilt insbesondere natürlich für die vielen Nordamerikaner und Skandinavier im Kader der Sauerländer. Aber auch die aus Deutschland stammenden Hockeyprofis genießen das Ereignis unter freiem Himmel Jahr für Jahr ganz besonders.\n\nFür diese Veranstaltung öffnet der Park sogar den noch ...",
+          "title_ru": "Петухи в парке Зауэрланд",
+          "content_ru": "Коровы. Свиньи. Изерлон. представляет: Радио МК Roostershockey шоу | на ICE 12 января вся команда Roosters будет гостями парка, включая автограф-сессию.\n\nХемер. На самом деле это особенная ежегодная традиция. Каждый сезон Адвента Изерлонские петухи появляются в зимнем саду SPARKASSE в Зауэрланд-парке Хемер. Развлечение на льду, за которым следует короткая автограф-сессия, обычно является частью этого. Это проблема только в том случае, если вы не можете найти встречу. Из-за напряженной фазы Рождества и начала нового года всем фанатам пришлось обходиться без него зимой 24/25. В январе 2026 года Radio MK, Sauerlandpark и The Roosters вернут свою команду DEL обратно в Хемер. Это важно еще и потому, что жители Фельзенмеерштадта, особенно Дайлингхофена, по-прежнему считают себя родиной хоккея в Зауэрланде. В этом году «Петухи» выйдут на лед в Хемере в понедельник, 12 января, по приглашению информационного партнера Радио МК.\n\nНа льду состоится особенный матч, который начнется в 17:00. Четыре профессионала Roosters представляют по одному кандидату из зала. После мероприятия с мороженым, организованного коровами. Свиньи. Изерлон. Автограф-сессия группы Roosters под руководством команды подкастов Феликса Дётча и Мирко Хайнца пройдет в альпийской хижине в парке Зауэрланд. Вся команда с тренерской командой Штефана Наймана здесь не только за подписями, но и за"
+        },
+        {
+          "title": "Ugbekile-Doppelschlag sichert furiosen 4:3-Erfolg gegen Berlin",
+          "link": "https://iserlohn-roosters.de/2026/01/08/ugbekile-doppelschlag-sichert-furiosen-43-erfolg-gegen-berlin/",
+          "date": "08.Jan2026",
+          "content": "Die Iserlohn Roosters haben mit einem regelrechten Kraftakt nach zwei Toren von Colin Ugbekile im letzten Drittel den amtierenden Deutschen Meister Eisbären Berlin mit 4:3 besiegt.\n\nDie Roosters erwischten einen ordentlichen Start in die Partie, auch wenn zunächst Jenike früh gegen Pföderl gefordert war. Kurz darauf setzte Törnqvist mit einem Bauerntrick das erste offensive Ausrufezeichen für den IEC. Berlin hatte in der Anfangsphase optisch leichte Vorteile, ohne daraus jedoch zwingende Chancen zu kreieren. Insgesamt blieb das Spiel bis zum ersten Powerbreak ereignisarm und ausgeglichen. Mit zunehmender Dauer nutzten die Roosters ihre Möglichkeiten konsequenter: Nach einer sehenswerten Kombination über Niehus und Camara schaltete Neumann aus dem Slot am schnellsten und brachte Iserlohn in Führung (9:28). Boland hätte wenig später sogar erhöhen können, verzog jedoch bei einer Breakchance. Die Eisbären versuchten in der Folge, mehr Druck aufzubauen, scheiterten jedoch immer wieder an einer stabilen Roosters-Defensive und einem aufmerksamen Jenike, der unter anderem einen Müller-Break sicher entschärfte. Effizient zeigten sich die Gastgeber erneut bei einem Bullygewinn von Törnqvist: Camara zog direkt ab und stellte auf 2:0 (16:26). Auch eine Unterzahlphase überstanden die Roosters schadlos, sodass es mit einer aufgrund der engagierten Spielweise nicht unverdienten Führung in die erste Pause ging.Die Roosters wurden auch im zweiten Drittel zunächst defensiv gefordert und mussten früh in Unterzahl agieren. Berlin ließ die Scheibe im Powerplay gut laufen, doch die Iserlohner Defensive blieb aufmerksam und alles, was den Weg zum Tor fand, war sichere Beute für Jenike. Offensiv setzte Borzecki nach schöner Vorarbeit von Fischbuch ein Achtungszeichen, verpasste jedoch knapp. In Überzahl bot sich den Gastgebern anschließend selbst die Chance, den Vorsprung auszubauen. Die Roosters erspielten sich mehrere gute Abschlüsse, ließen jedoch die letzte Konsequenz im Abschluss verm...",
+          "title_ru": "Двойной удар Угбекиле обеспечил яростную победу над Берлином со счетом 4:3.",
+          "content_ru": "«Изерлон Рустерс» разгромили действующего чемпиона Германии «Айсбарен Берлин» со счетом 4:3, продемонстрировав настоящую силу после двух голов Колина Угбекиле в последней трети.\n\n«Петухи» достойно начали игру, даже несмотря на то, что Енике на раннем этапе пришлось бросить вызов Пфедерлю. Вскоре после этого Торнквист поставил первый оскорбительный восклицательный знак для МЭК своей пешковой взяткой. Берлин имел небольшое визуальное преимущество на ранних этапах, но не создавал убедительных моментов. В целом игра оставалась спокойной и сбалансированной до первого перерыва в силе. Со временем «Петухи» более последовательно использовали свои возможности: после замечательной комбинации Нихуса и Камары Нойманн быстрее всех переключился со слота и вывел Изерлона вперед (9:28). Боланд мог даже чуть позже увеличиться, но упустил шанс на брейк. Затем «Айсбарен» попытались усилить давление, но неоднократно терпели неудачу из-за стабильной защиты «Петухов» и внимательного Йенике, который, среди прочего, благополучно обезвредил прорыв Мюллера. Хозяева еще раз показали свою результативность, когда Торнквист выиграл вбрасывание: Камара сразу же реализовал удар и сделал счет 2:0 (16:26). «Петухи» также пережили фазу численного превосходства невредимыми, так что на первый перерыв они вышли с незаслуженным преимуществом благодаря своему преданному стилю игры. Первоначально «Петухам» пришлось столкнуться с трудностями в обороне во второй трети, и им пришлось"
+        },
+        {
+          "title": "20 Jahre starke Partnerschaft – platzmann federn verlängert Hauptsponsoring für die kommende Saison",
+          "link": "https://iserlohn-roosters.de/2026/01/08/20-jahre-starke-partnerschaft-platzmann-federn-verlaengert-hauptsponsoring-fuer-die-kommende-saison/",
+          "date": "08.Jan2026",
+          "content": "Als starker Unterstützer geht die Partnerschaft zwischen der platzmann federn Gruppe und den Iserlohn Roosters bereits ins 20. Jahr.\n\nDas Unternehmen platzmann federn, gegründet im Jahr 1922 durch den Großvater des heutigen geschäftsführenden Gesellschafters Frank Altemeyer, gehört zu den Weltmarktführern im Bereich von technischen Federn. u.a. für die Bereiche Automotive, Maschinenbau sowie Agrar- und Medizinindustrie.\n\nCaroline Altemeyer setzt die gelebten Werte der Unternehmensgruppe fort. Besonders engagiert sie sich für soziales Verantwortungsbewusstsein und zukunftsorientiertes Denken – Werte, die sich auch im Sponsoring widerspiegeln.\n\nNeben dem Hauptsponsoring der Iserlohn Roosters setzt sich dieses Engagement beispielsweise auch beim ProA Basketball Team Phoenix Hagen, als Hauptsponsor der Deutschen Meisterschaften der Springreiterinnen in Balve oder im Rahmen des eigenen ATP-Tennisturnier, den platzmann open, fort, welches in diesem Jahr erneut auf der Anlage des Rot-Weiß Hagen vom 2.-9. August ausgetragen wird.\n\nCaroline Altemeyer ergänzt: „Die Verlängerung des Hauptsponsorings bei den Iserlohn Roosters unterstreicht unseren Anspruch an eine langfristige Partnerschaft und setzt ein klares Zeichen für Kontinuität und Verlässlichkeit.“",
+          "title_ru": "20 лет прочного партнерства – Platzmann Federn продлевает основное спонсорство на предстоящий сезон",
+          "content_ru": "Будучи сильным сторонником, партнерство между группой Platzmann Federn и Iserlohn Roosters длится уже 20 лет.\n\nКомпания Platzmann Federn, основанная в 1922 году дедушкой нынешнего управляющего партнера Франком Альтемайером, является одним из лидеров мирового рынка в области технических пружин. для автомобильной, машиностроительной, сельскохозяйственной и медицинской промышленности и других отраслей.\n\nКэролайн Альтемейер продолжает жизненные ценности группы. Она особенно привержена социальной ответственности и мышлению, ориентированному на будущее — ценностям, которые также отражаются в спонсорстве.\n\nПомимо основного спонсорства Iserlohn Roosters, это обязательство также продолжается, например, с баскетбольной командой ProA Phoenix Hagen в качестве главного спонсора чемпионата Германии по конкуру в Бальве или в рамках теннисного турнира ATP Platzmann Open, который снова пройдет в этом году на стадионе Рот-Вайс Хаген со 2 по 9 место. состоится в августе.\n\nКэролайн Альтемейер добавляет: «Продление основного спонсорства Iserlohn Roosters подчеркивает наше стремление к долгосрочному партнерству и посылает четкий сигнал о преемственности и надежности»."
+        },
+        {
+          "title": "Spieltag 38: Roosters vs. Berlin",
+          "link": "https://iserlohn-roosters.de/2026/01/08/spieltag-38-roosters-vs-berlin/",
+          "date": "08.Jan2026",
+          "content": "Da die Eisbären Berlin am kommenden Samstag das Winter Game in Dresden bestreiten, findet das Heimspiel der Iserlohn Roosters gegen den amtierenden deutschen Meister bereits am heutigen Donnerstagabend statt. Wie gewohnt um 19:30 Uhr gastieren die Hauptstädter in der Eissporthalle am Seilersee, es sind noch restliche Ticketkontingenteim Online-Shop verfügbar, auch die Abendkasse wird öffnen.\n\nDie Roosters: Das Team von Headcoach Stefan Nyman ist mit vier Siegen aus den sechs Partien seit Weihnachten absolut im Soll, im Jahr 2026 sind die Roosters in bisher drei Spielen noch nie punktlos vom Eis gegangen. Das soll sich auch gegen den deutschen Meister nicht ändern, auch wenn der Kader nach wie vor grippegeschwächt ist. Wie genau das Line-Up gegen die Eisbären aussieht, entscheidet sich nach dem Abschlusstraining heute Vormittag.\n\nDer Gegner: Als Tabellensiebter steht der Vorjahresmeister aktuell ein wenig hinter den Erwartungen – einige Verletzungen machten den Eisbären immer wieder zu schaffen, mit einem 3:2 in München bewiesen die Berliner aber eindrucksvoll, dass jederzeit mit ihnen zu rechnen ist.\n\nDas sagen die Roosters: „Berlin hatte im Saisonverlauf sicherlich hier und da ein paar Probleme, aber sie kommen mit einem vollen Line-Up und werden voll da sein. Wir dürfen ihnen keine Gelegenheiten geben, einfache Tore zu erzielen und müssen unsere Chancen nutzen, wenn sie sich bieten“, weiß Roosters-Sportdirektor Franz-David Fritzmeier.\n\nWo kann ich die Partie live verfolgen?Magenta Sport ist live dabei, ebenso unserLiveticker powered by Talentsuite.io. Am besten ist es aber natürlich wie immer live vor Ort in der Eissporthalle, Tickets gibt’s an der Abendkasse und imOnline-Ticketshop.",
+          "title_ru": "38-й тур: «Петухи» – «Берлин»",
+          "content_ru": "Поскольку в следующую субботу «Айсбарен» из Берлина проведет зимнюю игру в Дрездене, домашняя игра «Изерлон Рустерс» против действующих чемпионов Германии состоится в этот четверг вечером. Как обычно, столичные жители выйдут на каток Зайлерзее в 19:30, билеты еще есть в наличии в интернет-магазине, кассы также будут открыты.\n\nThe Roosters: Команда главного тренера Стефана Наймана абсолютно добилась цели, одержав четыре победы в шести играх с Рождества. В 2026 году «Петухи» еще ни разу не уходили со льда без очков в трех матчах. Ситуация не должна измениться в матче с чемпионами Германии, даже если команда все еще ослаблена гриппом. Как именно будет выглядеть состав на матч с «Айсбареном», решится сегодня утром после заключительной тренировки.\n\nСоперник: прошлогодние чемпионы, занимающие седьмое место в таблице, на данный момент немного отстают от ожиданий - несколько травм неоднократно доставляли Айсбарену проблемы, но победой в Мюнхене со счетом 3:2 берлинцы убедительно доказали, что они являются силой, с которой нужно считаться в любое время.\n\nВот что говорят «Петухи»: «У «Берлина», конечно, были некоторые проблемы в течение сезона, но они пришли в полном составе и будут полностью там. Мы не можем дать им никаких возможностей забивать легкие голы и должны использовать свои шансы, когда они возникают», - говорит спортивный директор «Рустерс» Франц-Давид Фрицмайер.\n\nГде я могу посмотреть игру в прямом эфире?"
+        },
+        {
+          "title": "Schützenfestspieltag gegen Straubing ausverkauft",
+          "link": "https://iserlohn-roosters.de/2026/01/07/schuetzenfestspieltag-gegen-straubing-ausverkauft/",
+          "date": "07.Jan2026",
+          "content": "Wir freuen uns, gemeinsam mit unserem Hauptsponsor Krombacher bekanntgeben zu können, dass der diesjährige Schützenfest-Spieltag gegen die Straubing Tigers am Sonntag, den 25. Januar seit heute bereits vorzeitig ausverkauft ist!",
+          "title_ru": "Билеты на Schützenfestspieltag против Штраубинга распроданы",
+          "content_ru": "Вместе с нашим главным спонсором Krombacher мы рады сообщить, что на сегодняшний день билеты на матч Шютценфеста против «Штраубинг Тайгерс» в воскресенье, 25 января, уже распроданы досрочно!"
+        }
+      ],
+      "updated_at": "2026-01-09T19:28:37.527957"
+    },
+    "KEC": {
+      "team": "KEC",
+      "team_name": "Kölner Haie",
+      "articles": [
+        {
+          "title": "Unser neuer Look",
+          "link": "https://www.haie.de/news/unsere-trikots-der-saison-2025-2026/",
+          "date": "",
+          "content": "In der LANXESS arena, unserem Haifischbecken, werden wir wieder mit euch an unserer Seite einlaufen – bereit für tolle Spiele, unvergessliche Momente und Gänsehaut. Und das in unserer Farbe: Rot. Für unsere Heimat, für unsere Geschichte, für unseren Club.Zuhause in Rot.\n\nUnser rotes Heimtrikot setzt ein klares Zeichen! Der edle Farbverlauf – von einem leuchtenden Rot im oberen Bereich bis zu einem tiefen Dunkelrot nach unten – steht für Stärke, Leidenschaft und Emotionen. Im Halsbereich eingearbeitet: unser Kölner Stadtwappen – ein klares Bekenntnis zu unserer Stadt und ihren Menschen. Direkt daneben: der Schriftzug #JUNGHAIE, doppelt an den Seiten gesetzt. Denn Zusammenhalt trägt man nicht nur im Herzen – sondern auch auf dem Trikot.\n\nUnser neues Auswärtstrikot ist in Weißgehalten und besticht mit grauen und schwarzen Akzenten – den primären Farben unseres Wappentiers. Im unteren Bereich des Trikots sowie an den Ärmeln sorgen viele kleine Haie für den Hingucker des Jerseys – und symbolisieren dabei unsere Haie-Gemeinschaft, mit der wir auch in der kommenden Saison auswärts auf Beutezug gehen.\n\nAm Kragen fein eingearbeitet: unser Kölner Stadtwappen – ein Zeichen, dass wir unsere Heimat auch auswärts in den fremden Arenen zu jeder Zeit bei uns tragen. Zusammenhalt kennt keine Grenzen – und begleitet uns auf jedem Eis, ob zuhause oder auswärts.\n\nDas neue Third Trikot ist in einem edlen Schwarz gehalten und besticht am unteren Ende des Jerseys mit einem dynamischen Farbverlauf über Rot zu Weiß. Das auffällige Design vereint Tradition und Power – perfekt abgestimmt auf die Leidenschaft und Energie, die unsere Jungs auf dem Eis verspüren.\n\nAls Verbindung zum Heim- und Auswärtstrikot befindet sich auch im Kragen des Third Trikots unser Kölner Stadtwappen. Weitere Highlights des neuen Jerseys sind die auffälligen Nummern, die in einem knalligen Rot daherkommen – sowohl auf den Ärmeln als auch auf dem Rücken.\n\nDer Tag der Junghaie ist stets ein emotionales Highlight in unse...",
+          "title_ru": "Наш новый облик",
+          "content_ru": "Мы снова прибудем на арену LANXESS, в наш аквариум с акулами, вместе с вами – готовые к отличным играм, незабываемым моментам и мурашкам по коже. И в нашем цвете: красном. За наш дом, за нашу историю, за наш клуб. Дом в красном.\n\nНаша красная домашняя футболка посылает четкий сигнал! Элегантный цветовой градиент — от ярко-красного вверху до темно-красного внизу — символизирует силу, страсть и эмоции. На шее изображен наш герб Кёльна — четкая приверженность нашему городу и его жителям. Рядом: надпись #JUNGHAIE, расположенная дважды по бокам. Потому что солидарность – это не только то, что вы носите в своем сердце, но и на своей футболке.\n\nНаша новая выездная майка белого цвета с серыми и черными акцентами — основными цветами нашего геральдического животного. В нижней части майки и на рукавах множество маленьких акул делают ее привлекательной и символизируют наше сообщество акул, с которым мы продолжим охотиться в предстоящем сезоне.\n\nНа воротнике прекрасно вписан герб нашего города Кельна — знак того, что мы всегда несем с собой нашу родину, даже на зарубежных аренах. Единение не знает границ – и сопровождает нас на любом льду, дома или на выезде.\n\nНовая третья майка элегантного черного цвета впечатляет динамичным цветовым градиентом в нижней части майки."
+        },
+        {
+          "title": "Bergfest der Auswärtstour - Haie spielen am Freitagabend beim ERC Ingolstadt",
+          "link": "https://www.haie.de/news/bergfest-der-auswaertstour-haie-spielen-am-freitagabend-beim-erc-ingolstadt/",
+          "date": "DONNERSTAG, 08. JANUAR 2026",
+          "content": "Bevor am Sonntag der etwas mehr als einwöchige Roadtrip für unsere Jungs in Augsburg endet, machen wir am Freitagabend Station in Ingolstadt. Nach unserem Auswärtsspiel in Nürnberg geht es für uns vor dem Wochenende mit dem Spiel bei den heimstarken „Schanzern“ des ERC Ingolstadt weiter – es ist das dritte Auswärtsspiel von insgesamt fünf am Stück. Wir haben den Vorbericht zur Partie beim Tabellenvierten der PENNY DEL.\n\nING:Die Panther aus Ingolstadt gewannen ihr vergangenes Spiel zuhause mit 6:3 gegen die Löwen Frankfurt. Zuvor hatte der aktuell Viertplatzierte jedoch dreimal das Nachsehen und musste in Niederlagen gegen Schwenningen, Bremerhaven und Straubing einwilligen. Von 19 Heimspielen gewannen die „Schanzer“ stolze 16 – zwischen September und Dezember gab es sogar 14 Heimsiege am Stück. Zuletzt (vier Spiele) lief es in der heimischen SATURN-Arena etwas holpriger – zwei Siege stehen zwei Niederlagen gegenüber.\n\nKEC:Es läuft! Wir stehen bei insgesamt zehn Siegen in Serie – auswärts konnten wir die vergangenen fünf Partien gewinnen. Wenn man noch etwas weiter in die Vergangenheit schaut, sieht man die starke Bilanz von neun Siegen aus den zehn vergangenen Auswärtsspielen. Lediglich beim Gastspiel in München Anfang Dezember hatten wir in der Verlängerung das Nachsehen. Das bisher letzte Spiel ohne Punkte ist mittlerweile 21 Spiele her (wir konnten in den vergangenen 20 Partien immer punkten) und fand Anfang November gegen München statt (0:2).\n\n„Wir freuen uns auf ein hart umkämpftes Spiel am Freitag. Ingolstadt ist eine wirklich starke Mannschaft mit viel Offensivkraft. Das haben wir bei der letzten Partie in Ingolstadt gesehen. Für uns ist es wichtig, uns auf unser Spiel zu konzentrieren, defensiv gut zu spielen und auf dem gesamten Eis hart zu kämpfen. Wir sind in letzter Zeit gut in Form und wollen das am Freitag gerne fortsetzen.“",
+          "title_ru": "Горный фестиваль выездного тура - игра Haie в ERC Ингольштадт в пятницу вечером",
+          "content_ru": "Прежде чем поездка наших мальчиков, которая продлится чуть больше недели, закончится в Аугсбурге в воскресенье, мы остановимся в Ингольштадте в пятницу вечером. После выездной игры в Нюрнберге перед выходными мы продолжаем игру против сильной хозяев поля «Шанцерс» из ERC Ingolstadt – это третья выездная игра из пяти подряд. У нас есть предварительный отчет по игре против PENNY DEL, занявшего четвертое место.\n\nING: Свой последний матч дома «Пантеры» из Ингольштадта выиграли со счетом 6:3 у «Лёвен Франкфурт». Однако команда, занимающая сейчас четвертое место, ранее трижды отставала и была вынуждена смириться с поражениями от Швеннингена, Бремерхафена и Штраубинга. \"Шанцер\" выиграл впечатляющие 16 домашних матчей из 19 - с сентября по декабрь было даже 14 домашних побед подряд. Совсем недавно (четыре игры) на домашней «САТУРН Арене» дела обстояли немного сложнее – две победы против двух поражений.\n\nКЭК: Это работает! Всего у нас десять побед подряд – пять последних игр мы выиграли на выезде. Если заглянуть немного дальше в прошлое, то можно увидеть сильный рекорд в девять побед в последних десяти выездных играх. Мы проиграли в дополнительное время только во время нашего гостевого выступления в Мюнхене в начале декабря. Последняя игра без очков была 21 игра назад (нам всегда удавалось набирать очки в последних 20 играх) и состоялась в начале ноября против Мюнхена (0:2).\n\n«Мы с нетерпением ждем тяжелого"
+        },
+        {
+          "title": "\"Dreckiger Rock, pure Energie - genau diese Authentizität liebe ich\"",
+          "link": "https://www.haie.de/news/dreckiger-rock-pure-energie-genau-diese-authentizitaet-liebe-ich/",
+          "date": "DONNERSTAG, 08. JANUAR 2026",
+          "content": "Seit über 30 Jahren kümmert sich Michael „Knete“ Schulten um die Gesundheit unserer Profis – im Training, bei Verletzungen und auf dem Eis. Zwischen 2003 und 2009 führte ihn sein Weg sogar an den Bosporus, wo er für den türkischen Spitzenclub Fenerbahce Istanbul (Fußball) arbeitete. Heute leitet der 56-Jährige seine eigene Physiotherapie-Praxis am Stadtwald und sorgt dafür, dass die Spieler schnell wieder fit werden. Nebenbei pflegt er eine ungewöhnliche Leidenschaft: Jährlich besucht er 30 bis 40 Konzerte – von großen Arenen bis zu winzigen Clubs, immer auf der Suche nach authentischer Live-Musik. Wir wollen zusammen mit unserem PartnerTRICORPdie Saison über in der Rubrik „Hardest Worker“ immer wieder das Team hinter dem Team vorstellen und die Leute vorstellen, die hinter den Kulissen für einen reibungslosen Ablauf sorgen. Den Anfang macht Michael „Knete“ Schulten. In unserem Gespräch erzählt „Knete“, wie er den Spagat zwischen Profi-Sport, Praxisalltag und Privatleben meistert – und warum er Eishockey bis heute mehr liebt als vieles andere.\n\n„Knete“, beschreibe doch bitte zunächst deine Aufgaben hier bei uns.„Die Aufgaben sind relativ breit gefächert – angefangen bei der Verletzungsbetreuung der Spieler, die in der Regel zunächst mit einer Diagnose beginnt und dann entsprechend an die Ärzteteams delegiert wird. Dabei gibt es natürlich die unterschiedlichsten Bereiche, die wir konsultieren. An erster Stelle kommen natürlich unsere Vereinsärzte aus Orthopädie und Allgemeinmedizin.“\n\nAlso gibt es neben dem festen Ärzteteam auch noch Externe, die kontaktiert werden?„Genau. Es geht immer darum, was in den individuellen Fällen gebraucht wird. Das reicht von Kernspintomographie über Blutabnahmen bis hin zum Ultraschall. Auch Augenärzte, Zahnärzte, Dermatologen oder Kardiologen werden hinzugezogen.“\n\nFür die Kinder und Frauen unserer Profis?„Genau. Das ist ganz wichtig. Das sind Partner an unserer Seite, die wir kontaktieren können und worüber wir sehr froh sind, wenn si...",
+          "title_ru": "«Грязный рок, чистая энергия – это именно та аутентичность, которую я люблю»",
+          "content_ru": "Более 30 лет Михаэль «Кнете» Шультен заботится о здоровье наших профессионалов – на тренировках, в случае травм и на льду. В период с 2003 по 2009 год его путь даже привел его на Босфор, где он работал в ведущем турецком клубе «Фенербахче Стамбул» (футбол). Сегодня 56-летний футболист ведет собственную физиотерапевтическую практику в городском лесу и следит за тем, чтобы игроки быстро восстанавливали форму. У него также есть необычная страсть: он посещает от 30 до 40 концертов каждый год - от больших арен до крошечных клубов, всегда в поисках аутентичной живой музыки. Вместе с нашим партнером TRICORP мы хотим представить команду, стоящую за командой, и людей, которые обеспечивают бесперебойную работу за кулисами в разделе «Самый трудолюбивый работник» на протяжении всего сезона. Первым идет Михаэль «Кнете» Шультен. В нашей беседе «Кнете» объясняет, как ему удается балансировать между профессиональным спортом, повседневной практикой и личной жизнью – и почему он до сих пор любит хоккей больше, чем многие другие вещи.\n\n«Кнете», пожалуйста, сначала опишите свои задачи здесь, у нас. \"Задачи относительно широки - начиная с лечения травм игроков, которое обычно начинается с постановки диагноза и затем соответственно делегируется медицинским бригадам. Конечно, мы консультируемся в самых разных областях. Прежде всего, конечно, это врачи нашего клуба из ортопедии и общей медицины."
+        },
+        {
+          "title": "\"Die Vorfreude bei uns allen ist riesig\" - im Gespräch mit unseren vier Olympia-Teilnehmern",
+          "link": "https://www.haie.de/news/die-vorfreude-bei-uns-allen-ist-riesig-im-gespraech-mit-unseren-vier-olympioniken/",
+          "date": "MITTWOCH, 07. JANUAR 2026",
+          "content": "KEC goes Milano! Mit Moritz Müller, Parker Tuomie (Deutschland), Frederik Storm und Patrick Russell (Dänemark) werden gleich vier Haie-Profis im Februar an den Olympischen Winterspielen in Mailand und Cortina teilnehmen. Während es für Moritz Müller bereits die dritten Spiele sind und Frederik Storm und Patrick Russell schon bei den Spielen 2022 in Peking dabei waren, wird es für Parker Tuomie die olympische Premiere. Wir haben die Vier nach ihren Gedanken zu den Olympischen Spielen 2026 gefragt.\n\nMoritz Müller:„Meine Vorfreude ist sehr groß, ich glaube bei uns allen vier ist sie riesig. Ich freue mich schon sehr auf meine dritten Olympischen Spiele, dazu die ersten in Europa.“\n\nFrederik Storm:„Ich freue mich sehr auf die Spiele in Mailand. Die Olympischen Spiele sind eines der größten Turniere und für mich das größte Ziel, was man als Sportler erreichen kann.“\n\nParker Tuomie:„Auch ich freue mich riesig, Teil der Olympia-Mannschaft zu sein. Als ich den Anruf von Harold Kreis bekommen habe, konnte ich es zunächst nicht wirklich glauben. Es ist eine sehr große Ehre für mich.“\n\nPatrick Russell:„Ich bin sehr aufgeregt. Es ist immer etwas Besonderes, sein Land vertreten zu dürfen, insbesondere bei den Olympischen Spielen. Wir hatten vergangenes Jahr eine gute WM mit der Dänischen Nationalmannschaft und es wird schön, mit dem Team wieder zusammenzukommen.“\n\nParker Tuomie:„Es war für mich ein großer Traum, einmal an den Olympischen Spielen teilzunehmen, der nun in Erfüllung geht. Meine Familie wird beim Turnier auch vor Ort sein. Dieses Erlebnis mit ihnen teilen zu können, macht es umso schöner.“\n\nPatrick Russell:„Meine ersten Olympischen Spiele 2022 standen noch etwas unter den Vorzeichen der Corona-Pandemie. Daher freue ich mich sehr auf die Spiele 2026 und darauf, diese besondere olympische Stimmung aufzunehmen. Dazu wird es schön, gegen die besten Spieler der Welt zu spielen und sich mit ihnen messen zu können.“\n\nFrederik Storm:„Auch meine ersten Spiele 2022 waren leid...",
+          "title_ru": "«Мы все этого очень ждем» – в разговоре с четырьмя нашими олимпийскими участниками",
+          "content_ru": "KEC идет в Милан! Вместе с Морицем Мюллером, Паркером Туоми (Германия), Фредериком Стормом и Патриком Расселом (Дания) четверо профессионалов Haie примут участие в зимних Олимпийских играх в Милане и Кортине в феврале. Хотя для Морица Мюллера это уже третьи Игры, а Фредерик Сторм и Патрик Рассел уже были на Играх 2022 года в Пекине, для Паркера Туоми это будет олимпийская премьера. Мы спросили у четверых, что они думают об Олимпийских играх 2026 года.\n\nМориц Мюллер: «Я очень жду этого, думаю, мы все четверо очень этого ждем. Я очень жду своих третьих Олимпийских игр, плюс первых в Европе».\n\nФредерик Шторм: «Я очень жду игр в Милане. Олимпийские игры — один из крупнейших турниров, и для меня это самая большая цель, которую можно достичь как спортсмен».\n\nПаркер Туоми: «Я также очень рад быть частью олимпийской сборной. Когда мне позвонил Гарольд Крайс, я сначала не мог в это поверить. Для меня это очень большая честь».\n\nПатрик Рассел: «Я очень взволнован. Это всегда нечто особенное — представлять свою страну, особенно на Олимпийских играх. В прошлом году мы хорошо провели чемпионат мира со сборной Дании, и будет здорово снова собраться вместе с командой».\n\nПаркер Туоми: «Для меня это была большая мечта – принять участие в Олимпийских играх, и теперь она сбывается."
+        },
+        {
+          "title": "Moritz Müller und Parker Tuomie im DEB-Kader für die Olympischen Spiele",
+          "link": "https://www.haie.de/news/moritz-mueller-und-parker-tuomie-im-deb-kader-fuer-die-olympischen-spielen/",
+          "date": "MITTWOCH, 07. JANUAR 2026",
+          "content": "Große Ehre für zwei Haie! Verteidiger Moritz Müller und Stürmer Parker Tuomie wurden vom deutschen Eishockey-Bund (DEB) in den Kader für die Olympischen Winterspiele 2026 in Mailand und Cortina berufen. Während es für Müller bereits die dritten Spiele werden, nimmt Tuomie in Mailand erstmals an Olympischen Spielen teil.\n\nDen Vorschlag zur Nominierung hat der DEB beim Deutschen Olympischen Sportbund e.V. (DOSB) eingereicht. Die offizielle Nominierung für das Team Deutschland erfolgt am 20. Januar durch den DOSB.\n\nMoritz Müller:„Ich freue mich schon sehr auf meine dritten Olympischen Spiele, dazu die ersten in Europa. Es ist etwas Besonderes für mich, dass das Turnier so nah an der Heimat ausgetragen wird und meine Familie vor Ort dabei sein kann. Dazu hat dieses Turnier mit der Teilnahme der NHL-Spieler nochmal einen besonderen Glanz, sich mit den Besten der Besten zu messen. Da mit 39 Jahren nochmal dabei sein zu dürfen, freut und ehrt mich sehr.“\n\nParker Tuomie:„Ich freue mich riesig, Teil der Olympia-Mannschaft zu sein. Als ich den Anruf von Harold Kreis bekommen habe, konnte ich es zunächst nicht wirklich glauben. Es ist eine sehr große Ehre für mich. Meine Familie wird beim Turnier auch vor Ort sein. Dieses Erlebnis mit ihnen teilen zu können, macht es umso schöner.“\n\nDen Großteil des 25-köpfigen Aufgebots von Bundestrainer Harold Kreis bildet ein Stamm aus Spielern der PENNY DEL. Da die NHL für die Zeit der Olympischen Spiele erstmals seit zwölf Jahren wieder eine Pause einlegt, können gleich neun deutsche NHL-Profis zum Team stoßen. Auch Ex-Junghai Leon Draisaitl wird somit erstmals an den Olympischen Spielen teilnehmen.\n\n„Unsere Aufgabe bei der Kaderplanung war, die Rollenverteilung im Olympia-Team zu definieren und aus unserer Sicht bestmöglich zu besetzen. Wir sind überzeugt, mit diesem Aufgebot nun die ideale Zusammenstellung des Kaders für die Olympischen Spiele gefunden zu haben“, so Bundestrainer Harold Kreis. „Jetzt ist die Vorfreude bei uns allen groß...",
+          "title_ru": "Мориц Мюллер и Паркер Туоми в составе DEB на Олимпийских играх",
+          "content_ru": "Большая честь для двух акул! Защитник Мориц Мюллер и нападающий Паркер Туоми включены в состав команды на зимние Олимпийские игры 2026 года в Милане и Кортине Немецкой ассоциацией хоккея с шайбой (DEB). Хотя это будут третьи Игры Мюллера, Туоми впервые примет участие в Олимпийских играх в Милане.\n\nDEB представил предложение о номинации в Немецкую конфедерацию олимпийских видов спорта (DOSB). Официальное номинирование сборной Германии состоится 20 января DOSB.\n\nМориц Мюллер: \"Я с нетерпением жду своих третьих Олимпийских игр и первых в Европе. Для меня это что-то особенное, что турнир проводится так близко к дому и что моя семья может быть там. Плюс, благодаря участию игроков НХЛ, этот турнир приобретает особый блеск, чтобы соревноваться с лучшими из лучших. Я очень рад и польщен возможностью снова принять участие в возрасте 39 лет\".\n\nПаркер Туоми: «Я очень рад быть частью олимпийской сборной. Когда мне позвонил Гарольд Крейс, я сначала не мог в это поверить. Для меня это очень большая честь. Моя семья тоже будет присутствовать на турнире. Возможность поделиться с ними этим опытом делает его еще лучше».\n\nБольшую часть команды национального тренера Гарольда Крайса из 25 человек составляют игроки PENNY DEL. Потому что НХЛ впервые за двенадцать лет берет перерыв во время Олимпийских игр."
+        }
+      ],
+      "updated_at": "2026-01-09T19:28:42.937896"
+    },
+    "FRA": {
+      "team": "FRA",
+      "team_name": "Löwen Frankfurt",
+      "articles": [
+        {
+          "title": "Saison(current)",
+          "link": "https://www.loewen-frankfurt.de/saison/aktuelles",
+          "date": "",
+          "content": "",
+          "title_ru": "Сезон(текущий)",
+          "content_ru": ""
+        },
+        {
+          "title": "Aktuelles(current)",
+          "link": "https://www.loewen-frankfurt.de/saison/aktuelles",
+          "date": "",
+          "content": "",
+          "title_ru": "Текущий",
+          "content_ru": ""
+        }
+      ],
+      "updated_at": "2026-01-09T19:28:46.000087"
+    },
+    "NIT": {
+      "team": "NIT",
+      "team_name": "Nürnberg Ice Tigers",
+      "articles": [
+        {
+          "title": "Filter auswählen",
+          "link": "",
+          "date": ""
+        }
+      ],
+      "updated_at": "2026-01-09T19:28:47.659715"
+    },
+    "SWW": {
+      "team": "SWW",
+      "team_name": "Schwenninger Wild Wings",
+      "articles": [
+        {
+          "title": "Verletzungsbericht",
+          "link": "https://www.schwenninger-wildwings.de/aktuell/verletzungsberichte/",
+          "date": "",
+          "content": "Alle Updates aus der medizinischen Abteilung.Donnerstag, 11. Dezember 2025Will Weber fällt für ein paar Wochen aus.Nach dem eine konservative Behandlung nicht den gewünschten Erfolg gebracht hat, muss sich der WILD WINGS-Verteidiger nun einem kleinen arthroskopischen Eingriff an der Hand unterziehen. Danach wird sich entscheiden, wie schnell Will Weber wieder für sein Team ins Spielgeschehen eingreifen kann.Montag, 29. September 2025Philip Feist fehlt den Neckarstädtern auf unbestimmte Zeit.Bei einem Zweikampf unmittelbar an der Bande, zog sich der WILD WINGS-Youngster gestern in Berlin einen Bruch im Fuß zu. Der notwendige operative Eingriff findet noch in dieser Woche und zwar am Donnerstag im Schwarzwald-Baar-Klinikum statt. Wie lange der Angreifer dem Team von Steve Walker nicht zur Verfügung stehen wird, ist aktuell nicht absehbar.",
+          "title_ru": "Отчет о травме",
+          "content_ru": "Все новости медицинского отдела. Четверг, 11 декабря 2025 г. Уилл Вебер отсутствует на несколько недель. После того как консервативное лечение не принесло желаемого результата, защитнику WILD WINGS теперь предстоит небольшая артроскопическая процедура на руке. После этого будет решено, как быстро Уилл Вебер сможет вернуться в игру за свою команду. Понедельник, 29 сентября 2025 г. Филип Файст пропал из команды Неккарштадта на неопределенный срок. Юноша WILD WINGS сломал ногу в поединке прямо у досок вчера в Берлине. Необходимая хирургическая процедура состоится на этой неделе, в четверг, в клинике Шварцвальд-Баар. На данный момент невозможно предсказать, как долго нападающий не будет доступен команде Стива Уокера."
+        }
+      ],
+      "updated_at": "2026-01-09T19:28:50.589805"
+    },
+    "STR": {
+      "team": "STR",
+      "team_name": "Straubing Tigers",
+      "articles": [
+        {
+          "title": "Loibl, Leonhardt und Varejcka als Trainingsathelten im Olympia-Camp",
+          "link": "https://www.straubing-tigers.de/loibl-leonhardt-und-varejcka-als-trainingsathelten-im-olympia-camp/",
+          "date": "7. 01 2026",
+          "content": "7.01.2026Die Straubing Tigers sind auch im erweiterten Aufgebot der deutschen Eishockey-Nationalmannschaft vertreten: Stefan Loibl, Danjo Leonhardt und Filip Varejcka wurden vom Deutschen Eishockey-Bund als Trainingsathleten für das Olympia-Camp in Bozen (ITA) nominiert.Aufgrund der späteren Anreise der NHL-Spieler ergänzen die drei Tigers ab Samstag, den 31. Januar 2026, das Aufgebot der Nationalmannschaft. Neben mehreren Trainingseinheiten bestreiten die Trainingsathleten auch das Vorbereitungs-Länderspiel gegen Italien am Mittwoch, den 4. Februar 2026, um 19:30 Uhr.Nach dem Eintreffen der Spieler aus Nordamerika in Mailand reisen die Trainingsathleten zurück nach Deutschland. Die Einladung zum Olympia-Camp bietet den nominierten Spielern die Möglichkeit, sich im Umfeld der Nationalmannschaft zu präsentieren und weitere Erfahrungen auf internationalem Niveau zu sammeln.Olympia 2026: Spielplan der MännerVorbereitung04.02.2026 | 19:30 Uhr | Italien –Deutschland(Bozen)Tickets und Informationen:https://italia.hockey/Olympia 2026 | Männer Gruppe C12.02.2026 | 21:10 Uhr |Deutschland– Dänemark14.02.2026 | 12:10 Uhr |Deutschland– Lettland15.02.2026 | 21:10 Uhr | USA –DeutschlandDie Straubing Tigers gratulieren Stefan Loibl, Danjo Leonhardt und Filip Varejcka zur Nominierung und wünschen eine erfolgreiche und verletzungsfreie Zeit im Kreis der Nationalmannschaft.",
+          "title_ru": "Лойбл, Леонхардт и Варейцка на тренировке спортсменов в олимпийском лагере.",
+          "content_ru": "07.01.2026Штраубинг Тайгерс также представлены в расширенном составе сборной Германии по хоккею: Штефан Лойбль, Даньо Леонхардт и Филип Варейчка были номинированы Немецкой хоккейной ассоциацией в качестве тренировочных спортсменов для олимпийского лагеря в Больцано (ITA). В связи с более поздним прибытием игроков НХЛ тройка «Тигров» пополнит состав сборной с субботы, 31 января 2026 года. Помимо нескольких тренировок, тренирующиеся спортсмены также сыграют подготовительный международный матч против Италии в среду, 4 февраля 2026 года, в 19:30. После того как игроки из Северной Америки прибудут в Милан, тренирующиеся спортсмены отправятся обратно в Германию. Приглашение в олимпийский лагерь дает номинированным игрокам возможность проявить себя в среде национальной сборной и получить дальнейший опыт на международном уровне.Олимпиада-2026: мужское расписание Подготовка04.02.2026 | 19:30. | Италия – Германия (Боцен) Билеты и информация: https://italia.hockey/Olympia 2026 | Мужская группа C12.02.2026 | 21:10. | Германия – Дания 14.02.2026 | 12:10. |Германия – Латвия15.02.2026 | 21:10. | США – ГерманияКомпания «Штраубинг Тайгерс» поздравляет Штефана Лойбла, Даньо Леонхардта и Филипа Варейцку с номинацией и желает им успешного и безтравматичного времени в национальной сборной."
+        },
+        {
+          "title": "Traditionsspieltag am 18. Januar 2026: Sondertrikot und Fanaktionen",
+          "link": "https://www.straubing-tigers.de/traditionsspieltag-am-18-januar-2026-sondertrikot-und-fanaktionen/",
+          "date": "7. 01 2026",
+          "content": "7.01.2026Am Sonntag, den 18. Januar 2026, steht das Heimspiel der Straubing Tigers gegen die Augsburger Panther ganz im Zeichen der Vereinsgeschichte. Gemeinsam mit dem Verein zum Erhalt der Eishockey Historie Straubing e.V. richten die Straubing Tigers einen umfassenden Traditionsspieltag aus, der zahlreiche Programmpunkte für Fans und Wegbegleiter des Straubinger Eishockeys bereithält.Sondertrikot in Anlehnung an die Saison 1994/95Anlässlich des Traditionsspieltags laufen die Straubing Tigers in einem besonderen Sondertrikot auf: einer Neuauflage des Trikots aus der Saison 1994/95 des EHC Straubing e.V.. Es handelt sich um die erste Spielzeit, in der der EHC offiziell unter dem Beinamen „Die Tiger“ antrat – ein Name, der den Club später deutschlandweit und international bekannt machen sollte. Diese historische Einordnung findet sich auch im Buch „Der Stolz einer Stadt“ wieder.Trikotverlosung zugunsten des NachwuchsesDie Starting-Six-Trikots des Spiels werden im Anschluss an die Partie verlost. Die Übergabe erfolgt direkt nach Spielende auf dem Eis und beinhaltet ein Meet & Greet mit den Spielern.Der Losverkauf findet am Spieltag statt, der Erlös kommt vollständig dem Nachwuchs des EHC Straubing e.V. zugute.Vorplatz-Fest & FanaktionenBereits ab 13.30 Uhr findet auf dem Vorplatz des Eisstadions ein Fan-Fest statt, welches von Fans für Fans durch die Fanclubs der Straubing Tigers organisiert ist. Neben Grill- und Getränkeständen steht dabei das gemeinsame Einstimmen auf den Spieltag im Vordergrund.Infostand zur Eishockey-HistorieBegleitend zum Spieltag ist der Verein zum Erhalt der Eishockey Historie Straubing e.V. mit einem Infostand vertreten und gibt Einblicke in seine Arbeit rund um die Bewahrung der Straubinger Eishockeygeschichte.Der Traditionsspieltag soll nicht nur erinnern, sondern verbinden – Generationen von Fans, ehemalige und aktuelle Spieler sowie alle, die den Standort Straubing über Jahrzehnte geprägt haben.",
+          "title_ru": "Традиционный игровой день 18 января 2026 года: специальная футболка и акции для болельщиков",
+          "content_ru": "07.01.2026В воскресенье, 18 января 2026 года, домашний матч «Штраубинг Тайгерс» против «Аугсбургских Пантерз» будет посвящен истории клуба. Совместно с Ассоциацией по сохранению истории хоккея с шайбой Straubing e.V. Straubing Tigers организуют обширный традиционный игровой день с многочисленными программами для любителей и товарищей по хоккею с шайбой Штраубинга. Специальная футболка по мотивам сезона 1994/95. По случаю традиционного игрового дня «Штраубинг Тайгерс» будут одеты в особую специальную майку: новое издание футболки сезона 1994/95 EHC Straubing e.V. Это первый сезон, в котором EHC официально выступал под прозвищем «Тигры» — именем, которое позже сделало клуб известным по всей Германии и за рубежом. Эту историческую классификацию можно найти и в книге «Гордость города». Розыгрыш футболок в пользу молодых игроков. После игры будут разыграны шесть стартовых футболок для игры. Передача происходит сразу после окончания игры на льду и включает в себя встречу с игроками. Продажа билетов происходит в день игры, доходы полностью передаются молодым игрокам EHC Straubing e.V. Помимо грилей и стендов с напитками, основное внимание уделяется совместному созданию настроения."
+        },
+        {
+          "title": "Straubing Tigers besiegen die Adler Mannheim mit 4:1",
+          "link": "https://www.straubing-tigers.de/straubing-tigers-besiegen-die-adler-mannheim-mit-41/",
+          "date": "6. 01 2026",
+          "content": "6.01.2026Die Straubing Tigers gewannen am Dreikönigstag mit 4:1 gegen die Adler Mannheim und rückten damit auf Tabellenplatz zwei vor. Die Hausherren legten den Grundstein für ihren Sieg bereits in den ersten acht Minuten, als sie die Gäste mit 3:0 überrollten. Nach dem zwischenzeitlichen Gegentor von Gilmour keimte bei den Adlern nochmals Hoffnung auf, doch Madden machte sechs Minuten vor Schluss alles klar.AusgangslageIm Topspiel des 37. Spieltags traf am Dienstagabend der Drittplatzierte Straubing auf den Zweitplatzierten Mannheim, wobei die Gäste lediglich einen Punkt mehr als die Niederbayern hatten. Beide Teams waren jeweils mit einem Sieg und einer Niederlage ins neue Jahr gestartet. Die bisherigen Aufeinandertreffen mit den Tigers hatten die Adler mit 3:0 bzw. 4:0 für sich entschieden. Herausragende Akteure bei Kurpfälzern waren bisher der US-Amerikaner Anthony Greco mit 37 Punkten (13 Tore, 24 Vorlagen), Ex-Tiger Nicolas Mattinen (17 T., 18 V.) sowie die beiden Nationalspieler Matthias Plachta (10 T., 22 V.) und Marc Michaelis (6 T., 24 V.).Bei den Straubing Tigers standen Mike Connolly (Reha), Zac Leslie, Wade Allison, Linus Brandl (verletzt), Florian Bugl, Tobias Schwarz und Filip Varejcka nicht im Aufgebot. Das Tor der Hausherren hütete Henrik Haukeland.Bei den Gästen um Headcoach Dallas Eakins fehlten Maximilian Franzreb, Tobias Fohrler, Nick Mähler, Colin Schlenker, Tom Kühnhackl und Max Penkin. Im Tor der Gäste stand Johan Mattsson.SpielNach verhaltenem Beginn sorgte in der dritten Minute Adrian Klein für das erste Ausrufezeichen: Der Tigers-Verteidiger zog einfach mal ab und der Puck schlug an Freund und Feind vorbei im Mannheimer Tor ein (02:17). Gäste-Goalie Johan Mattsson war die Sicht verstellt. Simon Seidl steuerte den ersten Assist seiner noch jungen DEL-Karriere bei. Die frühe Führung gab den Hausherren Sicherheit, die das Gästetor in der Folge weiter unter Druck setzten. Zunächst sorgte eine Doppelchance durch Danjo Leonhardt und Tim Brunnhub...",
+          "title_ru": "Штраубинг Тайгерс победил Адлер Мангейм со счетом 4-1.",
+          "content_ru": "06.01.2026Штраубинг Тайгерс выиграли со счетом 4-1 у Адлера Мангейма на Крещении и поднялись на второе место в таблице. Хозяева поля заложили основу для своей победы в первые восемь минут, разгромив гостей со счетом 3:0. Тем временем после того, как Гилмор пропустил гол, у «Иглз» возобновилась надежда, но Мэдден все прояснил за шесть минут до конца. Исходная ситуация В главной игре 37-го тура во вторник вечером Штраубинг, занявший третье место, встретился с Мангеймом, идущим вторым, и у гостей было всего на одно очко больше, чем у Нижней Баварии. Обе команды начали новый год с одной победы и одного поражения. «Иглз» выиграли свои предыдущие встречи с «Тайгерами» со счетом 3–0 и 4–0 соответственно. Выдающимися игроками Курпфальцерна на данный момент являются американец Энтони Греко с 37 очками (13 голов, 24 передачи), бывший игрок \"Тайгера\" Николас Маттинен (17 дней, 18 очков), а также два игрока национальной сборной Матиас Плахта (10 дней, 22 победы) и Марк Михаэлис (6 дней, 24 победы). В составе «Штраубинг Тайгерс» не было Майка Коннолли (реабилитация), Зака ​​Лесли, Уэйда Эллисона, Линуса Брандла (травмирован), Флориана Бюгла, Тобиаса Шварца и Филипа Варейцки. Хенрик Хаукеланд охранял ворота хозяев. В составе гостей во главе с главным тренером Далласом Икинсом не хватало Максимилиана Францреба, Тобиаса Форлера, Ника Мэлера, Колина Шленкера, Тома Кюнхакла и Макса Пенкина. Йохан Маттссон был в воротах гостей. Игра после медленного старта"
+        },
+        {
+          "title": "Straubing Tigers gewinnen Derby gegen Ingolstadt mit 6:3",
+          "link": "https://www.straubing-tigers.de/straubing-tigers-gewinnen-derby-gegen-ingolstadt-mit-63/",
+          "date": "4. 01 2026",
+          "content": "4.01.2026Die Straubing Tigers setzten sich im Derby Niederbayern gegen Oberbayern verdient mit 6:3 durch. Zwar ging das Team von Craig Woodcroft mit einem 1:2-Rückstand aus dem ersten Abschnitt, drehte das Spiel aber mit zwei Toren im Mitteldrittel und sorgte mit drei weiteren Treffern im Schlussabschnitt für klare Verhältnisse. Mann des Spiels auf Seiten der Straubinger war Nick Halloran mit einem Tor und drei Assists. Durch diesen Sieg schieben sich die Niederbayern auf Tabellenplatz drei vor.AusgangslageZum ersten Heimspiel des Jahres 2026 waren die Panther aus Ingolstadt am Pulverturm zu Gast. In den bisherigen 80 DEL-Begegnungen beider Teams konnten die Straubing Tigers das Eis 35-mal als Sieger verlassen. Die letzten beiden Aufeinandertreffen in dieser Saison gingen jeweils an Ingolstadt, zuletzt Ende Oktober mit 6:4.Bei den Straubing Tigers konnten neben den Langzeitverletzten Mike Connolly und Zac Leslie auch Wade Allison und Linus Brandl noch nicht wieder mitwirken. Nach ihren Einsätzen bei der U20-WM standen Simon Seidl und Tobias Schwarz nicht im Lineup, ebenso war Florian Bugl nicht aufgeboten. Im Tor setzte Headcoach Craig Woodcroft auf Henrik Haukeland.Gästetrainer Mark French konnte personell aus dem Vollen schöpfen. In der Aufstellung der Ingolstädter fehlten Devin Williams, Philipp Preto, Samir Kharboutli, Myles Powell und Nico Pertuch. Brett Brochu stand im Tor der Panther.SpielDie erste Chance des Spiels gehörte den Hausherren, als Tyler Madden nach anderthalb Minuten vor das gegnerische Tor zog, mit seinem Schuss das Ziel aber knapp verfehlte. Eine Minute später gingen die Tigers in Führung: Danjo Leonhardt blieb mit seinem ersten Versuch noch an Brett Brochu hängen, setzte aber nach und traf aus spitzem Winkel (3. Spielminute). Mit ihrer ersten Torgelegenheit glichen die Ingolstädter jedoch direkt aus: Riley Sheen kam im Angriffsdrittel etwas glücklich an den Puck, fackelte nicht lange und tunnelte Henrik Haukeland (6. Min.). In der zehnten Minu...",
+          "title_ru": "Штраубинг Тайгерс выиграли дерби у Ингольштадта со счетом 6:3",
+          "content_ru": "4.01.2026Штраубинг Тайгерс заслуженно выиграли со счетом 6:3 в дерби Нижней Баварии против Верхней Баварии. Хотя команда Крейга Вудкрофта вышла из первого периода с преимуществом 1:2, они перевернули игру, забив два гола в средней трети, и прояснили ситуацию, забив еще три гола в заключительном периоде. Лучшим игроком Штраубинга стал Ник Хэллоран с одним голом и тремя передачами. Благодаря этой победе Нижняя Бавария поднялась на третье место в таблице. Исходная ситуация «Пантеры» из Ингольштадта были гостями на «Пульвертурме» в первой домашней игре 2026 года. В 80 встречах DEL между обеими командами «Штраубинг Тайгерс» смогли покинуть лед победителями 35 раз. Две последние встречи в этом сезоне прошли в Ингольштадте, последняя в конце октября 6:4. Помимо давно травмированных Майка Коннолли и Зака ​​Лесли, Уэйд Эллисон и Линус Брандл еще не смогли снова сыграть за «Штраубинг Тайгерс». После выступления на чемпионате мира среди юношей до 20 лет в составе не было Симона Зайдля и Тобиаса Шварца, как и Флориана Бюгла. Главный тренер Крейг Вудкрофт сделал ставку на Хенрика Хокеланда в воротах. Приглашенный тренер Марк Френч смог задействовать весь кадровый состав. В составе ингольштадтской команды отсутствовали Девин Уильямс, Филипп Прето, Самир Харбутли, Майлз Пауэлл и Нико Пертуч. Бретт Брошу был в воротах «Пантеров». ИграПервый шанс в игре принадлежал хозяевам поля, когда Тайлер Мэдден после «Андерта»"
+        },
+        {
+          "title": "Straubing unterliegt trotz Aufholjagd in Köln",
+          "link": "https://www.straubing-tigers.de/straubing-unterliegt-trotz-aufholjagd-in-koeln/",
+          "date": "2. 01 2026",
+          "content": "2.01.2026Die Straubing Tigers zeigen in Köln Moral und kämpfen sich nach einem Zwei-Tore-Rückstand noch einmal zurück in die Partie, müssen sich am Ende jedoch mit 2:4 bei denKölner Haiegeschlagen geben. Trotz guter Phasen und intensiver Schlussminuten belohnen sich die Niederbayern nicht für ihren Aufwand.SpielDer Start in die Partie verlief aus Straubinger Sicht alles andere als ideal. Die Kölner Haie nutzten ihre erste gute Möglichkeit. Bereits nach 1:45 Minuten brachte Maximilian Kammerer die Gastgeber früh in Führung. Die Tigers wirkten in der Anfangsphase noch unsortiert und fanden zunächst nur schwer ins Spiel. Eine erste große Chance auf den Ausgleich bot sich Mario Zimmermann, dessen Abschluss jedoch genau im Handschuh von Felix Brückmann landete. Mit zunehmender Spielzeit wurde Straubing aktiver. Besonders Nick Halloran sorgte mit seinem Tempo immer wieder für Unruhe in der Kölner Defensive, die Tigers kamen nun besser in den Spielaufbau und hielten sich vermehrt im Drittel der Haie auf. Trotz der steigenden Spielanteile blieb die Effizienz auf Seiten der Gastgeber. Eine große Straubinger Möglichkeit blieb ungenutzt und im direkten Gegenzug schlug Köln erneut zu. Nate Schnarr erhöhte in der 16:22 Minute auf 2:0. Kurz vor der ersten Pause musste Marcel Brandt wegen hohen Stocks auf die Strafbank (19:12), sodass die Tigers mit einem Rückstand in die erste Drittelpause gingen.Das zweite Drittel begann für die Tigers erneut in Unterzahl. In dieser Phase erspielte sich Köln mehrere Möglichkeiten, ehe Straubing wieder vollzählig wurde. Kurz darauf blieb Stephan Daschner nach einem hohen Stock kurz liegen, Parker Tuomie musste dafür in der 21:43 Minute auf die Strafbank. Das anschließende Powerplay der Tigers brachte jedoch keine klaren Torchancen. Kaum wieder komplett, schlugen die Gastgeber zu: Frederik Storm erhöhte in der 23:51 Minute auf 3:0. In der Folge blieb Köln zunächst spielbestimmend und kam zu Chance um Chance. Straubing hatte jedoch ebenfalls gute M...",
+          "title_ru": "Несмотря на догонялку, Штраубинг проиграл в Кёльне.",
+          "content_ru": "02.01.2026Штраубинг Тайгерс демонстрируют боевой дух в Кельне и пробиваются обратно в игру после отставания в два гола, но в итоге вынуждены признать поражение со счетом 2:4 на Кёльнер Хайе. Несмотря на хорошие моменты и напряженные последние минуты, нижние баварцы не вознаграждают себя за свои усилия. Игра Начало игры было далеко не идеальным с точки зрения Штраубингера. «Кёльнер Хайе» воспользовались своей первой хорошей возможностью. Всего через 1:45 минут Максимилиан Каммерер вывел хозяев вперед. На ранних стадиях «Тигры» казались дезорганизованными, и поначалу им было трудно войти в игру. Марио Циммерманн имел свой первый большой шанс сравнять счет, но его удар попал прямо в перчатку Феликса Брюкмана. По мере увеличения игрового времени Штраубинг становился более активным. Ник Хэллоран, в частности, своей скоростью неоднократно вызывал волнения в защите Кельна. Теперь «Тигры» смогли лучше построить игру и все чаще оказывались на третьем месте у «Шаркс». Несмотря на возрастающий удельный вес игры, хозяева оставались эффективными. Прекрасная возможность для Штраубинга осталась неиспользованной, и Кельн снова нанес ответный удар. Нэйт Шнарр увеличил счет до 2-0 на 16:22 минуте. Незадолго до первого перерыва Марселю Брандту пришлось выйти на скамейку штрафников за высокую клюшку (19:12), так что на первый третий перерыв \"тигры\" ушли с дефицитом. Вторая треть снова началась с численного превосходства «Тигров». На этом этапе К."
+        }
+      ],
+      "updated_at": "2026-01-09T19:28:56.335661"
+    }
+  }
 }
