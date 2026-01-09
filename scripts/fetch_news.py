@@ -79,6 +79,21 @@ JUNK_WORDS = [
     "aktuelle nachrichten", "weitere", "alle news", "archiv"
 ]
 
+# Words indicating non-sports news (ads, jobs, merchandise, etc.)
+NON_SPORTS_WORDS = [
+    "job", "stelle", "mitarbeiter", "karriere", "bewerbung",  # jobs
+    "auktion", "versteigerung", "ersteigern", "gebot",  # auctions
+    "trikot", "merchandise", "fanshop", "shop", "kaufen", "bestellen",  # merchandise
+    "gewinnspiel", "verlosung", "gewinne",  # contests
+    "sponsor", "partner", "werbung",  # sponsors
+    "busreise", "fanreise", "anreise",  # travel
+    "dauerkarte", "saisonkarte", "vvk", "vorverkauf",  # tickets
+    "weihnacht", "silvester", "ostern",  # holidays (usually promotional)
+    "rabatt", "aktion", "angebot", "sale",  # sales
+    "catering", "gastronomie", "restaurant",  # food
+    "parkplatz", "parken", "anfahrt",  # logistics
+]
+
 
 def is_junk_title(title: str) -> bool:
     """Check if title is junk"""
@@ -88,6 +103,31 @@ def is_junk_title(title: str) -> bool:
     for word in JUNK_WORDS:
         if word in title_lower:
             return True
+    return False
+
+
+def is_non_sports_news(title: str, content: str = "") -> bool:
+    """Check if news is not about sports (ads, jobs, merchandise, etc.)"""
+    text = (title + " " + content).lower()
+
+    # Sports keywords that indicate it's a real game news
+    sports_keywords = [
+        "spiel", "sieg", "niederlage", "tor", "punkt", "tabelle",
+        "spieltag", "derby", "playoff", "meister", "saison",
+        "trainer", "spieler", "lineup", "aufstellung", "verletzt",
+        "interview", "vorbericht", "nachbericht", "analyse"
+    ]
+
+    # If contains sports keywords, it's likely sports news
+    for kw in sports_keywords:
+        if kw in text:
+            return False
+
+    # Check for non-sports words
+    non_sports_count = sum(1 for word in NON_SPORTS_WORDS if word in text)
+    if non_sports_count >= 2:
+        return True
+
     return False
 
 
@@ -174,7 +214,45 @@ async def fetch_article_content(url: str, client: httpx.AsyncClient) -> str:
         return ""
 
 
-async def parse_news_list(html: str, base_url: str) -> list:
+async def parse_eisbaeren_berlin(html: str, base_url: str) -> list:
+    """Special parser for Eisbären Berlin website"""
+    soup = BeautifulSoup(html, 'html.parser')
+    articles = []
+
+    # Try finding news items by various patterns
+    news_items = soup.select('.news-teaser, .teaser-item, article, .post')
+    if not news_items:
+        # Try finding by link patterns
+        news_items = soup.select('a[href*="/news/"], a[href*="/nachrichten/"]')
+
+    for item in news_items[:10]:
+        try:
+            if item.name == 'a':
+                link = item.get('href', '')
+                title = item.get_text(strip=True)
+            else:
+                link_el = item.select_one('a[href]')
+                title_el = item.select_one('h2, h3, h4, .title, .headline')
+                link = link_el.get('href', '') if link_el else ''
+                title = title_el.get_text(strip=True) if title_el else ''
+
+            if not title or is_junk_title(title):
+                continue
+
+            if link and not link.startswith('http'):
+                link = base_url.rstrip('/') + '/' + link.lstrip('/')
+
+            articles.append({"title": title, "link": link, "date": ""})
+
+            if len(articles) >= 5:
+                break
+        except Exception:
+            continue
+
+    return articles
+
+
+async def parse_news_list(html: str, base_url: str, team_abbrev: str = "") -> list:
     """Parse news list page to get article links"""
     soup = BeautifulSoup(html, 'html.parser')
     articles = []
@@ -195,7 +273,7 @@ async def parse_news_list(html: str, base_url: str) -> list:
             if parent and parent not in cards:
                 cards.append(parent)
 
-    for card in cards[:5]:  # Only 5 articles per team
+    for card in cards[:10]:  # Check more cards to filter later
         try:
             title_el = card.select_one('h2, h3, h4, .title, [class*="title"], [class*="headline"]')
             link_el = card.select_one('a[href]')
@@ -235,15 +313,24 @@ async def fetch_team_news(team_abbrev: str, source: dict, client: httpx.AsyncCli
         response.raise_for_status()
         html = response.text
 
-        # Get list of articles
-        articles = await parse_news_list(html, base_url)
+        # Use special parser for Eisbären Berlin
+        if team_abbrev == "EBB":
+            articles = await parse_eisbaeren_berlin(html, base_url)
+        else:
+            articles = await parse_news_list(html, base_url, team_abbrev)
 
-        # Fetch full content and translate for each article
+        # Fetch full content, filter and translate
+        filtered_articles = []
         for article in articles:
             if article["link"]:
                 print(f"  Fetching article {articles.index(article) + 1}...")
                 content = await fetch_article_content(article["link"], client)
                 article["content"] = content
+
+                # Filter out non-sports news
+                if is_non_sports_news(article["title"], content):
+                    print(f"    Skipped (non-sports): {article['title'][:40]}...")
+                    continue
 
                 # Translate title and content
                 article["title_ru"] = await translate_text(article["title"], client)
@@ -252,13 +339,19 @@ async def fetch_team_news(team_abbrev: str, source: dict, client: httpx.AsyncCli
                 else:
                     article["content_ru"] = ""
 
+                filtered_articles.append(article)
+
                 # Small delay to avoid rate limiting
                 await asyncio.sleep(0.5)
+
+                # Limit to 5 sports news per team
+                if len(filtered_articles) >= 5:
+                    break
 
         return {
             "team": team_abbrev,
             "team_name": source["name"],
-            "articles": articles,
+            "articles": filtered_articles,
             "updated_at": datetime.utcnow().isoformat(),
         }
     except Exception as e:
