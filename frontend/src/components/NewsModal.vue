@@ -48,9 +48,6 @@
               {{ formatDate(article.date) }}
             </div>
             <div class="news-title">{{ article.title_ru || article.title }}</div>
-            <div class="news-original" v-if="article.title_ru && article.title_ru !== article.title">
-              <span class="original-label">DE:</span> {{ article.title }}
-            </div>
           </a>
         </div>
       </div>
@@ -287,24 +284,5 @@ export default {
   font-size: 14px;
   color: var(--text-primary);
   line-height: 1.4;
-  margin-bottom: 6px;
-}
-
-.news-excerpt {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 8px;
-}
-
-.news-original {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-style: italic;
-}
-
-.original-label {
-  font-weight: 600;
-  font-style: normal;
 }
 </style>
