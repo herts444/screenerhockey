@@ -36,19 +36,20 @@
         </div>
 
         <div v-else class="news-list">
-          <a
+          <div
             v-for="(article, index) in currentNews"
             :key="index"
-            :href="article.link"
-            target="_blank"
-            rel="noopener noreferrer"
             class="news-item"
+            @click="openArticle(article)"
           >
             <div class="news-date" v-if="article.date">
               {{ formatDate(article.date) }}
             </div>
             <div class="news-title">{{ article.title_ru || article.title }}</div>
-          </a>
+            <div class="news-content" v-if="article.content_ru || article.content">
+              {{ truncateText(article.content_ru || article.content, 200) }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -130,6 +131,16 @@ export default {
       } catch {
         return dateStr
       }
+    },
+    truncateText(text, maxLength) {
+      if (!text) return ''
+      if (text.length <= maxLength) return text
+      return text.substring(0, maxLength).trim() + '...'
+    },
+    openArticle(article) {
+      if (article.link) {
+        window.open(article.link, '_blank', 'noopener,noreferrer')
+      }
     }
   }
 }
@@ -154,8 +165,8 @@ export default {
   border: 1px solid var(--border-color);
   border-radius: 12px;
   width: 90%;
-  max-width: 600px;
-  max-height: 80vh;
+  max-width: 700px;
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -254,16 +265,14 @@ export default {
 .news-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .news-item {
-  display: block;
-  padding: 12px 16px;
+  padding: 16px;
   background: var(--bg-tertiary);
   border-radius: 8px;
-  text-decoration: none;
-  color: inherit;
+  cursor: pointer;
   transition: all 0.2s;
   border: 1px solid transparent;
 }
@@ -276,13 +285,20 @@ export default {
 .news-date {
   font-size: 11px;
   color: var(--text-muted);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .news-title {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-primary);
   line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.news-content {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 </style>
