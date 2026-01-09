@@ -7,7 +7,6 @@ from urllib.parse import urlparse, parse_qs
 from datetime import datetime
 import httpx
 from bs4 import BeautifulSoup
-from googletrans import Translator
 
 # DEL team news sources
 DEL_NEWS_SOURCES = {
@@ -83,17 +82,26 @@ DEL_NEWS_SOURCES = {
     },
 }
 
-# Initialize translator
-translator = Translator()
-
-
-def translate_text(text: str) -> str:
-    """Translate text from German to Russian"""
+async def translate_text(text: str, client: httpx.AsyncClient) -> str:
+    """Translate text from German to Russian using Google Translate API"""
     if not text or len(text.strip()) < 3:
         return text
     try:
-        result = translator.translate(text, src='de', dest='ru')
-        return result.text
+        # Use Google Translate free API
+        url = "https://translate.googleapis.com/translate_a/single"
+        params = {
+            "client": "gtx",
+            "sl": "de",
+            "tl": "ru",
+            "dt": "t",
+            "q": text
+        }
+        response = await client.get(url, params=params)
+        if response.status_code == 200:
+            result = response.json()
+            translated = "".join([part[0] for part in result[0] if part[0]])
+            return translated
+        return text
     except Exception:
         return text
 
@@ -132,7 +140,7 @@ def parse_german_date(date_str: str) -> str:
     return date_str
 
 
-async def parse_wordpress_news(html: str, base_url: str) -> list:
+async def parse_wordpress_news(html: str, base_url: str, client: httpx.AsyncClient) -> list:
     """Parse WordPress-based news pages (like Straubing Tigers)"""
     soup = BeautifulSoup(html, 'html.parser')
     articles = []
@@ -152,13 +160,16 @@ async def parse_wordpress_news(html: str, base_url: str) -> list:
             date = parse_german_date(date_el.get_text(strip=True) if date_el else '')
             excerpt = desc_el.get_text(strip=True)[:300] if desc_el else ''
 
+            title_ru = await translate_text(title, client)
+            excerpt_ru = await translate_text(excerpt, client) if excerpt else ''
+
             articles.append({
                 "title": title,
-                "title_ru": translate_text(title),
+                "title_ru": title_ru,
                 "link": link,
                 "date": date,
                 "excerpt": excerpt,
-                "excerpt_ru": translate_text(excerpt) if excerpt else '',
+                "excerpt_ru": excerpt_ru,
             })
         except Exception:
             continue
@@ -166,7 +177,7 @@ async def parse_wordpress_news(html: str, base_url: str) -> list:
     return articles
 
 
-async def parse_generic_news(html: str, base_url: str) -> list:
+async def parse_generic_news(html: str, base_url: str, client: httpx.AsyncClient) -> list:
     """Generic parser for news pages"""
     soup = BeautifulSoup(html, 'html.parser')
     articles = []
@@ -221,13 +232,16 @@ async def parse_generic_news(html: str, base_url: str) -> list:
             date = parse_german_date(date_el.get_text(strip=True) if date_el else '')
             excerpt = desc_el.get_text(strip=True)[:300] if desc_el else ''
 
+            title_ru = await translate_text(title, client)
+            excerpt_ru = await translate_text(excerpt, client) if excerpt else ''
+
             articles.append({
                 "title": title,
-                "title_ru": translate_text(title),
+                "title_ru": title_ru,
                 "link": link,
                 "date": date,
                 "excerpt": excerpt,
-                "excerpt_ru": translate_text(excerpt) if excerpt else '',
+                "excerpt_ru": excerpt_ru,
             })
         except Exception:
             continue
@@ -253,10 +267,10 @@ async def fetch_team_news(team_abbrev: str, limit: int = 5) -> dict:
         response.raise_for_status()
         html = response.text
 
-    if parser_type == "wordpress":
-        articles = await parse_wordpress_news(html, base_url)
-    else:
-        articles = await parse_generic_news(html, base_url)
+        if parser_type == "wordpress":
+            articles = await parse_wordpress_news(html, base_url, client)
+        else:
+            articles = await parse_generic_news(html, base_url, client)
 
     return {
         "team": team_abbrev.upper(),
