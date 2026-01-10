@@ -106,6 +106,7 @@ export default {
   computed: {
     valueBets() {
       const bets = []
+      const MIN_ODDS = 1.80
 
       for (const event of this.oddsData) {
         // Skip events without team abbreviations (can't match with our stats)
@@ -116,16 +117,17 @@ export default {
         const homeStats = this.statsCache[event.home_team.abbrev]
         const awayStats = this.statsCache[event.away_team.abbrev]
 
-        // Process home team individual totals
+        // Process home team individual totals (ИТБ and ИТМ)
         if (event.odds?.home_total && homeStats?.stats?.home?.individual_totals) {
           for (const total of event.odds.home_total) {
             const threshold = `${total.line}+`
             const statsData = homeStats.stats.home.individual_totals[threshold]
 
             if (statsData && statsData.percentage != null) {
-              const probability = statsData.percentage / 100
-              if (probability > 0) {
-                const fairOdds = 1 / probability
+              // ИТБ (over) - probability that team scores MORE than line
+              const probOver = statsData.percentage / 100
+              if (probOver > 0 && total.over >= MIN_ODDS) {
+                const fairOdds = 1 / probOver
                 const value = ((total.over - fairOdds) / fairOdds) * 100
 
                 if (value > 0) {
@@ -138,10 +140,36 @@ export default {
                     awayAbbrev: event.away_team.abbrev,
                     league: event.league,
                     scheduled: event.scheduled,
-                    betType: `ИТ ${event.home_team.abbrev} больше`,
+                    betType: `ИТБ ${event.home_team.abbrev}`,
                     line: total.line,
                     odds: total.over,
-                    probability: probability,
+                    probability: probOver,
+                    fairOdds: fairOdds,
+                    value: value
+                  })
+                }
+              }
+
+              // ИТМ (under) - probability that team scores LESS than line
+              const probUnder = 1 - probOver
+              if (probUnder > 0 && total.under >= MIN_ODDS) {
+                const fairOdds = 1 / probUnder
+                const value = ((total.under - fairOdds) / fairOdds) * 100
+
+                if (value > 0) {
+                  bets.push({
+                    id: `${event.event_id}-home-it-under-${total.line}`,
+                    eventId: event.event_id,
+                    homeTeam: event.home_team.name,
+                    homeAbbrev: event.home_team.abbrev,
+                    awayTeam: event.away_team.name,
+                    awayAbbrev: event.away_team.abbrev,
+                    league: event.league,
+                    scheduled: event.scheduled,
+                    betType: `ИТМ ${event.home_team.abbrev}`,
+                    line: total.line,
+                    odds: total.under,
+                    probability: probUnder,
                     fairOdds: fairOdds,
                     value: value
                   })
@@ -151,16 +179,17 @@ export default {
           }
         }
 
-        // Process away team individual totals
+        // Process away team individual totals (ИТБ and ИТМ)
         if (event.odds?.away_total && awayStats?.stats?.away?.individual_totals) {
           for (const total of event.odds.away_total) {
             const threshold = `${total.line}+`
             const statsData = awayStats.stats.away.individual_totals[threshold]
 
             if (statsData && statsData.percentage != null) {
-              const probability = statsData.percentage / 100
-              if (probability > 0) {
-                const fairOdds = 1 / probability
+              // ИТБ (over)
+              const probOver = statsData.percentage / 100
+              if (probOver > 0 && total.over >= MIN_ODDS) {
+                const fairOdds = 1 / probOver
                 const value = ((total.over - fairOdds) / fairOdds) * 100
 
                 if (value > 0) {
@@ -173,10 +202,36 @@ export default {
                     awayAbbrev: event.away_team.abbrev,
                     league: event.league,
                     scheduled: event.scheduled,
-                    betType: `ИТ ${event.away_team.abbrev} больше`,
+                    betType: `ИТБ ${event.away_team.abbrev}`,
                     line: total.line,
                     odds: total.over,
-                    probability: probability,
+                    probability: probOver,
+                    fairOdds: fairOdds,
+                    value: value
+                  })
+                }
+              }
+
+              // ИТМ (under)
+              const probUnder = 1 - probOver
+              if (probUnder > 0 && total.under >= MIN_ODDS) {
+                const fairOdds = 1 / probUnder
+                const value = ((total.under - fairOdds) / fairOdds) * 100
+
+                if (value > 0) {
+                  bets.push({
+                    id: `${event.event_id}-away-it-under-${total.line}`,
+                    eventId: event.event_id,
+                    homeTeam: event.home_team.name,
+                    homeAbbrev: event.home_team.abbrev,
+                    awayTeam: event.away_team.name,
+                    awayAbbrev: event.away_team.abbrev,
+                    league: event.league,
+                    scheduled: event.scheduled,
+                    betType: `ИТМ ${event.away_team.abbrev}`,
+                    line: total.line,
+                    odds: total.under,
+                    probability: probUnder,
                     fairOdds: fairOdds,
                     value: value
                   })
@@ -186,16 +241,17 @@ export default {
           }
         }
 
-        // Process match totals from home team stats
+        // Process match totals (ТБ and ТМ)
         if (event.odds?.match_total && homeStats?.stats?.home?.match_totals) {
           for (const total of event.odds.match_total) {
             const threshold = `${total.line}+`
             const statsData = homeStats.stats.home.match_totals[threshold]
 
             if (statsData && statsData.percentage != null) {
-              const probability = statsData.percentage / 100
-              if (probability > 0) {
-                const fairOdds = 1 / probability
+              // ТБ (over)
+              const probOver = statsData.percentage / 100
+              if (probOver > 0 && total.over >= MIN_ODDS) {
+                const fairOdds = 1 / probOver
                 const value = ((total.over - fairOdds) / fairOdds) * 100
 
                 if (value > 0) {
@@ -208,10 +264,36 @@ export default {
                     awayAbbrev: event.away_team.abbrev,
                     league: event.league,
                     scheduled: event.scheduled,
-                    betType: 'Тотал матча больше',
+                    betType: 'ТБ',
                     line: total.line,
                     odds: total.over,
-                    probability: probability,
+                    probability: probOver,
+                    fairOdds: fairOdds,
+                    value: value
+                  })
+                }
+              }
+
+              // ТМ (under)
+              const probUnder = 1 - probOver
+              if (probUnder > 0 && total.under >= MIN_ODDS) {
+                const fairOdds = 1 / probUnder
+                const value = ((total.under - fairOdds) / fairOdds) * 100
+
+                if (value > 0) {
+                  bets.push({
+                    id: `${event.event_id}-match-total-under-${total.line}`,
+                    eventId: event.event_id,
+                    homeTeam: event.home_team.name,
+                    homeAbbrev: event.home_team.abbrev,
+                    awayTeam: event.away_team.name,
+                    awayAbbrev: event.away_team.abbrev,
+                    league: event.league,
+                    scheduled: event.scheduled,
+                    betType: 'ТМ',
+                    line: total.line,
+                    odds: total.under,
+                    probability: probUnder,
                     fairOdds: fairOdds,
                     value: value
                   })
