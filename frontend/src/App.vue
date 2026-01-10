@@ -1,72 +1,108 @@
 <template>
   <div id="app">
     <header class="header">
-      <div class="header-left">
-        <h1>{{ selectedLeagueName }} Screener</h1>
-        <div class="league-switcher">
-          <button
-            v-for="league in leagues"
-            :key="league.code"
-            :class="['league-btn', { active: selectedLeague === league.code }]"
-            @click="switchLeague(league.code)"
-          >
-            {{ league.name }}
-          </button>
+      <!-- Logo and main nav -->
+      <div class="header-brand">
+        <div class="logo">
+          <span class="logo-icon">🏒</span>
+          <span class="logo-text">Hockey Screener</span>
         </div>
-        <div class="stats-mode-switcher" v-if="activeTab === 'stats'">
+        <nav class="main-nav">
           <button
-            :class="['mode-btn', { active: statsMode === 'scored' }]"
-            @click="statsMode = 'scored'"
-          >
-            Забитые
-          </button>
-          <button
-            :class="['mode-btn', { active: statsMode === 'conceded' }]"
-            @click="statsMode = 'conceded'"
-          >
-            Пропущенные
-          </button>
-        </div>
-        <div class="tab-switcher">
-          <button
-            :class="['tab-btn', { active: activeTab === 'stats' }]"
+            :class="['nav-btn', { active: activeTab === 'stats' }]"
             @click="activeTab = 'stats'"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3v18h18"/>
+              <path d="m19 9-5 5-4-4-3 3"/>
+            </svg>
             Статистика
           </button>
           <button
-            :class="['tab-btn', { active: activeTab === 'value' }]"
+            :class="['nav-btn', 'nav-btn-value', { active: activeTab === 'value' }]"
             @click="activeTab = 'value'"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
+              <path d="M12 18V6"/>
+            </svg>
             Value Bets
           </button>
-        </div>
+        </nav>
       </div>
-      <div class="header-actions">
-        <div class="filter-group">
-          <select v-model="selectedDate" class="filter-select" @change="onDateChange">
-            <option v-for="date in availableDates" :key="date.value" :value="date.value">
-              {{ date.label }}
-            </option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <select v-model="lastN" class="filter-select" @change="onPeriodChange">
-            <option :value="0">Сезон</option>
-            <option :value="5">5 матчей</option>
-            <option :value="10">10 матчей</option>
-            <option :value="15">15 матчей</option>
-          </select>
-        </div>
-        <button class="btn-icon" @click="syncData" :disabled="syncing" title="Обновить данные">
-          <svg v-if="!syncing" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-            <path d="M3 3v5h5"/>
-            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
-            <path d="M16 16h5v5"/>
-          </svg>
-          <span v-else class="spinner-small"></span>
-        </button>
+
+      <!-- Context-specific controls -->
+      <div class="header-controls">
+        <!-- Stats tab controls -->
+        <template v-if="activeTab === 'stats'">
+          <div class="league-switcher">
+            <button
+              v-for="league in leagues"
+              :key="league.code"
+              :class="['league-btn', { active: selectedLeague === league.code }]"
+              @click="switchLeague(league.code)"
+            >
+              {{ league.name }}
+            </button>
+          </div>
+
+          <div class="control-divider"></div>
+
+          <div class="stats-mode-switcher">
+            <button
+              :class="['mode-btn', { active: statsMode === 'scored' }]"
+              @click="statsMode = 'scored'"
+            >
+              Забитые
+            </button>
+            <button
+              :class="['mode-btn', { active: statsMode === 'conceded' }]"
+              @click="statsMode = 'conceded'"
+            >
+              Пропущенные
+            </button>
+          </div>
+
+          <div class="control-divider"></div>
+
+          <div class="filter-group">
+            <select v-model="selectedDate" class="filter-select" @change="onDateChange">
+              <option v-for="date in availableDates" :key="date.value" :value="date.value">
+                {{ date.label }}
+              </option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <select v-model="lastN" class="filter-select" @change="onPeriodChange">
+              <option :value="0">Сезон</option>
+              <option :value="5">5 матчей</option>
+              <option :value="10">10 матчей</option>
+              <option :value="15">15 матчей</option>
+            </select>
+          </div>
+          <button class="btn-icon" @click="syncData" :disabled="syncing" title="Обновить данные">
+            <svg v-if="!syncing" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+              <path d="M16 16h5v5"/>
+            </svg>
+            <span v-else class="spinner-small"></span>
+          </button>
+        </template>
+
+        <!-- Value Bets tab - no controls needed, they're inside the component -->
+        <template v-else>
+          <div class="value-bets-hint">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 16v-4"/>
+              <path d="M12 8h.01"/>
+            </svg>
+            Все лиги • Фильтры в таблице
+          </div>
+        </template>
       </div>
     </header>
 
@@ -834,36 +870,4 @@ export default {
   color: white;
 }
 
-/* Tab switcher */
-.tab-switcher {
-  display: flex;
-  gap: 4px;
-  background: var(--bg-tertiary);
-  padding: 4px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  margin-left: 16px;
-}
-
-.tab-btn {
-  padding: 6px 14px;
-  border: none;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: transparent;
-  color: var(--text-secondary);
-}
-
-.tab-btn:hover {
-  color: var(--text-primary);
-  background: var(--bg-hover);
-}
-
-.tab-btn.active {
-  background: var(--accent-green, #4caf50);
-  color: white;
-}
 </style>

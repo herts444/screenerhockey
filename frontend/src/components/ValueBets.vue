@@ -7,8 +7,8 @@
           <option value="">Все лиги</option>
           <option value="NHL">NHL</option>
           <option value="AHL">AHL</option>
-          <option value="DEL">DEL</option>
-          <option value="KHL">KHL</option>
+          <option value="LIIGA">Финляндия</option>
+          <option value="DEL">Германия</option>
         </select>
         <select v-model="minValue" class="filter-select">
           <option :value="50">Value 50%+</option>

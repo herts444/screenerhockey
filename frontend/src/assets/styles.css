@@ -39,11 +39,112 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  gap: 24px;
 }
 
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  font-size: 28px;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.main-nav {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-tertiary);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.nav-btn.active {
+  background: var(--accent-blue);
+  color: white;
+}
+
+.nav-btn-value.active {
+  background: var(--accent-green);
+}
+
+.nav-btn svg {
+  flex-shrink: 0;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.control-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-color);
+  margin: 0 4px;
+}
+
+.value-bets-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.value-bets-hint svg {
+  color: var(--accent-blue);
+}
+
+/* Legacy support */
 .header-left {
   display: flex;
   align-items: center;
@@ -512,6 +613,20 @@ body {
 }
 
 /* Responsive */
+@media (max-width: 1200px) {
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .header-controls {
+    flex-basis: 100%;
+    justify-content: center;
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+  }
+}
+
 @media (max-width: 768px) {
   .stats-grid {
     grid-template-columns: 1fr;
@@ -528,17 +643,25 @@ body {
 
   .header {
     flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
+    gap: 12px;
+    padding: 12px;
   }
 
-  .header-left {
+  .header-brand {
     flex-direction: column;
     gap: 12px;
-    align-items: center;
   }
 
-  .header-actions {
-    justify-content: center;
+  .header-controls {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .control-divider {
+    display: none;
+  }
+
+  .league-switcher {
+    order: -1;
   }
 }
