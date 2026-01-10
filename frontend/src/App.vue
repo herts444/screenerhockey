@@ -60,10 +60,10 @@
           <tr>
             <th rowspan="2" class="th-match">Матч</th>
             <th rowspan="2" class="th-news" v-if="selectedLeague === 'DEL'"></th>
-            <th colspan="5" class="th-group">ИТ Гости</th>
             <th colspan="5" class="th-group">ИТ Хозяева</th>
-            <th colspan="4" class="th-group">Тотал (гости)</th>
+            <th colspan="5" class="th-group">ИТ Гости</th>
             <th colspan="4" class="th-group">Тотал (хозяева)</th>
+            <th colspan="4" class="th-group">Тотал (гости)</th>
           </tr>
           <tr>
             <!-- Individual totals away -->
@@ -94,11 +94,11 @@
           <tr v-for="game in filteredGamesWithStats" :key="game.game_id" class="game-row">
             <td class="td-match">
               <div class="match-info">
-                <img :src="game.away_team.logo_url" :alt="game.away_team.abbrev" class="team-logo">
-                <span class="team-away">{{ game.away_team.name_ru || game.away_team.abbrev }}</span>
-                <span class="vs-divider">—</span>
                 <img :src="game.home_team.logo_url" :alt="game.home_team.abbrev" class="team-logo">
                 <span class="team-home">{{ game.home_team.name_ru || game.home_team.abbrev }}</span>
+                <span class="vs-divider">—</span>
+                <img :src="game.away_team.logo_url" :alt="game.away_team.abbrev" class="team-logo">
+                <span class="team-away">{{ game.away_team.name_ru || game.away_team.abbrev }}</span>
               </div>
             </td>
 
@@ -114,14 +114,6 @@
               </button>
             </td>
 
-            <!-- Away team individual totals (away games stats) -->
-            <td v-for="t in [2,3,4,5,6]" :key="'away-it-'+t" class="td-stat">
-              <StatCell
-                :data="getAwayIndividualTotal(game, t)"
-                @click="showDetails(game, 'away', 'individual', t)"
-              />
-            </td>
-
             <!-- Home team individual totals (home games stats) -->
             <td v-for="t in [2,3,4,5,6]" :key="'home-it-'+t" class="td-stat">
               <StatCell
@@ -130,11 +122,11 @@
               />
             </td>
 
-            <!-- Away team match totals (away games stats) -->
-            <td v-for="t in [5,6,7,8]" :key="'away-mt-'+t" class="td-stat">
+            <!-- Away team individual totals (away games stats) -->
+            <td v-for="t in [2,3,4,5,6]" :key="'away-it-'+t" class="td-stat">
               <StatCell
-                :data="getAwayMatchTotal(game, t)"
-                @click="showDetails(game, 'away', 'total', t)"
+                :data="getAwayIndividualTotal(game, t)"
+                @click="showDetails(game, 'away', 'individual', t)"
               />
             </td>
 
@@ -143,6 +135,14 @@
               <StatCell
                 :data="getHomeMatchTotal(game, t)"
                 @click="showDetails(game, 'home', 'total', t)"
+              />
+            </td>
+
+            <!-- Away team match totals (away games stats) -->
+            <td v-for="t in [5,6,7,8]" :key="'away-mt-'+t" class="td-stat">
+              <StatCell
+                :data="getAwayMatchTotal(game, t)"
+                @click="showDetails(game, 'away', 'total', t)"
               />
             </td>
           </tr>
