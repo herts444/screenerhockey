@@ -432,7 +432,7 @@ export default {
     },
 
     getJettonUrl(eventId) {
-      return `https://jetton.direct/sports/event/${eventId}`
+      return `https://jtboost.life/sports/event/${eventId}`
     }
   }
 }
