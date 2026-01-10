@@ -67,6 +67,19 @@ export const hockeyApi = {
       params: { league, limit }
     })
     return response.data
+  },
+
+  // Get bookmaker odds from JetTon
+  async getOdds(league = null) {
+    const params = league ? { league } : {}
+    const response = await api.get('/odds', { params })
+    return response.data
+  },
+
+  // Get detailed odds for specific event
+  async getEventOdds(eventId) {
+    const response = await api.get('/odds', { params: { event_id: eventId } })
+    return response.data
   }
 }
 

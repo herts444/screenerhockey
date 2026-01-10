@@ -13,7 +13,7 @@
             {{ league.name }}
           </button>
         </div>
-        <div class="stats-mode-switcher">
+        <div class="stats-mode-switcher" v-if="activeTab === 'stats'">
           <button
             :class="['mode-btn', { active: statsMode === 'scored' }]"
             @click="statsMode = 'scored'"
@@ -25,6 +25,20 @@
             @click="statsMode = 'conceded'"
           >
             Пропущенные
+          </button>
+        </div>
+        <div class="tab-switcher">
+          <button
+            :class="['tab-btn', { active: activeTab === 'stats' }]"
+            @click="activeTab = 'stats'"
+          >
+            Статистика
+          </button>
+          <button
+            :class="['tab-btn', { active: activeTab === 'value' }]"
+            @click="activeTab = 'value'"
+          >
+            Value Bets
           </button>
         </div>
       </div>
@@ -56,19 +70,28 @@
       </div>
     </header>
 
-    <div v-if="loading" class="loading">
-      <div class="spinner"></div>
-      <span>Загрузка данных...</span>
-    </div>
+    <!-- Value Bets Tab -->
+    <ValueBets
+      v-if="activeTab === 'value'"
+      :stats-cache="allStatsCache"
+      @stats-loaded="onValueBetsStatsLoaded"
+    />
 
-    <div v-else-if="filteredGames.length === 0" class="empty-state">
-      <div class="empty-state-icon">🏒</div>
-      <p class="empty-state-text">
-        Нет матчей на выбранную дату.
-      </p>
-    </div>
+    <!-- Stats Tab -->
+    <template v-else>
+      <div v-if="loading" class="loading">
+        <div class="spinner"></div>
+        <span>Загрузка данных...</span>
+      </div>
 
-    <div v-else class="games-table-container">
+      <div v-else-if="filteredGames.length === 0" class="empty-state">
+        <div class="empty-state-icon">🏒</div>
+        <p class="empty-state-text">
+          Нет матчей на выбранную дату.
+        </p>
+      </div>
+
+      <div v-else class="games-table-container">
       <table class="games-table">
         <thead>
           <tr>
@@ -163,6 +186,7 @@
         </tbody>
       </table>
     </div>
+    </template>
 
     <!-- Details Modal -->
     <div v-if="detailsModal" class="modal-overlay" @click.self="detailsModal = null">
@@ -207,12 +231,14 @@
 import { hockeyApi } from './services/api.js'
 import StatCell from './components/StatCell.vue'
 import NewsModal from './components/NewsModal.vue'
+import ValueBets from './components/ValueBets.vue'
 
 export default {
   name: 'App',
   components: {
     StatCell,
-    NewsModal
+    NewsModal,
+    ValueBets
   },
   data() {
     return {
@@ -233,6 +259,7 @@ export default {
       selectedDate: null,
       selectedLeague: 'NHL',
       statsMode: 'scored', // 'scored' or 'conceded'
+      activeTab: 'stats', // 'stats' or 'value'
       leagues: [
         { code: 'NHL', name: 'NHL', name_ru: 'НХЛ' },
         { code: 'AHL', name: 'AHL', name_ru: 'АХЛ' },
@@ -281,6 +308,14 @@ export default {
         homeStats: this.statsCache[game.home_team.abbrev],
         awayStats: this.statsCache[game.away_team.abbrev]
       }))
+    },
+    allStatsCache() {
+      // Combine stats cache from all leagues for ValueBets
+      const combined = {}
+      for (const league of Object.keys(this.leagueData)) {
+        Object.assign(combined, this.leagueData[league].statsCache)
+      }
+      return combined
     }
   },
   async mounted() {
@@ -513,6 +548,14 @@ export default {
         this.error = 'Ошибка при обновлении данных'
       } finally {
         this.syncing = false
+      }
+    },
+
+    onValueBetsStatsLoaded({ abbrev, stats }) {
+      // Store stats loaded by ValueBets component in the global cache
+      // Find which league this team belongs to
+      for (const league of Object.keys(this.leagueData)) {
+        this.leagueData[league].statsCache[abbrev] = stats
       }
     }
   }
@@ -788,6 +831,39 @@ export default {
 
 .mode-btn.active {
   background: var(--accent-blue);
+  color: white;
+}
+
+/* Tab switcher */
+.tab-switcher {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-tertiary);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin-left: 16px;
+}
+
+.tab-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.tab-btn.active {
+  background: var(--accent-green, #4caf50);
   color: white;
 }
 </style>
