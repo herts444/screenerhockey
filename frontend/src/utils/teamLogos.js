@@ -43,40 +43,43 @@ export const NHL_LOGOS = {
   'WPG': '/logos/WPG.svg',
 }
 
-// AHL teams - HockeyTech CDN IDs
+// AHL teams - HockeyTech CDN IDs (from official API season_id=90)
 export const AHL_LOGO_IDS = {
-  'ABB': '50013',   // Abbotsford Canucks
-  'BAK': '329',     // Bakersfield Condors
-  'BEL': '50004',   // Belleville Senators
-  'BRI': '316',     // Bridgeport Islanders
-  'CGW': '50026',   // Calgary Wranglers
-  'CLT': '311',     // Charlotte Checkers
-  'CLE': '312',     // Cleveland Monsters
-  'COA': '50025',   // Coachella Valley Firebirds
-  'COL': '337',     // Colorado Eagles
-  'GR': '317',      // Grand Rapids Griffins
-  'HFD': '304',     // Hartford Wolf Pack
-  'LV': '50015',    // Henderson Silver Knights
+  'ABB': '440',     // Abbotsford Canucks
+  'BAK': '402',     // Bakersfield Condors
+  'BEL': '413',     // Belleville Senators
+  'BRI': '317',     // Bridgeport Islanders
+  'CGY': '444',     // Calgary Wranglers
+  'CGW': '444',     // Calgary Wranglers (alt)
+  'CLT': '384',     // Charlotte Checkers
+  'CHI': '330',     // Chicago Wolves
+  'CLE': '373',     // Cleveland Monsters
+  'CV': '445',      // Coachella Valley Firebirds
+  'COA': '445',     // Coachella Valley Firebirds (alt)
+  'COL': '419',     // Colorado Eagles
+  'GR': '328',      // Grand Rapids Griffins
+  'HFD': '307',     // Hartford Wolf Pack
+  'HSK': '437',     // Henderson Silver Knights
   'HER': '319',     // Hershey Bears
-  'IA': '335',      // Iowa Wild
-  'LAV': '50003',   // Laval Rocket
-  'LHV': '313',     // Lehigh Valley Phantoms
+  'IA': '389',      // Iowa Wild
+  'LAV': '415',     // Laval Rocket
+  'LV': '313',      // Lehigh Valley Phantoms
+  'LHV': '313',     // Lehigh Valley Phantoms (alt)
   'MB': '321',      // Manitoba Moose
-  'MIL': '330',     // Milwaukee Admirals
-  'ONT': '333',     // Ontario Reign
+  'MIL': '327',     // Milwaukee Admirals
+  'ONT': '403',     // Ontario Reign
   'PRO': '309',     // Providence Bruins
-  'ROC': '305',     // Rochester Americans
-  'RFD': '334',     // Rockford IceHogs
-  'SD': '50005',    // San Diego Gulls
-  'SJ': '328',      // San Jose Barracuda
-  'SPR': '310',     // Springfield Thunderbirds
-  'SYR': '315',     // Syracuse Crunch
-  'TEX': '331',     // Texas Stars
-  'TOR': '323',     // Toronto Marlies
-  'TUC': '50006',   // Tucson Roadrunners
-  'UTC': '306',     // Utica Comets
-  'WBS': '314',     // Wilkes-Barre/Scranton Penguins
-  'CHI': '318',     // Chicago Wolves (AHL)
+  'ROC': '323',     // Rochester Americans
+  'RFD': '372',     // Rockford IceHogs
+  'SD': '404',      // San Diego Gulls
+  'SJ': '405',      // San Jose Barracuda
+  'SPR': '411',     // Springfield Thunderbirds
+  'SYR': '324',     // Syracuse Crunch
+  'TEX': '380',     // Texas Stars
+  'TOR': '335',     // Toronto Marlies
+  'TUC': '412',     // Tucson Roadrunners
+  'UTC': '390',     // Utica Comets
+  'WBS': '316',     // Wilkes-Barre/Scranton Penguins
 }
 
 // Finnish Liiga teams - SportsLogos.net URLs
