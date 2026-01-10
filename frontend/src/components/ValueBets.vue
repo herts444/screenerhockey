@@ -11,11 +11,10 @@
           <option value="KHL">KHL</option>
         </select>
         <select v-model="minValue" class="filter-select">
-          <option :value="0">Любое value</option>
-          <option :value="5">Value 5%+</option>
-          <option :value="10">Value 10%+</option>
-          <option :value="15">Value 15%+</option>
-          <option :value="20">Value 20%+</option>
+          <option :value="50">Value 50%+</option>
+          <option :value="75">Value 75%+</option>
+          <option :value="100">Value 100%+</option>
+          <option :value="30">Value 30%+</option>
         </select>
         <button class="btn-refresh" @click="loadOdds" :disabled="loading">
           <svg v-if="!loading" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -91,6 +90,7 @@
 
 <script>
 import { hockeyApi } from '../services/api.js'
+import { getTeamLogo } from '../utils/teamLogos.js'
 
 export default {
   name: 'ValueBets',
@@ -106,7 +106,7 @@ export default {
       error: null,
       oddsData: [],
       selectedLeague: '',
-      minValue: 5
+      minValue: 50
     }
   },
   computed: {
@@ -149,10 +149,10 @@ export default {
                     eventId: event.event_id,
                     homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
                     homeAbbrev: event.home_team.abbrev,
-                    homeLogo: homeTeamInfo.logo_url,
+                    homeLogo: getTeamLogo(event.home_team.abbrev, homeTeamInfo.logo_url),
                     awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
                     awayAbbrev: event.away_team.abbrev,
-                    awayLogo: awayTeamInfo.logo_url,
+                    awayLogo: getTeamLogo(event.away_team.abbrev, awayTeamInfo.logo_url),
                     league: event.league,
                     scheduled: event.scheduled,
                     betType: `ИТБ ${event.home_team.abbrev}`,
@@ -178,10 +178,10 @@ export default {
                     eventId: event.event_id,
                     homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
                     homeAbbrev: event.home_team.abbrev,
-                    homeLogo: homeTeamInfo.logo_url,
+                    homeLogo: getTeamLogo(event.home_team.abbrev, homeTeamInfo.logo_url),
                     awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
                     awayAbbrev: event.away_team.abbrev,
-                    awayLogo: awayTeamInfo.logo_url,
+                    awayLogo: getTeamLogo(event.away_team.abbrev, awayTeamInfo.logo_url),
                     league: event.league,
                     scheduled: event.scheduled,
                     betType: `ИТМ ${event.home_team.abbrev}`,
@@ -217,10 +217,10 @@ export default {
                     eventId: event.event_id,
                     homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
                     homeAbbrev: event.home_team.abbrev,
-                    homeLogo: homeTeamInfo.logo_url,
+                    homeLogo: getTeamLogo(event.home_team.abbrev, homeTeamInfo.logo_url),
                     awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
                     awayAbbrev: event.away_team.abbrev,
-                    awayLogo: awayTeamInfo.logo_url,
+                    awayLogo: getTeamLogo(event.away_team.abbrev, awayTeamInfo.logo_url),
                     league: event.league,
                     scheduled: event.scheduled,
                     betType: `ИТБ ${event.away_team.abbrev}`,
@@ -245,10 +245,10 @@ export default {
                     eventId: event.event_id,
                     homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
                     homeAbbrev: event.home_team.abbrev,
-                    homeLogo: homeTeamInfo.logo_url,
+                    homeLogo: getTeamLogo(event.home_team.abbrev, homeTeamInfo.logo_url),
                     awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
                     awayAbbrev: event.away_team.abbrev,
-                    awayLogo: awayTeamInfo.logo_url,
+                    awayLogo: getTeamLogo(event.away_team.abbrev, awayTeamInfo.logo_url),
                     league: event.league,
                     scheduled: event.scheduled,
                     betType: `ИТМ ${event.away_team.abbrev}`,
@@ -284,10 +284,10 @@ export default {
                     eventId: event.event_id,
                     homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
                     homeAbbrev: event.home_team.abbrev,
-                    homeLogo: homeTeamInfo.logo_url,
+                    homeLogo: getTeamLogo(event.home_team.abbrev, homeTeamInfo.logo_url),
                     awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
                     awayAbbrev: event.away_team.abbrev,
-                    awayLogo: awayTeamInfo.logo_url,
+                    awayLogo: getTeamLogo(event.away_team.abbrev, awayTeamInfo.logo_url),
                     league: event.league,
                     scheduled: event.scheduled,
                     betType: 'ТБ',
@@ -312,10 +312,10 @@ export default {
                     eventId: event.event_id,
                     homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
                     homeAbbrev: event.home_team.abbrev,
-                    homeLogo: homeTeamInfo.logo_url,
+                    homeLogo: getTeamLogo(event.home_team.abbrev, homeTeamInfo.logo_url),
                     awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
                     awayAbbrev: event.away_team.abbrev,
-                    awayLogo: awayTeamInfo.logo_url,
+                    awayLogo: getTeamLogo(event.away_team.abbrev, awayTeamInfo.logo_url),
                     league: event.league,
                     scheduled: event.scheduled,
                     betType: 'ТМ',
@@ -335,8 +335,19 @@ export default {
       // Sort by value descending
       return bets.sort((a, b) => b.value - a.value)
     },
+    // Group by match, show only best value per match
+    bestValuePerMatch() {
+      const matchBets = {}
+      for (const bet of this.valueBets) {
+        const matchKey = bet.eventId
+        if (!matchBets[matchKey] || matchBets[matchKey].value < bet.value) {
+          matchBets[matchKey] = bet
+        }
+      }
+      return Object.values(matchBets).sort((a, b) => b.value - a.value)
+    },
     filteredValueBets() {
-      return this.valueBets.filter(bet => bet.value >= this.minValue)
+      return this.bestValuePerMatch.filter(bet => bet.value >= this.minValue)
     }
   },
   async mounted() {
@@ -349,7 +360,25 @@ export default {
 
       try {
         const response = await hockeyApi.getOdds(this.selectedLeague || null)
-        this.oddsData = response.events || []
+        let events = response.events || []
+
+        // Load detailed odds for events that don't have individual totals
+        const detailedPromises = events
+          .filter(e => e.home_team?.abbrev && (!e.odds?.home_total?.length || !e.odds?.away_total?.length))
+          .slice(0, 10) // Limit to 10 to avoid too many requests
+          .map(async (event) => {
+            try {
+              const detailed = await hockeyApi.getEventOdds(event.event_id)
+              if (detailed?.odds) {
+                event.odds = { ...event.odds, ...detailed.odds }
+              }
+            } catch (err) {
+              // Ignore errors for individual event loading
+            }
+          })
+
+        await Promise.all(detailedPromises)
+        this.oddsData = events
 
         // Load stats for all teams that we have mappings for
         await this.loadStatsForOdds()
@@ -396,9 +425,9 @@ export default {
     },
 
     getValueClass(value) {
-      if (value >= 20) return 'value-excellent'
-      if (value >= 15) return 'value-great'
-      if (value >= 10) return 'value-good'
+      if (value >= 100) return 'value-excellent'
+      if (value >= 75) return 'value-great'
+      if (value >= 50) return 'value-good'
       return 'value-ok'
     }
   }
