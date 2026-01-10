@@ -1,41 +1,47 @@
 <template>
   <div id="app">
     <header class="header">
-      <!-- Logo and main nav -->
-      <div class="header-brand">
-        <div class="logo">
-          <span class="logo-icon">🏒</span>
-          <span class="logo-text">Hockey Screener</span>
-        </div>
-        <nav class="main-nav">
-          <button
-            :class="['nav-btn', { active: activeTab === 'stats' }]"
-            @click="activeTab = 'stats'"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 3v18h18"/>
-              <path d="m19 9-5 5-4-4-3 3"/>
-            </svg>
-            Статистика
-          </button>
-          <button
-            :class="['nav-btn', 'nav-btn-value', { active: activeTab === 'value' }]"
-            @click="activeTab = 'value'"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Row 1: Logo and main navigation -->
+      <div class="header-row header-row-main">
+        <div class="header-brand">
+          <div class="logo">
+            <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"/>
-              <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
-              <path d="M12 18V6"/>
+              <path d="m4.93 4.93 4.24 4.24"/>
+              <path d="m14.83 9.17 4.24-4.24"/>
+              <path d="m14.83 14.83 4.24 4.24"/>
+              <path d="m9.17 14.83-4.24 4.24"/>
+              <circle cx="12" cy="12" r="4"/>
             </svg>
-            Value Bets
-          </button>
-        </nav>
+            <span class="logo-text">Hockey Screener</span>
+          </div>
+          <nav class="main-nav">
+            <button
+              :class="['nav-btn', { active: activeTab === 'stats' }]"
+              @click="activeTab = 'stats'"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v18h18"/>
+                <path d="m19 9-5 5-4-4-3 3"/>
+              </svg>
+              Статистика
+            </button>
+            <button
+              :class="['nav-btn', 'nav-btn-value', { active: activeTab === 'value' }]"
+              @click="activeTab = 'value'"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+              Value Bets
+            </button>
+          </nav>
+        </div>
       </div>
 
-      <!-- Context-specific controls -->
-      <div class="header-controls">
-        <!-- Stats tab controls -->
-        <template v-if="activeTab === 'stats'">
+      <!-- Row 2: Context-specific controls (Stats only) -->
+      <div v-if="activeTab === 'stats'" class="header-row header-row-controls">
+        <div class="controls-group">
           <div class="league-switcher">
             <button
               v-for="league in leagues"
@@ -63,9 +69,9 @@
               Пропущенные
             </button>
           </div>
+        </div>
 
-          <div class="control-divider"></div>
-
+        <div class="controls-group">
           <div class="filter-group">
             <select v-model="selectedDate" class="filter-select" @change="onDateChange">
               <option v-for="date in availableDates" :key="date.value" :value="date.value">
@@ -82,7 +88,7 @@
             </select>
           </div>
           <button class="btn-icon" @click="syncData" :disabled="syncing" title="Обновить данные">
-            <svg v-if="!syncing" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg v-if="!syncing" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
               <path d="M3 3v5h5"/>
               <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
@@ -90,19 +96,7 @@
             </svg>
             <span v-else class="spinner-small"></span>
           </button>
-        </template>
-
-        <!-- Value Bets tab - no controls needed, they're inside the component -->
-        <template v-else>
-          <div class="value-bets-hint">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 16v-4"/>
-              <path d="M12 8h.01"/>
-            </svg>
-            Все лиги • Фильтры в таблице
-          </div>
-        </template>
+        </div>
       </div>
     </header>
 
@@ -121,7 +115,16 @@
       </div>
 
       <div v-else-if="filteredGames.length === 0" class="empty-state">
-        <div class="empty-state-icon">🏒</div>
+        <div class="empty-state-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="m4.93 4.93 4.24 4.24"/>
+            <path d="m14.83 9.17 4.24-4.24"/>
+            <path d="m14.83 14.83 4.24 4.24"/>
+            <path d="m9.17 14.83-4.24 4.24"/>
+            <circle cx="12" cy="12" r="4"/>
+          </svg>
+        </div>
         <p class="empty-state-text">
           Нет матчей на выбранную дату.
         </p>

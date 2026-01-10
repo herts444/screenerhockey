@@ -10,12 +10,6 @@
           <option value="LIIGA">Финляндия</option>
           <option value="DEL">Германия</option>
         </select>
-        <select v-model="minValue" class="filter-select">
-          <option :value="50">Value 50%+</option>
-          <option :value="75">Value 75%+</option>
-          <option :value="100">Value 100%+</option>
-          <option :value="30">Value 30%+</option>
-        </select>
         <button class="btn-refresh" @click="loadOdds" :disabled="loading">
           <svg v-if="!loading" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
@@ -38,7 +32,12 @@
     </div>
 
     <div v-else-if="filteredValueBets.length === 0" class="empty-state">
-      <div class="empty-icon">📊</div>
+      <div class="empty-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 3v18h18"/>
+          <path d="m19 9-5 5-4-4-3 3"/>
+        </svg>
+      </div>
       <p>Нет валуйных ставок по выбранным критериям</p>
     </div>
 
@@ -49,11 +48,11 @@
             <th class="th-match">Матч</th>
             <th class="th-league">Лига</th>
             <th class="th-bet">Ставка</th>
-            <th class="th-line">Линия</th>
             <th class="th-odds">Коэф.</th>
-            <th class="th-prob">Наша вер-ть</th>
+            <th class="th-prob">Вероятность</th>
             <th class="th-fair">Fair Odds</th>
-            <th class="th-value">Value %</th>
+            <th class="th-value">Value</th>
+            <th class="th-link">БК</th>
           </tr>
         </thead>
         <tbody>
@@ -73,13 +72,21 @@
               <div class="match-time">{{ formatTime(bet.scheduled) }}</div>
             </td>
             <td class="td-league">{{ bet.league || '—' }}</td>
-            <td class="td-bet">{{ bet.betType }}</td>
-            <td class="td-line">{{ bet.line }}</td>
+            <td class="td-bet">{{ bet.betLabel }} ({{ bet.line }})</td>
             <td class="td-odds">{{ bet.odds.toFixed(2) }}</td>
             <td class="td-prob">{{ (bet.probability * 100).toFixed(1) }}%</td>
             <td class="td-fair">{{ bet.fairOdds.toFixed(2) }}</td>
             <td class="td-value" :class="getValueClass(bet.value)">
-              <span class="value-badge">+{{ bet.value.toFixed(1) }}%</span>
+              <span class="value-badge">+{{ bet.value.toFixed(0) }}%</span>
+            </td>
+            <td class="td-link">
+              <a :href="getJettonUrl(bet.eventId)" target="_blank" rel="noopener" class="jetton-link" title="Открыть в JetTon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+              </a>
             </td>
           </tr>
         </tbody>
@@ -105,17 +112,16 @@ export default {
       loading: false,
       error: null,
       oddsData: [],
-      selectedLeague: '',
-      minValue: 50
+      selectedLeague: ''
     }
   },
   computed: {
     valueBets() {
       const bets = []
       const MIN_ODDS = 1.80
+      const MIN_VALUE = 50
 
       for (const event of this.oddsData) {
-        // Skip events without team abbreviations (can't match with our stats)
         if (!event.home_team?.abbrev || !event.away_team?.abbrev) {
           continue
         }
@@ -123,39 +129,39 @@ export default {
         const homeStats = this.statsCache[event.home_team.abbrev]
         const awayStats = this.statsCache[event.away_team.abbrev]
 
-        // Get team info (name_ru, logo_url) from stats cache
         const homeTeamInfo = homeStats?.team || {}
         const awayTeamInfo = awayStats?.team || {}
+
+        const homeTeamName = homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name
+        const awayTeamName = awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name
 
         // Process home team individual totals (ИТБ and ИТМ)
         if (event.odds?.home_total && homeStats?.stats?.home?.individual_totals) {
           for (const total of event.odds.home_total) {
-            // Convert bookmaker line (2.5, 3.5) to our threshold (3+, 4+)
-            // For over 2.5, need 3+ goals; for over 3.5, need 4+ goals
             const thresholdNum = Math.ceil(total.line)
             const threshold = `${thresholdNum}+`
             const statsData = homeStats.stats.home.individual_totals[threshold]
 
             if (statsData && statsData.percentage != null) {
-              // ИТБ (over) - probability that team scores MORE than line
               const probOver = statsData.percentage / 100
               if (probOver > 0 && total.over >= MIN_ODDS) {
                 const fairOdds = 1 / probOver
                 const value = ((total.over - fairOdds) / fairOdds) * 100
 
-                if (value > 0) {
+                if (value >= MIN_VALUE) {
                   bets.push({
                     id: `${event.event_id}-home-it-over-${total.line}`,
                     eventId: event.event_id,
-                    homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
+                    homeTeam: homeTeamName,
                     homeAbbrev: event.home_team.abbrev,
                     homeLogo: getTeamLogo(event.home_team.abbrev, homeTeamInfo.logo_url, event.league),
-                    awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
+                    awayTeam: awayTeamName,
                     awayAbbrev: event.away_team.abbrev,
                     awayLogo: getTeamLogo(event.away_team.abbrev, awayTeamInfo.logo_url, event.league),
                     league: event.league,
                     scheduled: event.scheduled,
-                    betType: `ИТБ ${event.home_team.abbrev}`,
+                    betType: 'home-it-over',
+                    betLabel: `ИТБ ${homeTeamName}`,
                     line: total.line,
                     odds: total.over,
                     probability: probOver,
@@ -165,26 +171,25 @@ export default {
                 }
               }
 
-              // ИТМ (under) - probability that team scores LESS than line
-              // For under 2.5, need less than 3 goals, so probability = 1 - P(3+)
               const probUnder = 1 - probOver
               if (probUnder > 0 && total.under >= MIN_ODDS) {
                 const fairOdds = 1 / probUnder
                 const value = ((total.under - fairOdds) / fairOdds) * 100
 
-                if (value > 0) {
+                if (value >= MIN_VALUE) {
                   bets.push({
                     id: `${event.event_id}-home-it-under-${total.line}`,
                     eventId: event.event_id,
-                    homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
+                    homeTeam: homeTeamName,
                     homeAbbrev: event.home_team.abbrev,
                     homeLogo: getTeamLogo(event.home_team.abbrev, homeTeamInfo.logo_url, event.league),
-                    awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
+                    awayTeam: awayTeamName,
                     awayAbbrev: event.away_team.abbrev,
                     awayLogo: getTeamLogo(event.away_team.abbrev, awayTeamInfo.logo_url, event.league),
                     league: event.league,
                     scheduled: event.scheduled,
-                    betType: `ИТМ ${event.home_team.abbrev}`,
+                    betType: 'home-it-under',
+                    betLabel: `ИТМ ${homeTeamName}`,
                     line: total.line,
                     odds: total.under,
                     probability: probUnder,
@@ -197,7 +202,7 @@ export default {
           }
         }
 
-        // Process away team individual totals (ИТБ and ИТМ)
+        // Process away team individual totals
         if (event.odds?.away_total && awayStats?.stats?.away?.individual_totals) {
           for (const total of event.odds.away_total) {
             const thresholdNum = Math.ceil(total.line)
@@ -205,25 +210,25 @@ export default {
             const statsData = awayStats.stats.away.individual_totals[threshold]
 
             if (statsData && statsData.percentage != null) {
-              // ИТБ (over)
               const probOver = statsData.percentage / 100
               if (probOver > 0 && total.over >= MIN_ODDS) {
                 const fairOdds = 1 / probOver
                 const value = ((total.over - fairOdds) / fairOdds) * 100
 
-                if (value > 0) {
+                if (value >= MIN_VALUE) {
                   bets.push({
                     id: `${event.event_id}-away-it-over-${total.line}`,
                     eventId: event.event_id,
-                    homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
+                    homeTeam: homeTeamName,
                     homeAbbrev: event.home_team.abbrev,
                     homeLogo: getTeamLogo(event.home_team.abbrev, homeTeamInfo.logo_url, event.league),
-                    awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
+                    awayTeam: awayTeamName,
                     awayAbbrev: event.away_team.abbrev,
                     awayLogo: getTeamLogo(event.away_team.abbrev, awayTeamInfo.logo_url, event.league),
                     league: event.league,
                     scheduled: event.scheduled,
-                    betType: `ИТБ ${event.away_team.abbrev}`,
+                    betType: 'away-it-over',
+                    betLabel: `ИТБ ${awayTeamName}`,
                     line: total.line,
                     odds: total.over,
                     probability: probOver,
@@ -233,25 +238,25 @@ export default {
                 }
               }
 
-              // ИТМ (under)
               const probUnder = 1 - probOver
               if (probUnder > 0 && total.under >= MIN_ODDS) {
                 const fairOdds = 1 / probUnder
                 const value = ((total.under - fairOdds) / fairOdds) * 100
 
-                if (value > 0) {
+                if (value >= MIN_VALUE) {
                   bets.push({
                     id: `${event.event_id}-away-it-under-${total.line}`,
                     eventId: event.event_id,
-                    homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
+                    homeTeam: homeTeamName,
                     homeAbbrev: event.home_team.abbrev,
                     homeLogo: getTeamLogo(event.home_team.abbrev, homeTeamInfo.logo_url, event.league),
-                    awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
+                    awayTeam: awayTeamName,
                     awayAbbrev: event.away_team.abbrev,
                     awayLogo: getTeamLogo(event.away_team.abbrev, awayTeamInfo.logo_url, event.league),
                     league: event.league,
                     scheduled: event.scheduled,
-                    betType: `ИТМ ${event.away_team.abbrev}`,
+                    betType: 'away-it-under',
+                    betLabel: `ИТМ ${awayTeamName}`,
                     line: total.line,
                     odds: total.under,
                     probability: probUnder,
@@ -272,25 +277,25 @@ export default {
             const statsData = homeStats.stats.home.match_totals[threshold]
 
             if (statsData && statsData.percentage != null) {
-              // ТБ (over)
               const probOver = statsData.percentage / 100
               if (probOver > 0 && total.over >= MIN_ODDS) {
                 const fairOdds = 1 / probOver
                 const value = ((total.over - fairOdds) / fairOdds) * 100
 
-                if (value > 0) {
+                if (value >= MIN_VALUE) {
                   bets.push({
                     id: `${event.event_id}-match-total-over-${total.line}`,
                     eventId: event.event_id,
-                    homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
+                    homeTeam: homeTeamName,
                     homeAbbrev: event.home_team.abbrev,
                     homeLogo: getTeamLogo(event.home_team.abbrev, homeTeamInfo.logo_url, event.league),
-                    awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
+                    awayTeam: awayTeamName,
                     awayAbbrev: event.away_team.abbrev,
                     awayLogo: getTeamLogo(event.away_team.abbrev, awayTeamInfo.logo_url, event.league),
                     league: event.league,
                     scheduled: event.scheduled,
-                    betType: 'ТБ',
+                    betType: 'match-total-over',
+                    betLabel: 'ТБ',
                     line: total.line,
                     odds: total.over,
                     probability: probOver,
@@ -300,25 +305,25 @@ export default {
                 }
               }
 
-              // ТМ (under)
               const probUnder = 1 - probOver
               if (probUnder > 0 && total.under >= MIN_ODDS) {
                 const fairOdds = 1 / probUnder
                 const value = ((total.under - fairOdds) / fairOdds) * 100
 
-                if (value > 0) {
+                if (value >= MIN_VALUE) {
                   bets.push({
                     id: `${event.event_id}-match-total-under-${total.line}`,
                     eventId: event.event_id,
-                    homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
+                    homeTeam: homeTeamName,
                     homeAbbrev: event.home_team.abbrev,
                     homeLogo: getTeamLogo(event.home_team.abbrev, homeTeamInfo.logo_url, event.league),
-                    awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
+                    awayTeam: awayTeamName,
                     awayAbbrev: event.away_team.abbrev,
                     awayLogo: getTeamLogo(event.away_team.abbrev, awayTeamInfo.logo_url, event.league),
                     league: event.league,
                     scheduled: event.scheduled,
-                    betType: 'ТМ',
+                    betType: 'match-total-under',
+                    betLabel: 'ТМ',
                     line: total.line,
                     odds: total.under,
                     probability: probUnder,
@@ -332,10 +337,8 @@ export default {
         }
       }
 
-      // Sort by value descending
       return bets.sort((a, b) => b.value - a.value)
     },
-    // Group by match, show only best value per match
     bestValuePerMatch() {
       const matchBets = {}
       for (const bet of this.valueBets) {
@@ -347,7 +350,7 @@ export default {
       return Object.values(matchBets).sort((a, b) => b.value - a.value)
     },
     filteredValueBets() {
-      return this.bestValuePerMatch.filter(bet => bet.value >= this.minValue)
+      return this.bestValuePerMatch
     }
   },
   async mounted() {
@@ -362,10 +365,9 @@ export default {
         const response = await hockeyApi.getOdds(this.selectedLeague || null)
         let events = response.events || []
 
-        // Load detailed odds for events that don't have individual totals
         const detailedPromises = events
           .filter(e => e.home_team?.abbrev && (!e.odds?.home_total?.length || !e.odds?.away_total?.length))
-          .slice(0, 10) // Limit to 10 to avoid too many requests
+          .slice(0, 10)
           .map(async (event) => {
             try {
               const detailed = await hockeyApi.getEventOdds(event.event_id)
@@ -373,14 +375,13 @@ export default {
                 event.odds = { ...event.odds, ...detailed.odds }
               }
             } catch (err) {
-              // Ignore errors for individual event loading
+              // Ignore
             }
           })
 
         await Promise.all(detailedPromises)
         this.oddsData = events
 
-        // Load stats for all teams that we have mappings for
         await this.loadStatsForOdds()
       } catch (err) {
         console.error('Failed to load odds:', err)
@@ -429,6 +430,10 @@ export default {
       if (value >= 75) return 'value-great'
       if (value >= 50) return 'value-good'
       return 'value-ok'
+    },
+
+    getJettonUrl(eventId) {
+      return `https://jetton.gg/sports/event/${eventId}`
     }
   }
 }
@@ -512,8 +517,8 @@ export default {
 }
 
 .empty-icon {
-  font-size: 48px;
   margin-bottom: 16px;
+  color: var(--text-muted);
 }
 
 .error-state {
@@ -548,16 +553,16 @@ export default {
   background-color: var(--bg-hover);
 }
 
-.th-match { min-width: 250px; }
-.th-league { width: 60px; }
-.th-bet { width: 150px; }
-.th-line { width: 60px; text-align: center; }
+.th-match { min-width: 280px; }
+.th-league { width: 60px; text-align: center; }
+.th-bet { min-width: 180px; }
 .th-odds { width: 70px; text-align: center; }
-.th-prob { width: 80px; text-align: center; }
+.th-prob { width: 90px; text-align: center; }
 .th-fair { width: 80px; text-align: center; }
 .th-value { width: 80px; text-align: center; }
+.th-link { width: 50px; text-align: center; }
 
-.td-line, .td-odds, .td-prob, .td-fair, .td-value {
+.td-league, .td-odds, .td-prob, .td-fair, .td-value, .td-link {
   text-align: center;
 }
 
@@ -600,7 +605,6 @@ export default {
 }
 
 .td-league {
-  text-align: center;
   font-weight: 500;
 }
 
@@ -639,6 +643,23 @@ export default {
 .value-excellent .value-badge {
   background: rgba(255, 87, 34, 0.25);
   color: #ff5722;
+}
+
+.jetton-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.jetton-link:hover {
+  background: var(--accent-blue);
+  color: white;
 }
 
 .spinner-small {
