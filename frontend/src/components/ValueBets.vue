@@ -61,9 +61,15 @@
           <tr v-for="bet in filteredValueBets" :key="bet.id" class="bet-row" :class="getValueClass(bet.value)">
             <td class="td-match">
               <div class="match-info">
-                <span class="team-home">{{ bet.homeTeam }}</span>
+                <div class="team-with-logo">
+                  <img v-if="bet.homeLogo" :src="bet.homeLogo" :alt="bet.homeAbbrev" class="team-logo" />
+                  <span class="team-home">{{ bet.homeTeam }}</span>
+                </div>
                 <span class="vs">—</span>
-                <span class="team-away">{{ bet.awayTeam }}</span>
+                <div class="team-with-logo">
+                  <img v-if="bet.awayLogo" :src="bet.awayLogo" :alt="bet.awayAbbrev" class="team-logo" />
+                  <span class="team-away">{{ bet.awayTeam }}</span>
+                </div>
               </div>
               <div class="match-time">{{ formatTime(bet.scheduled) }}</div>
             </td>
@@ -117,10 +123,17 @@ export default {
         const homeStats = this.statsCache[event.home_team.abbrev]
         const awayStats = this.statsCache[event.away_team.abbrev]
 
+        // Get team info (name_ru, logo_url) from stats cache
+        const homeTeamInfo = homeStats?.team || {}
+        const awayTeamInfo = awayStats?.team || {}
+
         // Process home team individual totals (ИТБ and ИТМ)
         if (event.odds?.home_total && homeStats?.stats?.home?.individual_totals) {
           for (const total of event.odds.home_total) {
-            const threshold = `${total.line}+`
+            // Convert bookmaker line (2.5, 3.5) to our threshold (3+, 4+)
+            // For over 2.5, need 3+ goals; for over 3.5, need 4+ goals
+            const thresholdNum = Math.ceil(total.line)
+            const threshold = `${thresholdNum}+`
             const statsData = homeStats.stats.home.individual_totals[threshold]
 
             if (statsData && statsData.percentage != null) {
@@ -134,10 +147,12 @@ export default {
                   bets.push({
                     id: `${event.event_id}-home-it-over-${total.line}`,
                     eventId: event.event_id,
-                    homeTeam: event.home_team.name,
+                    homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
                     homeAbbrev: event.home_team.abbrev,
-                    awayTeam: event.away_team.name,
+                    homeLogo: homeTeamInfo.logo_url,
+                    awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
                     awayAbbrev: event.away_team.abbrev,
+                    awayLogo: awayTeamInfo.logo_url,
                     league: event.league,
                     scheduled: event.scheduled,
                     betType: `ИТБ ${event.home_team.abbrev}`,
@@ -151,6 +166,7 @@ export default {
               }
 
               // ИТМ (under) - probability that team scores LESS than line
+              // For under 2.5, need less than 3 goals, so probability = 1 - P(3+)
               const probUnder = 1 - probOver
               if (probUnder > 0 && total.under >= MIN_ODDS) {
                 const fairOdds = 1 / probUnder
@@ -160,10 +176,12 @@ export default {
                   bets.push({
                     id: `${event.event_id}-home-it-under-${total.line}`,
                     eventId: event.event_id,
-                    homeTeam: event.home_team.name,
+                    homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
                     homeAbbrev: event.home_team.abbrev,
-                    awayTeam: event.away_team.name,
+                    homeLogo: homeTeamInfo.logo_url,
+                    awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
                     awayAbbrev: event.away_team.abbrev,
+                    awayLogo: awayTeamInfo.logo_url,
                     league: event.league,
                     scheduled: event.scheduled,
                     betType: `ИТМ ${event.home_team.abbrev}`,
@@ -182,7 +200,8 @@ export default {
         // Process away team individual totals (ИТБ and ИТМ)
         if (event.odds?.away_total && awayStats?.stats?.away?.individual_totals) {
           for (const total of event.odds.away_total) {
-            const threshold = `${total.line}+`
+            const thresholdNum = Math.ceil(total.line)
+            const threshold = `${thresholdNum}+`
             const statsData = awayStats.stats.away.individual_totals[threshold]
 
             if (statsData && statsData.percentage != null) {
@@ -196,10 +215,12 @@ export default {
                   bets.push({
                     id: `${event.event_id}-away-it-over-${total.line}`,
                     eventId: event.event_id,
-                    homeTeam: event.home_team.name,
+                    homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
                     homeAbbrev: event.home_team.abbrev,
-                    awayTeam: event.away_team.name,
+                    homeLogo: homeTeamInfo.logo_url,
+                    awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
                     awayAbbrev: event.away_team.abbrev,
+                    awayLogo: awayTeamInfo.logo_url,
                     league: event.league,
                     scheduled: event.scheduled,
                     betType: `ИТБ ${event.away_team.abbrev}`,
@@ -222,10 +243,12 @@ export default {
                   bets.push({
                     id: `${event.event_id}-away-it-under-${total.line}`,
                     eventId: event.event_id,
-                    homeTeam: event.home_team.name,
+                    homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
                     homeAbbrev: event.home_team.abbrev,
-                    awayTeam: event.away_team.name,
+                    homeLogo: homeTeamInfo.logo_url,
+                    awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
                     awayAbbrev: event.away_team.abbrev,
+                    awayLogo: awayTeamInfo.logo_url,
                     league: event.league,
                     scheduled: event.scheduled,
                     betType: `ИТМ ${event.away_team.abbrev}`,
@@ -244,7 +267,8 @@ export default {
         // Process match totals (ТБ and ТМ)
         if (event.odds?.match_total && homeStats?.stats?.home?.match_totals) {
           for (const total of event.odds.match_total) {
-            const threshold = `${total.line}+`
+            const thresholdNum = Math.ceil(total.line)
+            const threshold = `${thresholdNum}+`
             const statsData = homeStats.stats.home.match_totals[threshold]
 
             if (statsData && statsData.percentage != null) {
@@ -258,10 +282,12 @@ export default {
                   bets.push({
                     id: `${event.event_id}-match-total-over-${total.line}`,
                     eventId: event.event_id,
-                    homeTeam: event.home_team.name,
+                    homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
                     homeAbbrev: event.home_team.abbrev,
-                    awayTeam: event.away_team.name,
+                    homeLogo: homeTeamInfo.logo_url,
+                    awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
                     awayAbbrev: event.away_team.abbrev,
+                    awayLogo: awayTeamInfo.logo_url,
                     league: event.league,
                     scheduled: event.scheduled,
                     betType: 'ТБ',
@@ -284,10 +310,12 @@ export default {
                   bets.push({
                     id: `${event.event_id}-match-total-under-${total.line}`,
                     eventId: event.event_id,
-                    homeTeam: event.home_team.name,
+                    homeTeam: homeTeamInfo.name_ru || homeTeamInfo.name || event.home_team.name,
                     homeAbbrev: event.home_team.abbrev,
-                    awayTeam: event.away_team.name,
+                    homeLogo: homeTeamInfo.logo_url,
+                    awayTeam: awayTeamInfo.name_ru || awayTeamInfo.name || event.away_team.name,
                     awayAbbrev: event.away_team.abbrev,
+                    awayLogo: awayTeamInfo.logo_url,
                     league: event.league,
                     scheduled: event.scheduled,
                     betType: 'ТМ',
@@ -509,6 +537,19 @@ export default {
   align-items: center;
   gap: 8px;
   font-weight: 500;
+  flex-wrap: wrap;
+}
+
+.team-with-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.team-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 .team-home {
