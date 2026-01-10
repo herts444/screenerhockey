@@ -115,10 +115,11 @@ def calculate_weighted_percentage(matches: List[GameResult], condition_func, dec
 
 def get_full_team_stats(home_matches: List[GameResult], away_matches: List[GameResult]) -> Dict:
     stats = {
-        "home": {"total_matches": len(home_matches), "individual_totals": {}, "match_totals": {}},
-        "away": {"total_matches": len(away_matches), "individual_totals": {}, "match_totals": {}}
+        "home": {"total_matches": len(home_matches), "individual_totals": {}, "individual_conceded": {}, "match_totals": {}},
+        "away": {"total_matches": len(away_matches), "individual_totals": {}, "individual_conceded": {}, "match_totals": {}}
     }
 
+    # Individual totals (goals scored by team)
     for threshold in [2, 3, 4, 5, 6]:
         for location, matches in [("home", home_matches), ("away", away_matches)]:
             condition = lambda m, t=threshold: m.team_score >= t
@@ -131,6 +132,20 @@ def get_full_team_stats(home_matches: List[GameResult], away_matches: List[GameR
                 "matches": [{"date": m.date.strftime("%d.%m.%Y"), "opponent": m.opponent, "opponent_abbrev": m.opponent_abbrev, "score": f"{m.team_score}:{m.opponent_score}"} for m in matching]
             }
 
+    # Individual conceded (goals conceded by team)
+    for threshold in [2, 3, 4, 5, 6]:
+        for location, matches in [("home", home_matches), ("away", away_matches)]:
+            condition = lambda m, t=threshold: m.opponent_score >= t
+            matching = [m for m in matches if condition(m)]
+            simple_pct, weighted_pct = calculate_weighted_percentage(matches, condition)
+            stats[location]["individual_conceded"][f"{threshold}+"] = {
+                "count": len(matching),
+                "percentage": simple_pct,
+                "weighted_percentage": weighted_pct,
+                "matches": [{"date": m.date.strftime("%d.%m.%Y"), "opponent": m.opponent, "opponent_abbrev": m.opponent_abbrev, "score": f"{m.team_score}:{m.opponent_score}"} for m in matching]
+            }
+
+    # Match totals
     for threshold in [5, 6, 7, 8]:
         for location, matches in [("home", home_matches), ("away", away_matches)]:
             condition = lambda m, t=threshold: m.total_goals >= t

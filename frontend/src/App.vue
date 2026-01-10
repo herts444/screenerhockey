@@ -13,6 +13,20 @@
             {{ league.name }}
           </button>
         </div>
+        <div class="stats-mode-switcher">
+          <button
+            :class="['mode-btn', { active: statsMode === 'scored' }]"
+            @click="statsMode = 'scored'"
+          >
+            Забитые
+          </button>
+          <button
+            :class="['mode-btn', { active: statsMode === 'conceded' }]"
+            @click="statsMode = 'conceded'"
+          >
+            Пропущенные
+          </button>
+        </div>
       </div>
       <div class="header-actions">
         <div class="filter-group">
@@ -60,8 +74,8 @@
           <tr>
             <th rowspan="2" class="th-match">Матч</th>
             <th rowspan="2" class="th-news" v-if="selectedLeague === 'DEL'"></th>
-            <th colspan="5" class="th-group">ИТ Хозяева</th>
-            <th colspan="5" class="th-group">ИТ Гости</th>
+            <th colspan="5" class="th-group">ИТ Хозяева {{ statsMode === 'conceded' ? '(проп.)' : '' }}</th>
+            <th colspan="5" class="th-group">ИТ Гости {{ statsMode === 'conceded' ? '(проп.)' : '' }}</th>
             <th colspan="4" class="th-group">Тотал (хозяева)</th>
             <th colspan="4" class="th-group">Тотал (гости)</th>
           </tr>
@@ -117,7 +131,7 @@
             <!-- Home team individual totals (home games stats) -->
             <td v-for="t in [2,3,4,5,6]" :key="'home-it-'+t" class="td-stat">
               <StatCell
-                :data="getHomeIndividualTotal(game, t)"
+                :data="getHomeIndividualTotal(game, t, statsMode)"
                 @click="showDetails(game, 'home', 'individual', t)"
               />
             </td>
@@ -125,7 +139,7 @@
             <!-- Away team individual totals (away games stats) -->
             <td v-for="t in [2,3,4,5,6]" :key="'away-it-'+t" class="td-stat">
               <StatCell
-                :data="getAwayIndividualTotal(game, t)"
+                :data="getAwayIndividualTotal(game, t, statsMode)"
                 @click="showDetails(game, 'away', 'individual', t)"
               />
             </td>
@@ -218,6 +232,7 @@ export default {
       newsModal: null,
       selectedDate: null,
       selectedLeague: 'NHL',
+      statsMode: 'scored', // 'scored' or 'conceded'
       leagues: [
         { code: 'NHL', name: 'NHL', name_ru: 'НХЛ' },
         { code: 'AHL', name: 'AHL', name_ru: 'АХЛ' },
@@ -412,16 +427,18 @@ export default {
       }
     },
 
-    getAwayIndividualTotal(game, threshold) {
+    getAwayIndividualTotal(game, threshold, mode = 'scored') {
       const stats = this.statsCache[game.away_team.abbrev]
-      const data = stats?.stats?.away?.individual_totals?.[`${threshold}+`]
+      const statType = mode === 'conceded' ? 'individual_conceded' : 'individual_totals'
+      const data = stats?.stats?.away?.[statType]?.[`${threshold}+`]
       if (!data) return null
       return { ...data, total_matches: stats?.stats?.away?.total_matches }
     },
 
-    getHomeIndividualTotal(game, threshold) {
+    getHomeIndividualTotal(game, threshold, mode = 'scored') {
       const stats = this.statsCache[game.home_team.abbrev]
-      const data = stats?.stats?.home?.individual_totals?.[`${threshold}+`]
+      const statType = mode === 'conceded' ? 'individual_conceded' : 'individual_totals'
+      const data = stats?.stats?.home?.[statType]?.[`${threshold}+`]
       if (!data) return null
       return { ...data, total_matches: stats?.stats?.home?.total_matches }
     },
@@ -442,25 +459,23 @@ export default {
 
     showDetails(game, location, type, threshold) {
       let data, teamName
+      const statType = type === 'individual'
+        ? (this.statsMode === 'conceded' ? 'individual_conceded' : 'individual_totals')
+        : 'match_totals'
+
       if (location === 'away') {
         teamName = game.away_team.name_ru || game.away_team.abbrev
         const stats = this.statsCache[game.away_team.abbrev]
-        if (type === 'individual') {
-          data = stats?.stats?.away?.individual_totals?.[`${threshold}+`]
-        } else {
-          data = stats?.stats?.away?.match_totals?.[`${threshold}+`]
-        }
+        data = stats?.stats?.away?.[statType]?.[`${threshold}+`]
       } else {
         teamName = game.home_team.name_ru || game.home_team.abbrev
         const stats = this.statsCache[game.home_team.abbrev]
-        if (type === 'individual') {
-          data = stats?.stats?.home?.individual_totals?.[`${threshold}+`]
-        } else {
-          data = stats?.stats?.home?.match_totals?.[`${threshold}+`]
-        }
+        data = stats?.stats?.home?.[statType]?.[`${threshold}+`]
       }
 
-      const typeLabel = type === 'individual' ? 'ИТ' : 'Тотал'
+      const typeLabel = type === 'individual'
+        ? (this.statsMode === 'conceded' ? 'ИТ проп.' : 'ИТ')
+        : 'Тотал'
       const locationLabel = location === 'away' ? 'выезд' : 'дом'
 
       this.detailsModal = {
@@ -742,5 +757,37 @@ export default {
   color: white;
   font-size: 20px;
   cursor: pointer;
+}
+
+/* Stats mode switcher */
+.stats-mode-switcher {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-tertiary);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.mode-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.mode-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.mode-btn.active {
+  background: var(--accent-blue);
+  color: white;
 }
 </style>
