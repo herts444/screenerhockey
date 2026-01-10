@@ -1,4 +1,4 @@
-"""Script to download all NHL team logos locally"""
+"""Script to download all team logos locally"""
 import os
 import httpx
 import asyncio
@@ -40,22 +40,59 @@ NHL_TEAMS = {
     'WPG': 'https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg',
 }
 
+# AHL team logos - using lscluster (alternative CDN)
+AHL_TEAMS = {
+    'ABB': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/50013.png',
+    'BAK': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/329.png',
+    'BEL': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/50004.png',
+    'BRI': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/316.png',
+    'CGW': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/50026.png',
+    'CLT': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/311.png',
+    'CLE': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/312.png',
+    'COA': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/50025.png',
+    'HFD': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/304.png',
+    'LV': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/50015.png',
+    'HER': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/319.png',
+    'IA': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/335.png',
+    'LAV': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/50003.png',
+    'LHV': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/313.png',
+    'MB': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/321.png',
+    'MIL': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/330.png',
+    'ONT': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/333.png',
+    'PRO': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/309.png',
+    'ROC': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/305.png',
+    'RFD': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/334.png',
+    'SD': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/50005.png',
+    'SJ': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/328.png',
+    'SPR': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/310.png',
+    'SYR': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/315.png',
+    'TEX': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/331.png',
+    'TUC': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/50006.png',
+    'UTC': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/306.png',
+    'WBS': 'https://lscluster.hockeytech.com/download.php?file_path=img/logos/314.png',
+}
+
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'public', 'logos')
 
 
-async def download_logo(client, abbrev, url):
+async def download_logo(client, abbrev, url, league=''):
     """Download a single logo"""
     try:
-        resp = await client.get(url)
-        if resp.status_code == 200:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+        resp = await client.get(url, follow_redirects=True, headers=headers)
+        if resp.status_code == 200 and len(resp.content) > 100:
             ext = 'svg' if '.svg' in url else 'png'
             filepath = os.path.join(OUTPUT_DIR, f'{abbrev}.{ext}')
             with open(filepath, 'wb') as f:
                 f.write(resp.content)
-            print(f'Downloaded: {abbrev}')
+            print(f'Downloaded: {league} {abbrev}')
             return True
+        else:
+            print(f'Failed {league} {abbrev}: status={resp.status_code}, size={len(resp.content)}')
     except Exception as e:
-        print(f'Failed {abbrev}: {e}')
+        print(f'Failed {league} {abbrev}: {e}')
     return False
 
 
@@ -63,11 +100,21 @@ async def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     async with httpx.AsyncClient(timeout=30.0) as client:
-        tasks = [download_logo(client, abbrev, url) for abbrev, url in NHL_TEAMS.items()]
-        results = await asyncio.gather(*tasks)
+        # Download NHL logos
+        print("=== NHL ===")
+        nhl_tasks = [download_logo(client, abbrev, url, 'NHL') for abbrev, url in NHL_TEAMS.items()]
+        nhl_results = await asyncio.gather(*nhl_tasks)
+        print(f'NHL: {sum(nhl_results)}/{len(NHL_TEAMS)}')
 
-    success = sum(results)
-    print(f'\nDownloaded {success}/{len(NHL_TEAMS)} logos')
+        # Download AHL logos
+        print("\n=== AHL ===")
+        ahl_tasks = [download_logo(client, abbrev, url, 'AHL') for abbrev, url in AHL_TEAMS.items()]
+        ahl_results = await asyncio.gather(*ahl_tasks)
+        print(f'AHL: {sum(ahl_results)}/{len(AHL_TEAMS)}')
+
+    total = sum(nhl_results) + sum(ahl_results)
+    total_teams = len(NHL_TEAMS) + len(AHL_TEAMS)
+    print(f'\n=== TOTAL: {total}/{total_teams} logos downloaded ===')
 
 
 if __name__ == '__main__':
