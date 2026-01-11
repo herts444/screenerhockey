@@ -1,6 +1,6 @@
 {
   "league": "DEL",
-  "updated_at": "2026-01-11T17:14:58.196384",
+  "updated_at": "2026-01-11T18:24:00.959800",
   "teams": {
     "MAN": {
       "team": "MAN",
@@ -31,12 +31,20 @@
           "content_ru": ""
         }
       ],
-      "updated_at": "2026-01-11T17:13:29.323688"
+      "updated_at": "2026-01-11T18:22:21.061807"
     },
     "AEV": {
       "team": "AEV",
       "team_name": "Augsburger Panther",
       "articles": [
+        {
+          "title": "11.01.2026 | 18:45 UhrPanther bieten Köln großen Kampf",
+          "link": "https://www.aev-panther.de/panther/news_news,-Panther-bieten-K%C3%B6ln-gro%C3%9Fen-Kampf-_naid,4218.html",
+          "date": "",
+          "content": "",
+          "title_ru": "11.01.2026 | 18:45. «Пантеры» предлагают «Кёльну» большой бой",
+          "content_ru": ""
+        },
         {
           "title": "11.01.2026 | 09:00 UhrPanther fordern Spitzenreiter Köln",
           "link": "https://www.aev-panther.de/panther/news_news,-Panther-fordern-Spitzenreiter-K%C3%B6ln-_naid,4217.html",
@@ -68,17 +76,9 @@
           "content": "Die Augsburger Panther haben trotz einer 2:0-Führung nur einen Punkt zu Hause gegen die Iserlohn Roosters geholt. Der AEV unterlag am Ende mit 2:3 nach Penaltyschießen. Die Treffer für die Panther erzielten Alexander Blank (10.) und Moritz Elias (11.). Für die Roosters waren Julian Napravnik (33.), Daniel Neumann (34.) und Daniel Fischbuch (66.) erfolgreich.\n\nAUCH TREVELYAN FEHLTBill Peters musste dabei erneut improvisieren, denn neben D.J. Busdeker und Madison Bowey fiel gegen Iserlohn auch T.J. Trevelyan aus. Verstärkung gab es daher vom Kooperationspartner Kaufbeuren aus der DEL2, dennLeon van der Linde und Sebastian Zwickl waren mit von der Partie.Zudem nahm der Headcoach auch einen Wechsel im Tor vor, wo Michael Garteig wieder für Peyton Jones zwischen die Pfosten rückte.Augsburgs Goalie hatte aber zu Beginn recht wenig zu tun. Nach einer ausgeglichenen Anfangsphase ohne große Möglichkeiten auf beiden Seiten, hatte der AEV in der siebten Minute die erste Topchance. Nach ganz feinem Querpass von Alexandre Grenier hatte Anthony Louis im Grunde das leere Tor vor sich, traf aber nur die Torumrandung.AUGSBURGER DOPPELSCHLAGDennoch war diese Szene eine Art Weckruf, denn die Panther wurden nun immer besser und schlugen dann innerhalb von 70 Sekunden doppelt zu. Erst war es ein schöner Angriff über Louis und Thomas Schemitch, der Blank bediente. Alleine vor Hendrik Hane blieb Augsburgs Topscorer cool und verwandelte mit der Rückhand (10.).Wenig später war es ein überragender langer Pass von Moritz Wirth auf Elias, der lange verzögerte und dann eiskalt auf 2:0 stellte (11.). Weitere Treffer waren anschließend möglich, aber es blieb bei der Zwei-Tore-Führung nach 20 Minuten. Im zweiten Durchgang wurde dann auch Garteig richtig warmgeschossen. Die ersten Minuten gehörten den Gästen, die einige gute Möglichkeiten herausspielten. Garteig zeigte jedoch einige starke Paraden und bewahrte dem AEV die Führung.ISERLOHN GLEICHT AUSDoch wie schon beim letzten Heimspiel gegen Schwenningen, als man sogar eine 4:0-Führung verspielte, präsentierten sich die Panther im Mitteldrittel deutlich unkonzentrierter als noch in den ersten 20 Minuten. Die Hausherren kamen nicht mehr richtig in die Zweikämpfe und auch wenn Kyle Mayhew das 3:0 hätte erzielen können, als er ganz knapp am Iserlohner Tor vorbeischoss (27.), waren die Roosters das bessere Team.Kurz nach Ablauf einer Strafe war es dann auch soweit. Napravnik setzte zum Solo an, machte das richtig gut und ließ auch Garteig keine Chance (33.). 31 Sekunden später hatte auch Iserlohn seinen Doppelschlag, als Neumann im Slot zu viel Platz hatte und das 2:2 erzielte (34.). Der AEV hatte erneut eine vermeintlich sichere Führung verspielt, konnte sich danach aber immerhin stabilisieren.WENIG MÖGLICHKEITEN IM SCHLUSSDRITTELIn der 38. Minute hatten die Panther sogar auch die Chance, erneut in Führung zu gehen. Joe Cramarossa legte genau im richtigen Moment quer auf Riley Damiani, doch dessen guten Abschluss wehrte Hane in üb...",
           "title_ru": "06.01.2026 | 21:41 AEV проигрывает победу над Петухами",
           "content_ru": "Несмотря на преимущество 2:0, «Аугсбург Пантерз» дома набрали всего одно очко против «Изерлон Рустерс». В итоге АЕВ после серии пенальти проиграли со счетом 2:3. Голы за «Пантеры» забили Александр Бланк (10-е место) и Мориц Элиас (11-е место). Успехи «Петухам» добились Юлиан Направник (33-е место), Даниэль Нойманн (34-е место) и Даниэль Фишбух (66-е место).\n\nТРЕВЕЛЬЯН ТОЖЕ ПРОПУСТИЛ. Биллу Питерсу пришлось снова импровизировать, потому что вместе с Д.Дж. Бусдекер и Мэдисон Боуи также проиграли Изерлону, Ти-Джею. Тревельян уходит. Подкрепление получил партнер по сотрудничеству Кауфбойрен из DEL2, поскольку в этом также участвовали Леон ван дер Линде и Себастьян Цвикль. Главный тренер также внес замену ворот: Михаэль Гартейг заменил Пейтона Джонса между штангами. Вратарю «Аугсбурга» поначалу особо нечего было делать. После равного начального этапа без особых возможностей с обеих сторон, у AEV появился первый отличный шанс на седьмой минуте. После очень точного паса Александра Гренье Энтони Луи практически имел перед собой пустые ворота, но попал лишь в край ворот. ДВОЙНОЙ УДАР АУГСБУРГЕРА Тем не менее, эта сцена была своего рода тревожным сигналом, потому что «Пантеры» теперь становились все лучше и лучше, а затем нанесли двойной удар в течение 70 секунд. Сначала это была красивая атака Луиса и Томаса Шемитча, который обслуживал Бланка. Одинокий перед Хендриком Хане лучший бомбардир «Аугсбурга» сохранил хладнокровие и реализовал удар слева (10-е место). Чуть позже это был выдающийся длинный пас Морица Вирта на Элиаса, который долго медлил, а затем сделал счет 2-0 (11-й). После этого были возможны и другие голы, но преимущество в два гола сохранилось по прошествии 20 минут. Во втором круге тесто действительно разогрелось. Первые несколько минут принадлежали гостям, которые создали несколько хороших моментов. Тем не менее, Гартейг показал несколько сильных сейвов и сохранил лидерство AEV. ИЗЕРЛОН РАВНО Но, как и в последней домашней игре против Швеннингена, когда они даже потеряли преимущество 4–0, «Пантеры» выглядели значительно менее сосредоточенными в средней трети, чем в первые 20 минут. Хозяева поля не смогли вступить в поединки, и хотя Кайл Мэйхью мог сделать счет 3:0, когда пробил мимо ворот Изерлона (27 минут), «Петухи» были лучшей командой. Вскоре после пенальти время пришло. Направник начал соло, сделал это очень хорошо и также оставил в стороне Гартейга."
-        },
-        {
-          "title": "06.01.2026 | 08:00 UhrAm Dreikönigstag gegen Iserlohn",
-          "link": "https://www.aev-panther.de/panther/news_news,-Am-Dreik%C3%B6nigstag-gegen-Iserlohn-_naid,4213.html",
-          "date": "",
-          "content": "Die Augsburger Panther treffen am heutigen Dreikönigstag im heimischen CFS auf die Iserlohn Roosters. Spielbeginn ist um 19:00 Uhr.\n\nNach dem spektakulären Auftakt ins Heimspieljahr 2026 mit dem torreichen Sieg gegen die Schwenninger Wild Wings wollen die Augsburger Panther auf heimischem Eis nachlegen. Noch ist man gegen die Iserlohn Roosters, die in der Tabelle nach 36 Spieltagen als Zwölfter nur einen Platz hinter den elfplatzierten Panthern liegen, noch ohne Punktverlust. Beide Teams brauchen für den Traum von Platz 10 jeden Zähler. Verzichten müssten die Panther auf der Jagd nach dem zweiten Heimsieg in Serie in jedem Fall auf die beiden Stürmer D.J. Busdeker und T.J. Trevelyan. Trevelyan zog sich in Berlin eine Unterkörperverletzung zu und kann mindestens heute nicht zum Einsatz kommen. Über den Einsatz von Madison Bowey wird kurzfristig entschieden.\n\nTickets für die Partie der Panther gegen die Roosters gibt es nach Verfügbarkeit ab 17:30 Uhr an der Tageskasse vor dem CFS oder jederzeit online unter www.panthertickets.de.\n\nNur heute und nur direkt im 1878 SHOP im Südfoyer gibt es die Ladymütze „Panther\" für 16,90 Euro\n\nDie Brust der Panthertrikots ziert heute das Logo des langjährigen Partners Scheppach GmbH. Scheppach ist ein traditionsreiches Produktions- und Handelsunternehmen und hat sich in den letzten 15 Jahren mit überproportionalem Wachstum zu einem namhaften, weltweit tätigen Lieferanten eines umfangreichen Portfolios von Maschinen und Elektrowerkzeugen für viele Anwendungsgebiete entwickelt. Die Unternehmensgruppe erzielt heute über 396 Mio. Euro Umsatz und zählt zu den führenden Unternehmen der Branche. Den rasanten Wachstumskurs und diese Marktposition will Scheppach weiter stärken und ausbauen. Dafür investieren sie kontinuierlich in die Erweiterung ihres Portfolios und die Optimierung aller Prozesse.\n\nAuch in dieser Saison findet die 50/50-Lotterie zugunsten des AEV-Nachwuchses hinter der Fankurve statt. Zusätzlich ist ein Team mit Bauchladen unterwegs. Ein Los kostet 2 Euro. Davon geht ein Euro an den Nachwuchs, der andere Euro in den Jackpot. Teilnehmen kann jeder Fan ab 18 Jahren.\n\nAm Freitag geht es für die Panther in Wolfsburg weiter, kommenden Sonntag folgt das Heimspiel gegen die Kölner Haie. Die Partie ist bereits ausverkauft.",
-          "title_ru": "06.01.2026 | В 8:00 на Крещение против Изерлона.",
-          "content_ru": "Сегодня на Крещение Аугсбургские Пантеры встретятся с Изерлонскими Петухами в их домашнем CFS. Игра начнется в 19:00.\n\nПосле впечатляющего начала домашнего 2026 года с результативной победы над «Швеннингер Уайлд Уингз» «Аугсбург Пантерз» хотят улучшить игру на домашнем льду. Они по-прежнему не теряют ни одного очка против «Изерлон Рустерс», которые после 36 игровых дней занимают двенадцатое место в таблице, отставая всего на одно место от «Пантерз», занявших одиннадцатое место. Обеим командам нужно каждое очко, чтобы осуществить свою мечту – 10-е место. В погоне за второй домашней победой подряд «Пантерам» определенно придется обойтись без двух нападающих Д.Дж. Бусдекер и Т.Дж. Тревельян. Тревельян получил травму нижней части тела в Берлине и не сможет играть, по крайней мере, сегодня. Решение о назначении Мэдисон Боуи будет принято в кратчайшие сроки.\n\nБилеты на игру «Пантеры» против «Петухов» можно приобрести с 17:30. в кассе перед CFS или в любое время на сайте www.panthertickets.de.\n\nТолько сегодня и только непосредственно в МАГАЗИНЕ 1878 года в южном фойе женская шляпа «Пантера» доступна за 16,90 евро.\n\nГрудь футболок Panther теперь украшена логотипом давнего партнера Scheppach GmbH. Scheppach – это традиционная производственно-торговая компания, которая за последние 15 лет превратилась с ростом выше среднего в известного, действующего во всем мире поставщика обширного портфолио машин и электроинструментов для многих областей применения. Группа компаний сегодня генерирует объем продаж более 396 миллионов евро и является одной из ведущих компаний в отрасли. Шеппах хочет еще больше укрепить и расширить свой быстрый рост и эту позицию на рынке. Для этого они постоянно инвестируют в расширение своего портфолио и оптимизацию всех процессов.\n\nВ этом сезоне лотерея 50/50 будет проходить в пользу детища AEV. Кроме того, движется команда с подносом для живота. Билет стоит 2 евро. Один евро из этой суммы идет потомству, другой евро идет на джекпот. Принять участие может любой болельщик от 18 лет и старше.\n\nВ пятницу «Пантеры» продолжат игру в «Вольфсбурге», а в следующее воскресенье последует домашняя игра против «Кёльнер Хайе». Игра уже распродана."
         }
       ],
-      "updated_at": "2026-01-11T17:13:38.369253"
+      "updated_at": "2026-01-11T18:22:30.350497"
     },
     "DRESDNER": {
       "team": "DRESDNER",
@@ -125,7 +125,7 @@
           "content_ru": "«Дрезденские ледяные львы» реорганизовали свое спортивное руководство: Йенс Баксманн немедленно вступит в должность спортивного директора. Бывший профессиональный хоккеист, родившийся в Вернигероде в 1985 году, получил трехлетний контракт с «Айсловен». Его существующие трудовые отношения с Lausitzer Füchsen были расторгнуты по взаимному согласию.\n\nБаксманн, известный многим болельщикам под прозвищем «Бакси», может похвастаться выдающейся игровой карьерой. Защитник провел большую часть своей карьеры в берлинском «Айсбарене», с которым семь раз становился чемпионом Германии по хоккею с шайбой. Он выступал за столичную команду вплоть до сезона 2018/19 включительно, а затем последовали два сезона за «Изерлон Рустерс». В сезоне 2021/22 Баксманн перешел из PENNY DEL в Lausitzer Füchse в DEL2. Однако серьезная травма глаза вынудила его завершить активную карьеру в начале января 2022 года.\n\nБаксманн сыграл в общей сложности 939 игр в DEL и 39 раз выступал за сборную Германии. После завершения карьеры он остался в хоккее и «Лаузитцер Фюхсен», первоначально заняв должность спортивного консультанта. Осенью 2022 года он начал заочный курс дистанционного обучения в области спортивного менеджмента и после его окончания стал спортивным директором в Вайсвассере.\n\nДирк Рорбах, управляющий директор Lausitzer Füchse: \"Мы позволили Йенсу Баксманну в Вайсвассере перейти от игровой карьеры к ответственной роли после травмы. Его подпись в последнее время становится все более четкой. Его уход, несомненно, оставляет пробел. Тем не менее, мы уважаем его решение пойти по новому пути и оставаться верным саксонскому хоккею. Мы благодарим его за его преданность делу и лично желаем ему всего наилучшего\".\n\nМайк Вальсдорф, управляющий директор Dresdner Eislöwen: «С Йенсом Баксманом обязанности спортивного директора берет на себя личность, которая не только имеет большой опыт работы в DEL со своих игровых дней, но также знакома с DEL2 и текущей ситуацией. Как бывший ведущий игрок, Йенс приносит с собой опыт реалистичной классификации спортивных ситуаций и последовательного их решения. Помимо сильной сети, он также очень хорошо разбирается в игроках и необходимых Но факт также: переехать из Вайсвассера в Дрезден или стоять наоборот – не имеет значения."
         }
       ],
-      "updated_at": "2026-01-11T17:13:48.343437"
+      "updated_at": "2026-01-11T18:22:40.440895"
     },
     "RBM": {
       "team": "RBM",
@@ -172,7 +172,7 @@
           "content_ru": ""
         }
       ],
-      "updated_at": "2026-01-11T17:13:52.696151"
+      "updated_at": "2026-01-11T18:22:49.274626"
     },
     "EBB": {
       "team": "EBB",
@@ -203,7 +203,7 @@
           "content_ru": "После выездной игры в Изерлоне «Айсберен Берлин» сел прямо на автобусы Nightliner. Они немедленно отправились в Дрезден. Большая зимняя игра PENNY DEL пройдет здесь завтра, в субботу, 10 января, на аншлаговом стадионе Рудольфа Харбига. Игра начнется в 17:00.\n\nИгра будет транслироваться в прямом эфире на Magenta Sport и на бесплатном телевидении на DF1. Важную информацию об игре также можно получить в прямом эфире и в социальных сетях Eisbären. Также в прямом эфире будет вести трансляцию Shutout – Eisbären Radio.\n\nДля столичного клуба это вторая зимняя игра в истории клуба. В 2013 году берлинцы сразились с хозяевами турнира «Ледяные тигры» на стадионе Нюрнберга. Нюрнберг выиграл со счетом 4:3 на глазах у 50 000 зрителей в первой игре на открытом воздухе Немецкой хоккейной лиги.\n\nДрездену нужно каждое очко. Саксонцы находятся внизу таблицы и поэтому находятся под большой угрозой вылета. Отставание от Лёвен Франкфурт, занимающего 13-е место, составляет уже 13 очков. Под руководством нового главного тренера Джерри Флеминга «Ледяные львы» смогли несколько стабилизировать ситуацию, а также отпраздновать некоторые успехи. Победы над Ингольштадтом, Аугсбургом и, прежде всего, Мангеймом заставили людей задуматься. Однако, поскольку прямые соперники регулярно набирали очки в борьбе за место в лиге, сократить отставание от копилки не удалось. В последнем туре дрезденцы с небольшим перевесом уступили дома «Фиштаун Пингвинз» со счетом 2:3.\n\nЗа недельную выездную поездку «Айсбарен» набрали три очка. За победой в Мюнхене в четверг вечером последовало поражение на выезде со счетом 3:4 в Изерлоне. После 38 игр в основном раунде у столичного клуба 59 очков. С таким результатом берлинцы остаются на седьмом месте в таблице.\n\nВ субботу состоится третий поединок между этими двумя командами в текущем основном раунде. Берлинцы одержали победу в каждой из двух предыдущих игр. В начале сезона «Айсбарен» выиграл дома со счетом 6:2 на «Убер Арене». Столичная команда последовала за этой победой домашней победой на Шпрее со счетом 5:1.\n\nНесмотря на напряженную ситуацию в таблице, «Айсловен» являются шестыми бомбардирами в лиге. Остин Ортега в этом сезоне забил уже 16 голов. Однако в плюс-минусной статистике у американца значение -32. Вместе с Лиамом Кирком \"Айсбарен\" на данный момент является вторым лучшим бомбардиром лиги. На счету британца 24 гола и 39 очков.\n\nДля"
         }
       ],
-      "updated_at": "2026-01-11T17:13:57.995604"
+      "updated_at": "2026-01-11T18:22:56.257596"
     },
     "ING": {
       "team": "ING",
@@ -218,18 +218,26 @@
           "content_ru": ""
         }
       ],
-      "updated_at": "2026-01-11T17:14:00.612084"
+      "updated_at": "2026-01-11T18:22:58.831022"
     },
     "BHV": {
       "team": "BHV",
       "team_name": "Fischtown Pinguins",
       "articles": [
         {
-          "title": "Bewährungsprobe für die Pinguins – Standortbestimmung bei den Adler Mannheim",
-          "link": "https://fischtown-pinguins.de/bewaehrungsprobe-fuer-die-pinguins-standortbestimmung-bei-den-adler-mannheim/",
+          "title": "3:4 Niederlage in Mannheim – Pinguins belohnen sich nicht für starke Partie",
+          "link": "https://fischtown-pinguins.de/34-niederlage-in-mannheim-pinguins-belohnen-sich-nicht-fuer-starke-partie/",
           "date": "",
           "content": "",
-          "title_ru": "Тест для «Пингвинз» – определение их позиции на Адлере в Мангейме",
+          "title_ru": "Поражение 3:4 в Мангейме – «Пингвины» не награждают себя за сильную игру",
+          "content_ru": ""
+        },
+        {
+          "title": "3:4 Niederlage in Mannheim – Pinguins belohnen sich nicht für starke Partie",
+          "link": "https://fischtown-pinguins.de/34-niederlage-in-mannheim-pinguins-belohnen-sich-nicht-fuer-starke-partie/",
+          "date": "",
+          "content": "",
+          "title_ru": "Поражение 3:4 в Мангейме – «Пингвины» не награждают себя за сильную игру",
           "content_ru": ""
         },
         {
@@ -255,17 +263,9 @@
           "content": "",
           "title_ru": "Важная информация для фанатов Fischtown Pinguins:",
           "content_ru": ""
-        },
-        {
-          "title": "Nürnberg zu Gast an der Nordseeküste – Pinguins wollen den 6. Sieg in Serie",
-          "link": "https://fischtown-pinguins.de/nuernberg-zu-gast-an-der-nordseekueste-pinguins-wollen-den-6-sieg-in-serie/",
-          "date": "",
-          "content": "",
-          "title_ru": "Нюрнберг – гость на побережье Северного моря – «Пингвины» хотят одержать шестую победу подряд",
-          "content_ru": ""
         }
       ],
-      "updated_at": "2026-01-11T17:14:07.679616"
+      "updated_at": "2026-01-11T18:23:07.889786"
     },
     "WOB": {
       "team": "WOB",
@@ -312,12 +312,20 @@
           "content_ru": "«Аугсбургские Пантеры» приедут на «Айс Арену» во второй раз в этом сезоне. Перед пятничным поединком (19:30 | Билеты здесь), который в спортивном плане является весьма взрывоопасным из-за борьбы за выход в плей-офф, мы присмотримся к AEV."
         }
       ],
-      "updated_at": "2026-01-11T17:14:23.238910"
+      "updated_at": "2026-01-11T18:23:23.885023"
     },
     "IEC": {
       "team": "IEC",
       "team_name": "Iserlohn Roosters",
       "articles": [
+        {
+          "title": "Roosters unterliegen in München mit 0:6",
+          "link": "https://iserlohn-roosters.de/2026/01/11/roosters-unterliegen-in-muenchen-mit-60/",
+          "date": "11.Jan2026",
+          "content": "Die Iserlohn Roosters haben beim EHC Red Bull München einen schwierigen Abend erwischt und deutlich mit 0:6 verloren. Gegen spielfreudige und effiziente Gastgeber fanden die Sauerländer trotz großem Einsatz und einzelner guter Phasen kein Mittel, um die Partie offen zu gestalten.\n\nMünchen übernahm von Beginn an die Kontrolle und setzte die Roosters früh unter Druck. Bereits mit dem ersten ernsthaften Abschluss brachte McKenna die Red Bulls in Führung (3.). Die Gastgeber kombinierten in der Anfangsphase schnell und präzise, während Iserlohn Mühe hatte, Stabilität in die eigene Defensive zu bekommen. Zwar verzeichneten die Roosters durch Boland und Fischbuch erste Entlastungsangriffe, doch gefährlicher blieb München. Nach einem weiteren schnellen Angriff erhöhte Abeltshauser mit einem Distanzschuss auf 2:0 (8.). Die Führung war zu diesem Zeitpunkt verdient, da München das Spieltempo klar bestimmte.\n\nNach einer überstandenen Unterzahl fanden die Roosters besser in die Partie. Törnqvist eroberte im Aufbau die Scheibe und prüfte Bibeau, auch Camara und Eisenmenger kamen zu Abschlüssen. Dennoch blieben die Versuche der Gäste meist zu zentral, sodass Münchens Schlussmann wenig Probleme hatte. Kurz vor der Pause bot sich Fischbuch die große Möglichkeit zum Anschlusstreffer, doch Bibeau blieb im Eins-gegen-eins der Sieger. Mit einem 0:2-Rückstand ging es in die erste Pause.\n\nIm Mittelabschnitt zeigte sich ein ähnliches Bild. München blieb vor allem über sein Umschaltspiel brandgefährlich, während Iserlohn bemüht war, Struktur ins eigene Offensivspiel zu bringen. Hane verhinderte mit mehreren starken Paraden zunächst einen höheren Rückstand, unter anderem gegen Hirose und Krening. Doch in Unterzahl musste der IEC erneut einen Gegentreffer hinnehmen: Eisenschmid traf zehn Sekunden vor Ablauf einer Strafe zum 3:0 (36.). Auch danach gelang es den Roosters nicht, ernsthaften Druck auf das Münchener Tor auszuüben. Abschlüsse von Wood und Eisenmenger stellten Bibeau weiterhin vor keine größeren Probleme. Kurz vor der zweiten Pause vereitelte Hane einen weiteren Hochkaräter und hielt den Rückstand zumindest in Grenzen.\n\nMit Beginn des Schlussdrittels versuchten die Roosters noch einmal alles, um die Partie zu drehen. München ließ jedoch kaum etwas zu und erhöhte früh auf 4:0, als McKenna nach einem Bully mit einem weiteren wuchtigen Schlagschuss traf (43.). Trotz Überzahlchancen und mehrerer Aluminiumtreffer – Ugbekile und Boland scheiterten jeweils am Pfosten – blieb den Sauerländern der Ehrentreffer verwehrt. Bibeau präsentierte sich über die gesamte Spielzeit souverän und ließ keine Unsicherheit erkennen. In der Schlussphase schraubte München das Ergebnis weiter in die Höhe: Brooks traf nach feinem Zuspiel von Hirose zum 5:0 (50.), ehe McKenna mit seinem dritten Treffer des Abends den 6:0-Endstand markierte (58.).\n\nTrotz einzelner guter Aktionen und großer Moral mussten sich die Roosters einem in allen Belangen überlegenen Münchener Team geschlagen geben. Währ...",
+          "title_ru": "«Петухи» проиграли в Мюнхене со счетом 6:0.",
+          "content_ru": "У «Изерлон Рустерс» был трудный вечер на EHC Red Bull Мюнхен, и они явно проиграли со счетом 0–6. Против игривых и эффективных хозяев зауэрландцы, несмотря на большие усилия и отдельные хорошие моменты, не смогли сохранить игру открытой.\n\nМюнхен взял под свой контроль с самого начала и оказал на «Петухов» давление с самого начала. Первым серьезным финишем Маккенна вывел «Ред Буллз» вперед (3-е место). Хозяева комбинировались быстро и точно на первых этапах, а Изерлон изо всех сил пытался найти стабильность в собственной обороне. Хотя «Петухи» зафиксировали свои первые атаки через Боланда и Фишбуха, Мюнхен оставался более опасным. После очередной быстрой атаки Абельтсхаузер дальним ударом (8-е место) сделал счет 2:0. В этот момент преимущество было заслуженным, поскольку Мюнхен четко определял темп игры.\n\nПобедив меньшинство, «Петухи» лучше влились в игру. Торнквист забил гол во время подготовки и протестировал Бибо, а также забили Камара и Айзенменгер. Тем не менее, удары гостей по большей части оставались слишком центральными, так что проблем у мюнхенцев было мало. Незадолго до перерыва Фишбух имел прекрасную возможность забить, но Бибо остался победителем в матче один на один. На первый перерыв мы пошли с преимуществом 0:2.\n\nАналогичная картина наблюдалась и в средней части. Мюнхен оставался особенно опасным из-за своей игры с переключением, в то время как Изерлон пытался структурировать свою атакующую игру. Первоначально Хейн не позволил команде отстать дальше, сделав несколько сильных сейвов, в том числе против Хиросе и Кренинга. Но, находясь в меньшинстве, МЭК был вынужден пропустить еще один гол: Айзеншмид забил за десять секунд до истечения срока пенальти, сделав счет 3-0 (36-е место). Даже после этого «Петухам» не удалось оказать серьёзного давления на мюнхенские ворота. Окончание Вуда и Эйзенменгера по-прежнему не представляло для Бибо серьезных проблем. Незадолго до второго перерыва Хейн сорвал еще один крупный гол и, по крайней мере, удержал дефицит в пределах.\n\nВ начале заключительной трети «Петухи» снова попробовали все, чтобы переломить ход игры. Однако мюнхенцы почти ничего не допустили и увеличили преимущество до 4:0 в начале матча, когда Маккенна забил еще одним мощным ударом после вбрасывания (43 минуты). Несмотря на возможности численного превосходства и несколько попаданий алюминия – Угбекиле и Боланд не смогли попасть в штангу – они остались"
+        },
         {
           "title": "Spieltag 39: Roosters @ München",
           "link": "https://iserlohn-roosters.de/2026/01/11/spieltag-39-roosters-muenchen/",
@@ -349,17 +357,9 @@
           "content": "Als starker Unterstützer geht die Partnerschaft zwischen der platzmann federn Gruppe und den Iserlohn Roosters bereits ins 20. Jahr.\n\nDas Unternehmen platzmann federn, gegründet im Jahr 1922 durch den Großvater des heutigen geschäftsführenden Gesellschafters Frank Altemeyer, gehört zu den Weltmarktführern im Bereich von technischen Federn. u.a. für die Bereiche Automotive, Maschinenbau sowie Agrar- und Medizinindustrie.\n\nCaroline Altemeyer setzt die gelebten Werte der Unternehmensgruppe fort. Besonders engagiert sie sich für soziales Verantwortungsbewusstsein und zukunftsorientiertes Denken – Werte, die sich auch im Sponsoring widerspiegeln.\n\nNeben dem Hauptsponsoring der Iserlohn Roosters setzt sich dieses Engagement beispielsweise auch beim ProA Basketball Team Phoenix Hagen, als Hauptsponsor der Deutschen Meisterschaften der Springreiterinnen in Balve oder im Rahmen des eigenen ATP-Tennisturnier, den platzmann open, fort, welches in diesem Jahr erneut auf der Anlage des Rot-Weiß Hagen vom 2.-9. August ausgetragen wird.\n\nCaroline Altemeyer ergänzt: „Die Verlängerung des Hauptsponsorings bei den Iserlohn Roosters unterstreicht unseren Anspruch an eine langfristige Partnerschaft und setzt ein klares Zeichen für Kontinuität und Verlässlichkeit.“",
           "title_ru": "20 лет крепкого партнерства – Platzmann Federn продлевает основное спонсорство на предстоящий сезон",
           "content_ru": "Будучи сильным сторонником, партнерство между группой Platzmann Federn и Iserlohn Roosters длится уже 20 лет.\n\nКомпания Platzmann Federn, основанная в 1922 году дедушкой нынешнего управляющего партнера Франком Альтемайером, является одним из лидеров мирового рынка в области технических пружин. для автомобильной, машиностроительной, сельскохозяйственной и медицинской промышленности и других отраслей.\n\nКэролайн Альтемейер продолжает жизненные ценности группы. Она особенно привержена социальной ответственности и мышлению, ориентированному на будущее — ценностям, которые также отражаются в спонсорстве.\n\nПомимо основного спонсорства Iserlohn Roosters, это обязательство также продолжается, например, с баскетбольной командой ProA Phoenix Hagen в качестве главного спонсора чемпионата Германии по конкуру в Бальве или в рамках теннисного турнира ATP Platzmann Open, который снова пройдет в этом году на стадионе Рот-Вайс Хаген со 2 по 9 место. состоится в августе.\n\nКэролайн Альтемейер добавляет: «Продление основного спонсорства Iserlohn Roosters подчеркивает наше стремление к долгосрочному партнерству и посылает четкий сигнал о преемственности и надежности»."
-        },
-        {
-          "title": "Spieltag 38: Roosters vs. Berlin",
-          "link": "https://iserlohn-roosters.de/2026/01/08/spieltag-38-roosters-vs-berlin/",
-          "date": "08.Jan2026",
-          "content": "Da die Eisbären Berlin am kommenden Samstag das Winter Game in Dresden bestreiten, findet das Heimspiel der Iserlohn Roosters gegen den amtierenden deutschen Meister bereits am heutigen Donnerstagabend statt. Wie gewohnt um 19:30 Uhr gastieren die Hauptstädter in der Eissporthalle am Seilersee, es sind noch restliche Ticketkontingenteim Online-Shop verfügbar, auch die Abendkasse wird öffnen.\n\nDie Roosters: Das Team von Headcoach Stefan Nyman ist mit vier Siegen aus den sechs Partien seit Weihnachten absolut im Soll, im Jahr 2026 sind die Roosters in bisher drei Spielen noch nie punktlos vom Eis gegangen. Das soll sich auch gegen den deutschen Meister nicht ändern, auch wenn der Kader nach wie vor grippegeschwächt ist. Wie genau das Line-Up gegen die Eisbären aussieht, entscheidet sich nach dem Abschlusstraining heute Vormittag.\n\nDer Gegner: Als Tabellensiebter steht der Vorjahresmeister aktuell ein wenig hinter den Erwartungen – einige Verletzungen machten den Eisbären immer wieder zu schaffen, mit einem 3:2 in München bewiesen die Berliner aber eindrucksvoll, dass jederzeit mit ihnen zu rechnen ist.\n\nDas sagen die Roosters: „Berlin hatte im Saisonverlauf sicherlich hier und da ein paar Probleme, aber sie kommen mit einem vollen Line-Up und werden voll da sein. Wir dürfen ihnen keine Gelegenheiten geben, einfache Tore zu erzielen und müssen unsere Chancen nutzen, wenn sie sich bieten“, weiß Roosters-Sportdirektor Franz-David Fritzmeier.\n\nWo kann ich die Partie live verfolgen?Magenta Sport ist live dabei, ebenso unserLiveticker powered by Talentsuite.io. Am besten ist es aber natürlich wie immer live vor Ort in der Eissporthalle, Tickets gibt’s an der Abendkasse und imOnline-Ticketshop.",
-          "title_ru": "38-й тур: «Рустерс» — «Берлин»",
-          "content_ru": "Поскольку в следующую субботу «Айсбарен» из Берлина проведет зимнюю игру в Дрездене, домашняя игра «Изерлон Рустерс» против действующих чемпионов Германии состоится в этот четверг вечером. Как обычно, столичные жители выйдут на каток Зайлерзее в 19:30, билеты еще есть в наличии в интернет-магазине, кассы также будут открыты.\n\nThe Roosters: Команда главного тренера Стефана Наймана абсолютно добилась цели, одержав четыре победы в шести играх с Рождества. В 2026 году «Петухи» еще ни разу не уходили со льда без очков в трех матчах. Ситуация не должна измениться в матче с чемпионами Германии, даже если команда все еще ослаблена гриппом. Как именно будет выглядеть состав на матч с «Айсбареном», решится сегодня утром после заключительной тренировки.\n\nСоперник: прошлогодние чемпионы, занимающие седьмое место в таблице, на данный момент немного отстают от ожиданий - несколько травм неоднократно доставляли Айсбарену проблемы, но победой в Мюнхене со счетом 3:2 берлинцы убедительно доказали, что они являются силой, с которой нужно считаться в любое время.\n\nВот что говорят «Петухи»: «У «Берлина», конечно, были некоторые проблемы в течение сезона, но они пришли в полном составе и будут полностью там. Мы не можем дать им никаких возможностей забивать легкие голы и должны использовать свои шансы, когда они возникают», - говорит спортивный директор «Рустерс» Франц-Давид Фрицмайер.\n\nГде я могу посмотреть игру в прямом эфире? Magenta Sport доступен в прямом эфире, как и наш живой тикер на Talentsuite.io. Но самое лучшее, конечно, как всегда, жить на месте, на катке. Билеты можно приобрести в кассах и в интернет-магазине билетов."
         }
       ],
-      "updated_at": "2026-01-11T17:14:32.008184"
+      "updated_at": "2026-01-11T18:23:34.500514"
     },
     "KEC": {
       "team": "KEC",
@@ -406,7 +406,7 @@
           "content_ru": "Более 30 лет Михаэль «Кнете» Шультен заботится о здоровье наших профессионалов – на тренировках, в случае травм и на льду. В период с 2003 по 2009 год его путь даже привел его на Босфор, где он работал в ведущем турецком клубе «Фенербахче Стамбул» (футбол). Сегодня 56-летний футболист ведет собственную физиотерапевтическую практику в городском лесу и следит за тем, чтобы игроки быстро восстанавливали форму. У него также есть необычная страсть: он посещает от 30 до 40 концертов каждый год - от больших арен до крошечных клубов, всегда в поисках аутентичной живой музыки. Вместе с нашим партнером TRICORP мы хотим представить команду, стоящую за командой, и людей, которые обеспечивают бесперебойную работу за кулисами в разделе «Самый трудолюбивый работник» на протяжении всего сезона. Первым идет Михаэль «Кнете» Шультен. В нашей беседе «Кнете» объясняет, как ему удается балансировать между профессиональным спортом, повседневной практикой и личной жизнью – и почему он до сих пор любит хоккей больше, чем многие другие вещи.\n\n«Кнете», пожалуйста, сначала опишите свои задачи здесь, у нас. \"Задачи относительно широки - начиная с лечения травм игроков, которое обычно начинается с диагностики и затем делегируется соответствующим образом медицинским командам. Конечно, мы консультируемся в самых разных областях. В первую очередь, конечно, это врачи нашего клуба из ортопедии и общей медицины\".\n\nТо есть, помимо постоянной команды врачей, есть ли еще внешние люди, с которыми контактируют? «Именно. Всегда речь идет о том, что необходимо в каждом отдельном случае. Это варьируется от магнитно-резонансной томографии до анализов крови и УЗИ. Также привлекаются офтальмологи, стоматологи, дерматологи и кардиологи».\n\nДля детей и жен наших специалистов? - Именно. Это очень важно. Это наши партнеры, с которыми мы можем связаться, и мы очень рады, если они доступны и в большинстве случаев могут помочь нам в кратчайшие сроки. Гинекологи также являются частью сети – когда в семье Хайе появляются дети, важно предоставить партнерам наших игроков максимально возможную поддержку в области гинекологических проблем. Как видите: портфолио выходит далеко за рамки заботы здесь, на месте».\n\nВ то же время здесь, в КА2, у вас полно дел. «Когда игроки возвращаются после постановки диагноза, все дело в соответствующем подходе."
         }
       ],
-      "updated_at": "2026-01-11T17:14:38.142260"
+      "updated_at": "2026-01-11T18:23:40.628121"
     },
     "FRA": {
       "team": "FRA",
@@ -429,21 +429,21 @@
           "content_ru": ""
         },
         {
-          "title": "Spielberichte (227)",
+          "title": "Spielberichte (228)",
           "link": "https://www.loewen-frankfurt.de/saison/aktuelles/spielberichte",
           "date": "",
           "content": "",
-          "title_ru": "Протоколы матчей (227)",
+          "title_ru": "Протоколы матчей (228)",
           "content_ru": ""
         }
       ],
-      "updated_at": "2026-01-11T17:14:42.527214"
+      "updated_at": "2026-01-11T18:23:45.615158"
     },
     "NIT": {
       "team": "NIT",
       "team_name": "Nürnberg Ice Tigers",
       "articles": [],
-      "updated_at": "2026-01-11T17:14:44.509867"
+      "updated_at": "2026-01-11T18:23:47.622220"
     },
     "SWW": {
       "team": "SWW",
@@ -474,7 +474,7 @@
           "content_ru": ""
         }
       ],
-      "updated_at": "2026-01-11T17:14:50.386827"
+      "updated_at": "2026-01-11T18:23:53.402907"
     },
     "STR": {
       "team": "STR",
@@ -521,7 +521,7 @@
           "content_ru": "В дерби между Нижней Баварией и Верхней Баварией «Штраубинг Тайгерс» заслуженно выиграли со счетом 6:3. Хотя команда Крейга Вудкрофта вышла из первого периода с преимуществом 1:2, они перевернули игру, забив два гола в средней трети, и прояснили ситуацию, забив еще три гола в заключительном периоде. Лучшим игроком Штраубинга стал Ник Хэллоран с одним голом и тремя передачами. Благодаря этой победе Нижняя Бавария поднялась на третье место в таблице.\n\n«Пантеры» из Ингольштадта были гостями «Пульвертурма» на первом домашнем матче 2026 года. В 80 встречах DEL между обеими командами «Штраубинг Тайгерс» смогли покинуть лед победителями 35 раз. Две последние встречи в этом сезоне прошли в Ингольштадте, последняя встреча состоялась со счетом 6-4 в конце октября.\n\nПомимо давно травмированных Майка Коннолли и Зака ​​Лесли, Уэйд Эллисон и Линус Брандл еще не смогли снова сыграть за «Штраубинг Тайгерс». После выступления на чемпионате мира среди юношей до 20 лет в составе не было Симона Зайдля и Тобиаса Шварца, как и Флориана Бюгла. Главный тренер Крейг Вудкрофт сделал ставку на Хенрика Хокеланда в воротах.\n\nТренер гостей Марк Френч смог задействовать весь кадровый состав. В составе ингольштадтской команды отсутствовали Девин Уильямс, Филипп Прето, Самир Харбутли, Майлз Пауэлл и Нико Пертуч. Бретт Брошу был в воротах «Пантерс».\n\nПервый шанс в игре принадлежал хозяевам поля, когда Тайлер Мэдден через полторы минуты вышел перед воротами соперника, но его удар едва не попал в створ. Через минуту «Тигры» вышли вперед: первая попытка Данджо Леонхардта попала в Бретта Брошу, но тот последовал за ним и забил с острого угла (3-я минута игры). Однако ингольштадтцы сразу же сравняли счет, воспользовавшись первой же возможностью забить: Райли Шину несколько повезло получить шайбу в атакующей трети, он не долго колебался и пробил мимо Хенрика Хаукеланда (6-я минута). На десятой минуте «Тайгерс» упустили две многообещающие возможности: во-первых, Тим Флейшер провалил удар слева, а Ник Хэллоран также не смог пройти твердым резиновым диском мимо Бретта Брошу. С другой стороны, Крис Яндрич подал из-за ворот, но Хенрик Хаукеланд оказался в штанге (13-я минута). Вместо Штраубинга Штефан Лойбл попробовал прямой удар от синей линии, который также был заблокирован. Джастин Скотт стартовал вторым со Скайлер Маккензи."
         }
       ],
-      "updated_at": "2026-01-11T17:14:57.194864"
+      "updated_at": "2026-01-11T18:23:59.958298"
     }
   }
 }
