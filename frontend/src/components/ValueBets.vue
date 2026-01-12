@@ -80,7 +80,7 @@
               <span class="value-badge">+{{ bet.value.toFixed(0) }}%</span>
             </td>
             <td class="td-link">
-              <a :href="getJettonUrl(bet.eventId)" target="_blank" rel="noopener" class="jetton-link" title="Открыть в JetTon">
+              <a :href="getJettonUrl(bet)" target="_blank" rel="noopener" class="jetton-link" title="Открыть в JetTon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                   <polyline points="15 3 21 3 21 9"/>
@@ -431,8 +431,32 @@ export default {
       return 'value-ok'
     },
 
-    getJettonUrl(eventId) {
-      return `https://jtboost.life/sports/event/${eventId}`
+    getJettonUrl(bet) {
+      // Format: /sportsbook/ice-hockey/{region}/{league}/{home-team}-{away-team}-{event_id}
+      const slugify = (text) => {
+        return text
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^\w\-]+/g, '')
+          .replace(/\-\-+/g, '-')
+          .replace(/^-+/, '')
+          .replace(/-+$/, '')
+      }
+
+      // Map league to region
+      const leagueRegions = {
+        'NHL': 'usa-nhl',
+        'AHL': 'usa-ahl',
+        'LIIGA': 'finland-liiga',
+        'DEL': 'germany-del',
+        'KHL': 'russia-khl'
+      }
+
+      const region = leagueRegions[bet.league] || 'ice-hockey'
+      const homeSlug = slugify(bet.homeTeam)
+      const awaySlug = slugify(bet.awayTeam)
+
+      return `https://jtboost.life/sportsbook/ice-hockey/${region}/${homeSlug}-${awaySlug}-${bet.eventId}`
     }
   }
 }
