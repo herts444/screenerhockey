@@ -2,15 +2,24 @@
   <div class="value-bets">
     <div class="value-bets-header">
       <h2>Value Bets</h2>
+      <div class="mode-switcher">
+        <button :class="['mode-btn', { active: viewMode === 'current' }]" @click="viewMode = 'current'">
+          Текущие
+        </button>
+        <button :class="['mode-btn', { active: viewMode === 'history' }]" @click="switchToHistory">
+          История
+        </button>
+      </div>
       <div class="filters">
-        <select v-model="selectedLeague" class="filter-select" @change="loadOdds">
+        <select v-if="viewMode === 'current'" v-model="selectedLeague" class="filter-select" @change="loadOdds">
           <option value="">Все лиги</option>
           <option value="NHL">NHL</option>
           <option value="AHL">AHL</option>
           <option value="LIIGA">Финляндия</option>
           <option value="DEL">Германия</option>
         </select>
-        <button class="btn-refresh" @click="loadOdds" :disabled="loading">
+        <input v-if="viewMode === 'history'" type="date" v-model="selectedDate" class="date-input" @change="loadHistory" />
+        <button class="btn-refresh" @click="viewMode === 'current' ? loadOdds() : loadHistory()" :disabled="loading">
           <svg v-if="!loading" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
             <path d="M3 3v5h5"/>
@@ -22,23 +31,46 @@
       </div>
     </div>
 
+    <div v-if="viewMode === 'history' && historyStats" class="auto-check-info">
+      Автоматическая проверка: каждый час (через 5+ часов после начала матча)
+    </div>
+
+    <div v-if="viewMode === 'history' && historyStats" class="stats-summary">
+      <div class="stat-card stat-total">
+        <div class="stat-value">{{ historyStats.total }}</div>
+        <div class="stat-label">Всего прогнозов</div>
+      </div>
+      <div class="stat-card stat-won">
+        <div class="stat-value">{{ historyStats.won }}</div>
+        <div class="stat-label">Зашло</div>
+      </div>
+      <div class="stat-card stat-lost">
+        <div class="stat-value">{{ historyStats.lost }}</div>
+        <div class="stat-label">Не зашло</div>
+      </div>
+      <div class="stat-card stat-winrate">
+        <div class="stat-value">{{ historyStats.winRate }}%</div>
+        <div class="stat-label">Процент попаданий</div>
+      </div>
+    </div>
+
     <div v-if="loading" class="loading-state">
       <div class="spinner"></div>
-      <span>Загрузка коэффициентов...</span>
+      <span>{{ viewMode === 'current' ? 'Загрузка коэффициентов...' : 'Загрузка истории...' }}</span>
     </div>
 
     <div v-else-if="error" class="error-state">
       {{ error }}
     </div>
 
-    <div v-else-if="filteredValueBets.length === 0" class="empty-state">
+    <div v-else-if="displayedBets.length === 0" class="empty-state">
       <div class="empty-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 3v18h18"/>
           <path d="m19 9-5 5-4-4-3 3"/>
         </svg>
       </div>
-      <p>Нет валуйных ставок по выбранным критериям</p>
+      <p>{{ viewMode === 'current' ? 'Нет валуйных ставок по выбранным критериям' : 'Нет прогнозов на выбранную дату' }}</p>
     </div>
 
     <div v-else class="value-bets-table-container">
@@ -49,13 +81,20 @@
             <th class="th-league">Лига</th>
             <th class="th-bet">Ставка</th>
             <th class="th-odds">Коэф.</th>
-            <th class="th-prob">Вероятность</th>
-            <th class="th-fair">Fair Odds</th>
+            <th v-if="viewMode === 'current'" class="th-prob">Вероятность</th>
+            <th v-if="viewMode === 'current'" class="th-fair">Fair Odds</th>
             <th class="th-value">Value</th>
+            <th v-if="viewMode === 'history'" class="th-result">Результат</th>
+            <th v-if="viewMode === 'history'" class="th-status">Статус</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="bet in filteredValueBets" :key="bet.id" class="bet-row" :class="getValueClass(bet.value)">
+          <tr
+            v-for="bet in displayedBets"
+            :key="bet.id"
+            class="bet-row"
+            :class="viewMode === 'current' ? getValueClass(bet.value) : getHistoryRowClass(bet)"
+          >
             <td class="td-match">
               <div class="match-info">
                 <div class="team-with-logo">
@@ -73,10 +112,18 @@
             <td class="td-league">{{ bet.league || '—' }}</td>
             <td class="td-bet">{{ bet.betLabel }} ({{ bet.line }})</td>
             <td class="td-odds">{{ bet.odds.toFixed(2) }}</td>
-            <td class="td-prob">{{ (bet.probability * 100).toFixed(1) }}%</td>
-            <td class="td-fair">{{ bet.fairOdds.toFixed(2) }}</td>
-            <td class="td-value" :class="getValueClass(bet.value)">
+            <td v-if="viewMode === 'current'" class="td-prob">{{ (bet.probability * 100).toFixed(1) }}%</td>
+            <td v-if="viewMode === 'current'" class="td-fair">{{ bet.fairOdds.toFixed(2) }}</td>
+            <td class="td-value" :class="viewMode === 'current' ? getValueClass(bet.value) : ''">
               <span class="value-badge">+{{ bet.value.toFixed(0) }}%</span>
+            </td>
+            <td v-if="viewMode === 'history'" class="td-result">
+              {{ bet.actualResult || '—' }}
+            </td>
+            <td v-if="viewMode === 'history'" class="td-status">
+              <span v-if="!bet.isChecked" class="status-badge status-pending">Ожидание</span>
+              <span v-else-if="bet.isWon" class="status-badge status-won">✓ Зашло</span>
+              <span v-else class="status-badge status-lost">✗ Не зашло</span>
             </td>
           </tr>
         </tbody>
@@ -99,11 +146,12 @@ export default {
   data() {
     return {
       loading: false,
-      saving: false,
       error: null,
-      saveMessage: null,
       oddsData: [],
-      selectedLeague: ''
+      selectedLeague: '',
+      viewMode: 'current', // 'current' or 'history'
+      historyPredictions: [],
+      selectedDate: this.getYesterday()
     }
   },
   computed: {
@@ -342,6 +390,27 @@ export default {
     },
     filteredValueBets() {
       return this.bestValuePerMatch
+    },
+    displayedBets() {
+      if (this.viewMode === 'current') {
+        return this.filteredValueBets
+      } else {
+        return this.historyPredictions
+      }
+    },
+    historyStats() {
+      if (this.historyPredictions.length === 0) return null
+
+      const checked = this.historyPredictions.filter(p => p.isChecked)
+      const won = checked.filter(p => p.isWon).length
+      const lost = checked.length - won
+
+      return {
+        total: this.historyPredictions.length,
+        won,
+        lost,
+        winRate: checked.length > 0 ? Math.round((won / checked.length) * 100) : 0
+      }
     }
   },
   async mounted() {
@@ -428,9 +497,53 @@ export default {
       }
     },
 
+    getYesterday() {
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+      return yesterday.toISOString().split('T')[0]
+    },
+
+    async switchToHistory() {
+      this.viewMode = 'history'
+      await this.loadHistory()
+    },
+
+    async loadHistory() {
+      this.loading = true
+      this.error = null
+
+      try {
+        const response = await fetch(`/api/predictions?date=${this.selectedDate}`)
+        const data = await response.json()
+
+        if (response.ok) {
+          // Format history predictions with logo URLs
+          this.historyPredictions = (data.predictions || []).map(pred => {
+            const homeStats = this.statsCache[pred.homeAbbrev]
+            const awayStats = this.statsCache[pred.awayAbbrev]
+
+            return {
+              ...pred,
+              homeLogo: homeStats?.team?.logo_url,
+              awayLogo: awayStats?.team?.logo_url,
+              value: pred.value || pred.value_percentage || 0
+            }
+          })
+        } else {
+          this.error = data.error || 'Ошибка загрузки истории'
+        }
+      } catch (err) {
+        console.error('Failed to load history:', err)
+        this.error = 'Не удалось загрузить историю прогнозов'
+      } finally {
+        this.loading = false
+      }
+    },
+
     formatTime(timestamp) {
       if (!timestamp) return ''
-      const date = new Date(timestamp * 1000)
+      // Handle both Unix timestamp (seconds) and milliseconds
+      const date = new Date(timestamp > 10000000000 ? timestamp : timestamp * 1000)
       const day = date.getDate().toString().padStart(2, '0')
       const month = (date.getMonth() + 1).toString().padStart(2, '0')
       const hours = date.getHours().toString().padStart(2, '0')
@@ -443,6 +556,11 @@ export default {
       if (value >= 75) return 'value-great'
       if (value >= 50) return 'value-good'
       return 'value-ok'
+    },
+
+    getHistoryRowClass(pred) {
+      if (!pred.isChecked) return ''
+      return pred.isWon ? 'row-won' : 'row-lost'
     }
   }
 }
@@ -458,6 +576,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .value-bets-header h2 {
@@ -466,19 +586,50 @@ export default {
   margin: 0;
 }
 
+.mode-switcher {
+  display: flex;
+  gap: 8px;
+  padding: 4px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+}
+
+.mode-btn {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mode-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.mode-btn.active {
+  background: var(--accent-blue);
+  color: white;
+}
+
 .filters {
   display: flex;
   gap: 10px;
   align-items: center;
 }
 
-.filter-select {
+.filter-select, .date-input {
   padding: 8px 12px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
   background: var(--bg-secondary);
   color: var(--text-primary);
   font-size: 13px;
+  font-family: inherit;
 }
 
 .btn-save, .btn-refresh {
@@ -690,5 +841,105 @@ export default {
   border-top-color: var(--accent-blue);
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+.auto-check-info {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent-blue);
+}
+
+.stats-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.stat-total .stat-value { color: var(--accent-blue); }
+.stat-won .stat-value { color: #4caf50; }
+.stat-lost .stat-value { color: #f44336; }
+.stat-winrate .stat-value { color: #9c27b0; }
+
+.th-result { width: 80px; text-align: center; }
+.th-status { width: 120px; text-align: center; }
+
+.td-result, .td-status {
+  text-align: center;
+}
+
+.row-won {
+  background: rgba(76, 175, 80, 0.08);
+}
+
+.row-lost {
+  background: rgba(244, 67, 54, 0.08);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.status-pending {
+  background: rgba(158, 158, 158, 0.15);
+  color: #9e9e9e;
+}
+
+.status-won {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4caf50;
+}
+
+.status-lost {
+  background: rgba(244, 67, 54, 0.15);
+  color: #f44336;
+}
+
+@media (max-width: 1024px) {
+  .stats-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .value-bets-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mode-switcher, .filters {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stats-summary {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
