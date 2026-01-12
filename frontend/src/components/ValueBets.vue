@@ -52,7 +52,6 @@
             <th class="th-prob">Вероятность</th>
             <th class="th-fair">Fair Odds</th>
             <th class="th-value">Value</th>
-            <th class="th-link">БК</th>
           </tr>
         </thead>
         <tbody>
@@ -78,15 +77,6 @@
             <td class="td-fair">{{ bet.fairOdds.toFixed(2) }}</td>
             <td class="td-value" :class="getValueClass(bet.value)">
               <span class="value-badge">+{{ bet.value.toFixed(0) }}%</span>
-            </td>
-            <td class="td-link">
-              <a :href="getJettonUrl(bet)" target="_blank" rel="noopener" class="jetton-link" title="Открыть в JetTon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                  <polyline points="15 3 21 3 21 9"/>
-                  <line x1="10" y1="14" x2="21" y2="3"/>
-                </svg>
-              </a>
             </td>
           </tr>
         </tbody>
@@ -429,34 +419,6 @@ export default {
       if (value >= 75) return 'value-great'
       if (value >= 50) return 'value-good'
       return 'value-ok'
-    },
-
-    getJettonUrl(bet) {
-      // Format: /sportsbook/ice-hockey/{region}/{league}/{home-team}-{away-team}-{event_id}
-      const slugify = (text) => {
-        return text
-          .toLowerCase()
-          .replace(/\s+/g, '-')
-          .replace(/[^\w\-]+/g, '')
-          .replace(/\-\-+/g, '-')
-          .replace(/^-+/, '')
-          .replace(/-+$/, '')
-      }
-
-      // Map league to region
-      const leagueRegions = {
-        'NHL': 'usa-nhl',
-        'AHL': 'usa-ahl',
-        'LIIGA': 'finland-liiga',
-        'DEL': 'germany-del',
-        'KHL': 'russia-khl'
-      }
-
-      const region = leagueRegions[bet.league] || 'ice-hockey'
-      const homeSlug = slugify(bet.homeTeam)
-      const awaySlug = slugify(bet.awayTeam)
-
-      return `https://jtboost.life/sportsbook/ice-hockey/${region}/${homeSlug}-${awaySlug}-${bet.eventId}`
     }
   }
 }
@@ -583,9 +545,8 @@ export default {
 .th-prob { width: 90px; text-align: center; }
 .th-fair { width: 80px; text-align: center; }
 .th-value { width: 80px; text-align: center; }
-.th-link { width: 50px; text-align: center; }
 
-.td-league, .td-odds, .td-prob, .td-fair, .td-value, .td-link {
+.td-league, .td-odds, .td-prob, .td-fair, .td-value {
   text-align: center;
 }
 
@@ -666,23 +627,6 @@ export default {
 .value-excellent .value-badge {
   background: rgba(255, 87, 34, 0.25);
   color: #ff5722;
-}
-
-.jetton-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-  background: var(--bg-tertiary);
-  color: var(--text-secondary);
-  transition: all 0.2s;
-}
-
-.jetton-link:hover {
-  background: var(--accent-blue);
-  color: white;
 }
 
 .spinner-small {
