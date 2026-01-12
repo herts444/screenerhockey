@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, ForeignKey, Float, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from datetime import datetime
@@ -54,6 +54,41 @@ class DataUpdate(Base):
     id = Column(Integer, primary_key=True)
     updated_at = Column(DateTime, default=datetime.utcnow)
     update_type = Column(String(50))
+
+
+class ValueBetPrediction(Base):
+    __tablename__ = "value_bet_predictions"
+
+    id = Column(Integer, primary_key=True)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+    # Event info
+    event_id = Column(String(50), index=True)
+    league = Column(String(10), index=True)
+    scheduled = Column(DateTime, index=True)
+
+    # Teams
+    home_team = Column(String(100))
+    home_abbrev = Column(String(10))
+    away_team = Column(String(100))
+    away_abbrev = Column(String(10))
+
+    # Bet info
+    bet_type = Column(String(50))  # home-it-over, away-it-under, match-total-over, etc.
+    bet_label = Column(String(100))  # Human readable: "ИТБ Edmonton Oilers"
+    line = Column(Float)  # 2.5, 5.5, etc.
+
+    # Odds and value
+    odds = Column(Float)
+    probability = Column(Float)  # 0-1
+    fair_odds = Column(Float)
+    value_percentage = Column(Float)  # Value %
+
+    # Result tracking
+    is_checked = Column(Boolean, default=False)
+    is_won = Column(Boolean, nullable=True)  # NULL = not checked yet
+    actual_result = Column(String(20), nullable=True)  # e.g., "3-2", "over", "under"
+    checked_at = Column(DateTime, nullable=True)
 
 
 def init_db():
