@@ -9,13 +9,6 @@
           class="date-input"
           @change="loadHistory"
         />
-        <button class="btn-check" @click="checkResults" :disabled="checking">
-          <svg v-if="!checking" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-          <span v-else class="spinner-small"></span>
-          Проверить результаты
-        </button>
         <button class="btn-refresh" @click="loadHistory" :disabled="loading">
           <svg v-if="!loading" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
@@ -26,6 +19,9 @@
           <span v-else class="spinner-small"></span>
         </button>
       </div>
+    </div>
+    <div v-if="stats" class="auto-check-info">
+      Автоматическая проверка: каждый час (через 5+ часов после начала матча)
     </div>
 
     <div v-if="stats" class="stats-summary">
@@ -136,7 +132,6 @@ export default {
   data() {
     return {
       loading: false,
-      checking: false,
       error: null,
       predictions: [],
       selectedDate: this.getYesterday()
@@ -186,27 +181,6 @@ export default {
         this.error = 'Не удалось загрузить историю прогнозов'
       } finally {
         this.loading = false
-      }
-    },
-
-    async checkResults() {
-      this.checking = true
-
-      try {
-        const response = await fetch('/api/predictions?action=check')
-        const data = await response.json()
-
-        if (response.ok) {
-          // Reload history to see updated results
-          await this.loadHistory()
-        } else {
-          this.error = data.error || 'Ошибка проверки результатов'
-        }
-      } catch (err) {
-        console.error('Failed to check results:', err)
-        this.error = 'Не удалось проверить результаты'
-      } finally {
-        this.checking = false
       }
     },
 
@@ -267,7 +241,7 @@ export default {
   font-family: inherit;
 }
 
-.btn-check, .btn-refresh {
+.btn-refresh {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -282,15 +256,25 @@ export default {
   transition: all 0.2s;
 }
 
-.btn-check:hover, .btn-refresh:hover {
+.btn-refresh:hover {
   background: var(--accent-blue);
   border-color: var(--accent-blue);
   color: white;
 }
 
-.btn-check:disabled, .btn-refresh:disabled {
+.btn-refresh:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.auto-check-info {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent-blue);
 }
 
 .stats-summary {

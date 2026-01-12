@@ -10,15 +10,6 @@
           <option value="LIIGA">Финляндия</option>
           <option value="DEL">Германия</option>
         </select>
-        <button class="btn-save" @click="savePredictions" :disabled="saving || filteredValueBets.length === 0">
-          <svg v-if="!saving" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-            <polyline points="17 21 17 13 7 13 7 21"/>
-            <polyline points="7 3 7 8 15 8"/>
-          </svg>
-          <span v-else class="spinner-small"></span>
-          Сохранить прогнозы
-        </button>
         <button class="btn-refresh" @click="loadOdds" :disabled="loading">
           <svg v-if="!loading" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
@@ -29,10 +20,6 @@
           <span v-else class="spinner-small"></span>
         </button>
       </div>
-    </div>
-
-    <div v-if="saveMessage" class="save-message" :class="saveMessage.type">
-      {{ saveMessage.text }}
     </div>
 
     <div v-if="loading" class="loading-state">
@@ -387,6 +374,9 @@ export default {
         this.oddsData = events
 
         await this.loadStatsForOdds()
+
+        // Auto-save predictions after loading
+        await this.savePredictionsAuto()
       } catch (err) {
         console.error('Failed to load odds:', err)
         this.error = 'Не удалось загрузить коэффициенты'
@@ -419,12 +409,12 @@ export default {
       await Promise.all(promises)
     },
 
-    async savePredictions() {
-      this.saving = true
-      this.saveMessage = null
+    async savePredictionsAuto() {
+      // Auto-save predictions silently in background
+      if (this.filteredValueBets.length === 0) return
 
       try {
-        const response = await fetch('/api/predictions', {
+        await fetch('/api/predictions', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -433,34 +423,8 @@ export default {
             predictions: this.filteredValueBets
           })
         })
-
-        const data = await response.json()
-
-        if (response.ok) {
-          this.saveMessage = {
-            type: 'success',
-            text: `Сохранено прогнозов: ${data.saved}, пропущено дубликатов: ${data.skipped}`
-          }
-        } else {
-          this.saveMessage = {
-            type: 'error',
-            text: data.error || 'Ошибка сохранения прогнозов'
-          }
-        }
-
-        // Clear message after 5 seconds
-        setTimeout(() => {
-          this.saveMessage = null
-        }, 5000)
-
       } catch (err) {
-        console.error('Failed to save predictions:', err)
-        this.saveMessage = {
-          type: 'error',
-          text: 'Не удалось сохранить прогнозы'
-        }
-      } finally {
-        this.saving = false
+        console.error('Failed to auto-save predictions:', err)
       }
     },
 
