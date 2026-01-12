@@ -10,6 +10,15 @@
           <option value="LIIGA">Финляндия</option>
           <option value="DEL">Германия</option>
         </select>
+        <button class="btn-save" @click="savePredictions" :disabled="saving || filteredValueBets.length === 0">
+          <svg v-if="!saving" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          <span v-else class="spinner-small"></span>
+          Сохранить прогнозы
+        </button>
         <button class="btn-refresh" @click="loadOdds" :disabled="loading">
           <svg v-if="!loading" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
@@ -20,6 +29,10 @@
           <span v-else class="spinner-small"></span>
         </button>
       </div>
+    </div>
+
+    <div v-if="saveMessage" class="save-message" :class="saveMessage.type">
+      {{ saveMessage.text }}
     </div>
 
     <div v-if="loading" class="loading-state">
@@ -99,7 +112,9 @@ export default {
   data() {
     return {
       loading: false,
+      saving: false,
       error: null,
+      saveMessage: null,
       oddsData: [],
       selectedLeague: ''
     }
@@ -404,6 +419,51 @@ export default {
       await Promise.all(promises)
     },
 
+    async savePredictions() {
+      this.saving = true
+      this.saveMessage = null
+
+      try {
+        const response = await fetch('/api/predictions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            predictions: this.filteredValueBets
+          })
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+          this.saveMessage = {
+            type: 'success',
+            text: `Сохранено прогнозов: ${data.saved}, пропущено дубликатов: ${data.skipped}`
+          }
+        } else {
+          this.saveMessage = {
+            type: 'error',
+            text: data.error || 'Ошибка сохранения прогнозов'
+          }
+        }
+
+        // Clear message after 5 seconds
+        setTimeout(() => {
+          this.saveMessage = null
+        }, 5000)
+
+      } catch (err) {
+        console.error('Failed to save predictions:', err)
+        this.saveMessage = {
+          type: 'error',
+          text: 'Не удалось сохранить прогнозы'
+        }
+      } finally {
+        this.saving = false
+      }
+    },
+
     formatTime(timestamp) {
       if (!timestamp) return ''
       const date = new Date(timestamp * 1000)
@@ -457,8 +517,8 @@ export default {
   font-size: 13px;
 }
 
-.btn-refresh {
-  padding: 8px;
+.btn-save, .btn-refresh {
+  padding: 8px 12px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
   background: var(--bg-secondary);
@@ -466,17 +526,47 @@ export default {
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-save:hover {
+  background: var(--accent-green);
+  border-color: var(--accent-green);
+  color: white;
 }
 
 .btn-refresh:hover {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+  color: white;
 }
 
-.btn-refresh:disabled {
+.btn-save:disabled, .btn-refresh:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.save-message {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.save-message.success {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4caf50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.save-message.error {
+  background: rgba(244, 67, 54, 0.15);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.3);
 }
 
 .loading-state,

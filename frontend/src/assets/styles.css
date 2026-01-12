@@ -134,6 +134,10 @@ body {
   background: var(--accent-green);
 }
 
+.nav-btn-history.active {
+  background: #9c27b0;
+}
+
 .nav-btn svg {
   flex-shrink: 0;
 }
