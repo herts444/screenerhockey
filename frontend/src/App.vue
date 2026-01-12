@@ -135,7 +135,7 @@
         <thead>
           <tr>
             <th rowspan="2" class="th-match">Матч</th>
-            <th rowspan="2" class="th-news" v-if="selectedLeague === 'DEL'"></th>
+            <!-- <th rowspan="2" class="th-news" v-if="selectedLeague === 'DEL'"></th> -->
             <th colspan="5" class="th-group">ИТ Хозяева {{ statsMode === 'conceded' ? '(проп.)' : '' }}</th>
             <th colspan="5" class="th-group">ИТ Гости {{ statsMode === 'conceded' ? '(проп.)' : '' }}</th>
             <th colspan="4" class="th-group">Тотал (хозяева)</th>
@@ -179,7 +179,7 @@
             </td>
 
             <!-- News button (DEL only) -->
-            <td class="td-news" v-if="selectedLeague === 'DEL'">
+            <!-- <td class="td-news" v-if="selectedLeague === 'DEL'">
               <button class="btn-news" @click="openNewsModal(game)" title="Новости команд">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
@@ -188,7 +188,7 @@
                   <path d="M10 6h8v4h-8V6Z"/>
                 </svg>
               </button>
-            </td>
+            </td> -->
 
             <!-- Home team individual totals (home games stats) -->
             <td v-for="t in [2,3,4,5,6]" :key="'home-it-'+t" class="td-stat">

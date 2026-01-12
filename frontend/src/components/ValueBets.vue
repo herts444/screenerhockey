@@ -31,9 +31,9 @@
       </div>
     </div>
 
-    <div v-if="viewMode === 'history' && historyStats" class="auto-check-info">
+    <!-- <div v-if="viewMode === 'history' && historyStats" class="auto-check-info">
       Автоматическая проверка: каждый час (через 5+ часов после начала матча)
-    </div>
+    </div> -->
 
     <div v-if="viewMode === 'history' && historyStats" class="stats-summary">
       <div class="stat-card stat-total">
