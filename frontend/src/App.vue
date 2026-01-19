@@ -604,28 +604,47 @@ export default {
 <style scoped>
 .games-table-container {
   overflow-x: auto;
-  margin-top: 20px;
+  margin-top: 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  box-shadow: var(--shadow-md);
 }
 
 .games-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
+  background: var(--bg-secondary);
 }
 
 .games-table th {
-  background-color: var(--bg-tertiary);
-  padding: 10px 6px;
+  background: linear-gradient(180deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+  padding: 12px 8px;
   text-align: center;
-  font-weight: 600;
+  font-weight: 700;
   border: 1px solid var(--border-color);
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 
 .th-group {
-  background-color: var(--bg-secondary) !important;
-  font-size: 12px;
-  color: var(--text-secondary);
+  background: var(--gradient-premium) !important;
+  font-size: 11px;
+  color: var(--accent-blue-light);
+  position: relative;
+}
+
+.th-group::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
 }
 
 .th-match {
@@ -638,12 +657,33 @@ export default {
   font-size: 11px;
 }
 
+.game-row {
+  transition: all 0.2s;
+  position: relative;
+}
+
+.game-row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent-blue);
+  transform: scaleY(0);
+  transition: transform 0.2s;
+}
+
 .game-row:hover {
-  background-color: var(--bg-hover);
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
+}
+
+.game-row:hover::before {
+  transform: scaleY(1);
 }
 
 .games-table td {
-  padding: 8px 6px;
+  padding: 10px 8px;
   border: 1px solid var(--border-color);
 }
 
@@ -737,13 +777,25 @@ export default {
 }
 
 .modal-content {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
+  background: var(--gradient-premium);
+  border: 1px solid var(--border-light);
+  border-radius: 0;
   max-width: 500px;
   width: 90%;
   max-height: 80vh;
   overflow: hidden;
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+.modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-blue);
 }
 
 .modal-header {
@@ -787,9 +839,17 @@ export default {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 12px;
-  background: var(--bg-tertiary);
-  border-radius: 6px;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 0;
+  border-left: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.match-item-modal:hover {
+  background: rgba(37, 99, 235, 0.1);
+  border-left-color: var(--accent-blue);
+  transform: translateX(2px);
 }
 
 .match-date {
@@ -844,33 +904,54 @@ export default {
 /* Stats mode switcher */
 .stats-mode-switcher {
   display: flex;
-  gap: 4px;
-  background: var(--bg-tertiary);
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.4);
   padding: 4px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
+  border-radius: 0;
+  border: 1px solid var(--border-light);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .mode-btn {
-  padding: 6px 14px;
+  padding: 8px 18px;
   border: none;
-  border-radius: 6px;
+  border-radius: 0;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   background: transparent;
   color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+.mode-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  background: var(--accent-blue);
+  transform: scaleY(0);
+  transition: transform 0.25s;
 }
 
 .mode-btn:hover {
   color: var(--text-primary);
-  background: var(--bg-hover);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .mode-btn.active {
-  background: var(--accent-blue);
-  color: white;
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.2) 0%, rgba(37, 99, 235, 0.05) 100%);
+  color: var(--accent-blue-light);
+  box-shadow: inset 2px 0 0 var(--accent-blue);
+}
+
+.mode-btn.active::after {
+  transform: scaleY(1);
 }
 
 </style>
