@@ -133,24 +133,24 @@
             <th colspan="4" class="th-group">Тотал (гости)</th>
           </tr>
           <tr>
-            <!-- Individual totals away -->
-            <th class="th-stat">2+</th>
-            <th class="th-stat">3+</th>
-            <th class="th-stat">4+</th>
-            <th class="th-stat">5+</th>
-            <th class="th-stat">6+</th>
             <!-- Individual totals home -->
             <th class="th-stat">2+</th>
             <th class="th-stat">3+</th>
             <th class="th-stat">4+</th>
             <th class="th-stat">5+</th>
             <th class="th-stat">6+</th>
-            <!-- Match totals away -->
+            <!-- Individual totals away -->
+            <th class="th-stat">2+</th>
+            <th class="th-stat">3+</th>
+            <th class="th-stat">4+</th>
+            <th class="th-stat">5+</th>
+            <th class="th-stat">6+</th>
+            <!-- Match totals home -->
             <th class="th-stat">5+</th>
             <th class="th-stat">6+</th>
             <th class="th-stat">7+</th>
             <th class="th-stat">8+</th>
-            <!-- Match totals home -->
+            <!-- Match totals away -->
             <th class="th-stat">5+</th>
             <th class="th-stat">6+</th>
             <th class="th-stat">7+</th>
