@@ -641,6 +641,7 @@ export default {
 .th-match {
   text-align: left;
   min-width: 380px;
+  width: 380px;
 }
 
 .th-stat {
@@ -682,6 +683,9 @@ export default {
 .td-match {
   font-weight: 500;
   padding: 10px 12px;
+  min-width: 380px;
+  width: 380px;
+  max-width: 380px;
 }
 
 .match-info {
