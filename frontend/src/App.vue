@@ -683,12 +683,14 @@ export default {
 }
 
 .games-table td {
-  padding: 10px 8px;
+  padding: 6px 4px;
   border: 1px solid var(--border-color);
+  vertical-align: middle;
 }
 
 .td-match {
   font-weight: 500;
+  padding: 10px 12px;
 }
 
 .match-info {
@@ -731,7 +733,8 @@ export default {
 
 .td-stat {
   text-align: center;
-  padding: 4px !important;
+  padding: 2px !important;
+  min-width: 50px;
 }
 
 .th-news {
