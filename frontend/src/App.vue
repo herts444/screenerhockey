@@ -606,7 +606,6 @@ export default {
   border-collapse: collapse;
   font-size: 13px;
   background: var(--bg-secondary);
-  table-layout: fixed;
 }
 
 .games-table th {
@@ -730,9 +729,6 @@ export default {
 .td-stat {
   text-align: center;
   padding: 2px !important;
-  width: 50px;
-  max-width: 50px;
-  min-width: 50px;
 }
 
 .th-news {
