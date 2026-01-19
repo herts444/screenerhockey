@@ -853,35 +853,58 @@ export default {
   cursor: pointer;
 }
 
-/* Stats mode switcher */
+/* Stats mode switcher - same style as league-switcher */
 .stats-mode-switcher {
   display: flex;
-  gap: 4px;
-  background: var(--bg-tertiary);
+  gap: 2px;
+  background-color: rgba(0, 0, 0, 0.4);
   padding: 4px;
-  border-radius: 8px;
+  border-radius: 0;
+  border: 1px solid var(--border-light);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .mode-btn {
-  padding: 6px 14px;
+  padding: 8px 18px;
   border: none;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
+  border-radius: 0;
   background: transparent;
   color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+.mode-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent-blue);
+  transform: scaleX(0);
+  transition: transform 0.25s;
 }
 
 .mode-btn:hover {
   color: var(--text-primary);
-  background: var(--bg-hover);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .mode-btn.active {
-  background: var(--accent-blue);
-  color: white;
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.2) 0%, rgba(37, 99, 235, 0.1) 100%);
+  color: var(--accent-blue-light);
+  border-left: 2px solid var(--accent-blue);
+  border-right: 2px solid var(--accent-blue);
+}
+
+.mode-btn.active::after {
+  transform: scaleX(1);
 }
 
 </style>
