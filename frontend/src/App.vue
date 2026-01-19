@@ -5,14 +5,6 @@
       <div class="header-row header-row-main">
         <div class="header-brand">
           <div class="logo">
-            <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="m4.93 4.93 4.24 4.24"/>
-              <path d="m14.83 9.17 4.24-4.24"/>
-              <path d="m14.83 14.83 4.24 4.24"/>
-              <path d="m9.17 14.83-4.24 4.24"/>
-              <circle cx="12" cy="12" r="4"/>
-            </svg>
             <span class="logo-text">Hockey Screener</span>
           </div>
           <nav class="main-nav">
@@ -135,7 +127,6 @@
         <thead>
           <tr>
             <th rowspan="2" class="th-match">Матч</th>
-            <!-- <th rowspan="2" class="th-news" v-if="selectedLeague === 'DEL'"></th> -->
             <th colspan="5" class="th-group">ИТ Хозяева {{ statsMode === 'conceded' ? '(проп.)' : '' }}</th>
             <th colspan="5" class="th-group">ИТ Гости {{ statsMode === 'conceded' ? '(проп.)' : '' }}</th>
             <th colspan="4" class="th-group">Тотал (хозяева)</th>
