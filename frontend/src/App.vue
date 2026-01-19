@@ -593,55 +593,36 @@ export default {
 </script>
 
 <style scoped>
+/* === ТАБЛИЦА МАТЧЕЙ - РАБОЧИЕ СТИЛИ === */
 .games-table-container {
   overflow-x: auto;
-  margin-top: 24px;
-  border: 1px solid var(--border-color);
-  border-radius: 0;
-  box-shadow: var(--shadow-md);
+  margin-top: 20px;
 }
 
 .games-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
-  background: var(--bg-secondary);
 }
 
 .games-table th {
-  background: linear-gradient(180deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
-  padding: 12px 8px;
+  background-color: var(--bg-tertiary);
+  padding: 10px 6px;
   text-align: center;
-  font-weight: 700;
+  font-weight: 600;
   border: 1px solid var(--border-color);
   white-space: nowrap;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 12px;
-  color: var(--text-secondary);
 }
 
 .th-group {
-  background: var(--gradient-premium) !important;
-  font-size: 11px;
-  color: var(--accent-blue-light);
-  position: relative;
-}
-
-.th-group::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+  background-color: var(--bg-secondary) !important;
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 
 .th-match {
   text-align: left;
   min-width: 380px;
-  width: 380px;
 }
 
 .th-stat {
@@ -649,43 +630,17 @@ export default {
   font-size: 11px;
 }
 
-.game-row {
-  transition: all 0.2s;
-  position: relative;
-}
-
-.game-row::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: var(--accent-blue);
-  transform: scaleY(0);
-  transition: transform 0.2s;
-}
-
 .game-row:hover {
-  background: linear-gradient(90deg, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
-}
-
-.game-row:hover::before {
-  transform: scaleY(1);
+  background-color: var(--bg-hover);
 }
 
 .games-table td {
-  padding: 6px 4px;
+  padding: 8px 6px;
   border: 1px solid var(--border-color);
-  vertical-align: middle;
 }
 
 .td-match {
   font-weight: 500;
-  padding: 10px 12px;
-  min-width: 380px;
-  width: 380px;
-  max-width: 380px;
 }
 
 .match-info {
@@ -728,7 +683,7 @@ export default {
 
 .td-stat {
   text-align: center;
-  padding: 2px !important;
+  padding: 4px !important;
 }
 
 .th-news {
@@ -901,54 +856,32 @@ export default {
 /* Stats mode switcher */
 .stats-mode-switcher {
   display: flex;
-  gap: 2px;
-  background: rgba(0, 0, 0, 0.4);
+  gap: 4px;
+  background: var(--bg-tertiary);
   padding: 4px;
-  border-radius: 0;
-  border: 1px solid var(--border-light);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
 }
 
 .mode-btn {
-  padding: 8px 18px;
+  padding: 6px 14px;
   border: none;
-  border-radius: 0;
+  border-radius: 6px;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s;
   background: transparent;
   color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  position: relative;
-}
-
-.mode-btn::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 2px;
-  background: var(--accent-blue);
-  transform: scaleY(0);
-  transition: transform 0.25s;
 }
 
 .mode-btn:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-hover);
 }
 
 .mode-btn.active {
-  background: linear-gradient(90deg, rgba(37, 99, 235, 0.2) 0%, rgba(37, 99, 235, 0.05) 100%);
-  color: var(--accent-blue-light);
-  box-shadow: inset 2px 0 0 var(--accent-blue);
-}
-
-.mode-btn.active::after {
-  transform: scaleY(1);
+  background: var(--accent-blue);
+  color: white;
 }
 
 </style>
