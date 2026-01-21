@@ -68,46 +68,110 @@ def find_winning_bet(home_score, away_score, home_name, away_name):
     total = home_score + away_score
     winning_bets = []
 
-    # Check home team individual total over
+    # === ИТБ (Индивидуальный тотал больше) ===
+    # Home team
+    if home_score > 1.5:
+        winning_bets.append({
+            "type": "home-it-over", "line": 1.5, "odds": round(random.uniform(1.55, 1.75), 2),
+            "label": f"ИТБ {home_name} (1.5)"
+        })
     if home_score > 2.5:
         winning_bets.append({
-            "type": "home-it-over", "line": 2.5, "odds": 1.95,
-            "label": f"ИТБ {home_name}"
+            "type": "home-it-over", "line": 2.5, "odds": round(random.uniform(1.90, 2.15), 2),
+            "label": f"ИТБ {home_name} (2.5)"
         })
     if home_score > 3.5:
         winning_bets.append({
-            "type": "home-it-over", "line": 3.5, "odds": 2.45,
-            "label": f"ИТБ {home_name}"
+            "type": "home-it-over", "line": 3.5, "odds": round(random.uniform(2.40, 2.80), 2),
+            "label": f"ИТБ {home_name} (3.5)"
         })
 
-    # Check away team individual total over
+    # Away team
+    if away_score > 1.5:
+        winning_bets.append({
+            "type": "away-it-over", "line": 1.5, "odds": round(random.uniform(1.55, 1.75), 2),
+            "label": f"ИТБ {away_name} (1.5)"
+        })
     if away_score > 2.5:
         winning_bets.append({
-            "type": "away-it-over", "line": 2.5, "odds": 1.95,
-            "label": f"ИТБ {away_name}"
+            "type": "away-it-over", "line": 2.5, "odds": round(random.uniform(1.90, 2.15), 2),
+            "label": f"ИТБ {away_name} (2.5)"
         })
     if away_score > 3.5:
         winning_bets.append({
-            "type": "away-it-over", "line": 3.5, "odds": 2.45,
-            "label": f"ИТБ {away_name}"
+            "type": "away-it-over", "line": 3.5, "odds": round(random.uniform(2.40, 2.80), 2),
+            "label": f"ИТБ {away_name} (3.5)"
         })
 
-    # Check match total over
+    # === ИТМ (Индивидуальный тотал меньше) ===
+    # Home team
+    if home_score < 2.5:
+        winning_bets.append({
+            "type": "home-it-under", "line": 2.5, "odds": round(random.uniform(1.80, 2.05), 2),
+            "label": f"ИТМ {home_name} (2.5)"
+        })
+    if home_score < 1.5:
+        winning_bets.append({
+            "type": "home-it-under", "line": 1.5, "odds": round(random.uniform(2.10, 2.40), 2),
+            "label": f"ИТМ {home_name} (1.5)"
+        })
+
+    # Away team
+    if away_score < 2.5:
+        winning_bets.append({
+            "type": "away-it-under", "line": 2.5, "odds": round(random.uniform(1.80, 2.05), 2),
+            "label": f"ИТМ {away_name} (2.5)"
+        })
+    if away_score < 1.5:
+        winning_bets.append({
+            "type": "away-it-under", "line": 1.5, "odds": round(random.uniform(2.10, 2.40), 2),
+            "label": f"ИТМ {away_name} (1.5)"
+        })
+
+    # === Общий тотал ТБ (больше) ===
+    if total > 4.5:
+        winning_bets.append({
+            "type": "total-over", "line": 4.5, "odds": round(random.uniform(1.55, 1.75), 2),
+            "label": "Тотал Б (4.5)"
+        })
     if total > 5.5:
         winning_bets.append({
-            "type": "match-total-over", "line": 5.5, "odds": 1.85,
-            "label": "Тотал матча Б"
+            "type": "total-over", "line": 5.5, "odds": round(random.uniform(1.80, 2.00), 2),
+            "label": "Тотал Б (5.5)"
         })
     if total > 6.5:
         winning_bets.append({
-            "type": "match-total-over", "line": 6.5, "odds": 2.20,
-            "label": "Тотал матча Б"
+            "type": "total-over", "line": 6.5, "odds": round(random.uniform(2.15, 2.45), 2),
+            "label": "Тотал Б (6.5)"
+        })
+
+    # === Общий тотал ТМ (меньше) ===
+    if total < 6.5:
+        winning_bets.append({
+            "type": "total-under", "line": 6.5, "odds": round(random.uniform(1.70, 1.90), 2),
+            "label": "Тотал М (6.5)"
+        })
+    if total < 5.5:
+        winning_bets.append({
+            "type": "total-under", "line": 5.5, "odds": round(random.uniform(1.85, 2.10), 2),
+            "label": "Тотал М (5.5)"
+        })
+
+    # === Победа в матче ===
+    if home_score > away_score:
+        winning_bets.append({
+            "type": "home-win", "line": 0, "odds": round(random.uniform(1.65, 2.30), 2),
+            "label": f"Победа {home_name}"
+        })
+    elif away_score > home_score:
+        winning_bets.append({
+            "type": "away-win", "line": 0, "odds": round(random.uniform(1.65, 2.30), 2),
+            "label": f"Победа {away_name}"
         })
 
     if winning_bets:
-        # Prefer higher odds bets
-        winning_bets.sort(key=lambda x: x["odds"], reverse=True)
-        return winning_bets[0]
+        # Random selection from winning bets
+        return random.choice(winning_bets)
 
     return None
 
