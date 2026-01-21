@@ -9,7 +9,13 @@ from urllib.parse import urlparse, parse_qs
 # Add backend to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'backend'))
 
-from app.models.database import SessionLocal, ValueBetPrediction, Game
+from app.models.database import SessionLocal, ValueBetPrediction, Game, init_db
+
+# Initialize database tables on cold start
+try:
+    init_db()
+except Exception as e:
+    print(f"DB init error (may be ok if tables exist): {e}")
 
 
 class handler(BaseHTTPRequestHandler):
