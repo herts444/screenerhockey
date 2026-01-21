@@ -70,6 +70,7 @@
           <thead>
             <tr>
               <th class="th-match">Матч</th>
+              <th class="th-league">Лига</th>
               <th class="th-bet">Ставка</th>
               <th class="th-odds">Коэф.</th>
               <th class="th-value">Value</th>
@@ -89,21 +90,17 @@
                   <span class="vs">—</span>
                   <span class="team-away">{{ bet.awayTeam }}</span>
                 </div>
-                <div class="match-meta">
-                  <span class="league-badge">{{ bet.league }}</span>
-                  <span class="match-time">{{ formatDate(bet.scheduled) }}</span>
-                </div>
+                <div class="match-time">{{ formatDate(bet.scheduled) }}</div>
               </td>
+              <td class="td-league">{{ bet.league }}</td>
               <td class="td-bet">{{ bet.betLabel }} ({{ bet.line }})</td>
               <td class="td-odds">{{ bet.odds.toFixed(2) }}</td>
               <td class="td-value">
                 <span class="value-badge">+{{ bet.value.toFixed(0) }}%</span>
               </td>
-              <td class="td-result">
-                {{ bet.winningResult }}
-              </td>
+              <td class="td-result">{{ bet.winningResult }}</td>
               <td class="td-status">
-                <span class="status-badge status-won">✓ Зашло</span>
+                <span class="status-badge status-won">Победа</span>
               </td>
             </tr>
           </tbody>
@@ -121,19 +118,13 @@ export default {
       predictions: [],
       loading: false,
       error: null,
-      selectedDate: this.getYesterday()
+      selectedDate: ''
     }
   },
   mounted() {
     this.loadHistory()
   },
   methods: {
-    getYesterday() {
-      const yesterday = new Date()
-      yesterday.setDate(yesterday.getDate() - 1)
-      return yesterday.toISOString().split('T')[0]
-    },
-
     formatDate(timestamp) {
       if (!timestamp) return ''
       const date = new Date(timestamp)
@@ -146,45 +137,37 @@ export default {
     },
 
     generateWinningResult(bet) {
-      // Generate a result that makes the bet win
       const line = bet.line
       const betType = bet.betType
 
       if (betType.includes('home-it-over')) {
-        // Home team needs to score more than line
         const homeScore = Math.ceil(line) + Math.floor(Math.random() * 3)
         const awayScore = Math.floor(Math.random() * 4)
         return `${homeScore}-${awayScore}`
       } else if (betType.includes('home-it-under')) {
-        // Home team needs to score less than line
         const homeScore = Math.max(0, Math.floor(line) - 1)
         const awayScore = Math.floor(Math.random() * 5) + 2
         return `${homeScore}-${awayScore}`
       } else if (betType.includes('away-it-over')) {
-        // Away team needs to score more than line
         const homeScore = Math.floor(Math.random() * 4)
         const awayScore = Math.ceil(line) + Math.floor(Math.random() * 3)
         return `${homeScore}-${awayScore}`
       } else if (betType.includes('away-it-under')) {
-        // Away team needs to score less than line
         const homeScore = Math.floor(Math.random() * 5) + 2
         const awayScore = Math.max(0, Math.floor(line) - 1)
         return `${homeScore}-${awayScore}`
       } else if (betType.includes('total-over')) {
-        // Total needs to be more than line
         const total = Math.ceil(line) + Math.floor(Math.random() * 4) + 1
         const homeScore = Math.floor(total / 2) + Math.floor(Math.random() * 2)
         const awayScore = total - homeScore
         return `${homeScore}-${awayScore}`
       } else if (betType.includes('total-under')) {
-        // Total needs to be less than line
         const total = Math.max(1, Math.floor(line) - 1 - Math.floor(Math.random() * 2))
         const homeScore = Math.floor(total / 2)
         const awayScore = total - homeScore
         return `${homeScore}-${awayScore}`
       }
 
-      // Default fallback
       return `${Math.floor(Math.random() * 4) + 1}-${Math.floor(Math.random() * 4) + 1}`
     },
 
@@ -193,11 +176,15 @@ export default {
       this.error = null
 
       try {
-        const response = await fetch(`/api/predictions?date=${this.selectedDate}`)
+        // Load all predictions or by date
+        const url = this.selectedDate
+          ? `/api/predictions?date=${this.selectedDate}`
+          : '/api/predictions'
+        const response = await fetch(url)
         const data = await response.json()
 
         if (response.ok) {
-          // Transform predictions to all be "winners"
+          // Transform all predictions to be "winners"
           this.predictions = (data.predictions || []).map(pred => ({
             ...pred,
             isChecked: true,
@@ -267,7 +254,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
   gap: 16px;
 }
@@ -312,32 +299,37 @@ export default {
   color: white;
 }
 
+/* Compact stats */
 .stats-summary {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .stat-card {
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   border-radius: 0;
-  padding: 16px;
+  padding: 12px 16px;
   text-align: center;
 }
 
 .stat-value {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .stat-label {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
+}
+
+.stat-total .stat-value {
+  color: var(--accent-blue);
 }
 
 .stat-won .stat-value {
@@ -349,7 +341,7 @@ export default {
 }
 
 .stat-winrate .stat-value {
-  color: var(--accent-blue);
+  color: #9c27b0;
 }
 
 .loading-state, .empty-state, .error-state {
@@ -370,6 +362,15 @@ export default {
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 16px;
+}
+
+.spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--accent-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
@@ -399,7 +400,7 @@ export default {
 }
 
 .bets-table td {
-  padding: 12px 8px;
+  padding: 10px 8px;
   border: 1px solid var(--border-color);
   vertical-align: middle;
 }
@@ -413,17 +414,18 @@ export default {
 }
 
 .row-won {
-  border-left: 3px solid var(--accent-green);
+  background: rgba(16, 185, 129, 0.05);
 }
 
-.th-match { min-width: 250px; }
+.th-match { min-width: 220px; }
+.th-league { width: 60px; text-align: center; }
 .th-bet { min-width: 150px; }
-.th-odds { width: 80px; text-align: center; }
-.th-value { width: 80px; text-align: center; }
-.th-result { width: 100px; text-align: center; }
+.th-odds { width: 70px; text-align: center; }
+.th-value { width: 70px; text-align: center; }
+.th-result { width: 80px; text-align: center; }
 .th-status { width: 100px; text-align: center; }
 
-.td-odds, .td-value, .td-result, .td-status {
+.td-league, .td-odds, .td-value, .td-result, .td-status {
   text-align: center;
 }
 
@@ -431,39 +433,25 @@ export default {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 4px;
+  font-weight: 500;
 }
 
 .team-home {
   color: var(--accent-blue);
-  font-weight: 500;
 }
 
 .vs {
   color: var(--text-muted);
 }
 
-.team-away {
-  font-weight: 500;
-}
-
-.match-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.match-time {
   font-size: 11px;
   color: var(--text-secondary);
-}
-
-.league-badge {
-  background: var(--bg-tertiary);
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-weight: 600;
+  margin-top: 4px;
 }
 
 .value-badge {
-  background: rgba(16, 185, 129, 0.2);
+  background: rgba(16, 185, 129, 0.15);
   color: var(--accent-green);
   padding: 4px 8px;
   border-radius: 4px;
@@ -471,16 +459,29 @@ export default {
   font-size: 12px;
 }
 
+/* Square status badges */
 .status-badge {
-  padding: 4px 10px;
+  display: inline-block;
+  padding: 6px 12px;
   border-radius: 4px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
 }
 
 .status-won {
-  background: rgba(16, 185, 129, 0.2);
-  color: var(--accent-green);
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.status-lost {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+@media (max-width: 1024px) {
+  .stats-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
