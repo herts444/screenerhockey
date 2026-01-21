@@ -14,7 +14,12 @@
       <div class="winners-header">
         <h2>История прогнозов</h2>
         <div class="filters">
-          <input type="date" v-model="selectedDate" class="date-input" @change="loadHistory" />
+          <select v-model="selectedDate" class="date-select" @change="loadHistory">
+            <option value="">Все даты</option>
+            <option v-for="date in availableDates" :key="date.value" :value="date.value">
+              {{ date.label }}
+            </option>
+          </select>
           <button class="btn-refresh" @click="loadHistory" :disabled="loading">
             <svg v-if="!loading" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
@@ -73,7 +78,6 @@
               <th class="th-league">Лига</th>
               <th class="th-bet">Ставка</th>
               <th class="th-odds">Коэф.</th>
-              <th class="th-value">Value</th>
               <th class="th-result">Результат</th>
               <th class="th-status">Статус</th>
             </tr>
@@ -95,9 +99,6 @@
               <td class="td-league">{{ bet.league }}</td>
               <td class="td-bet">{{ bet.betLabel }} ({{ bet.line }})</td>
               <td class="td-odds">{{ bet.odds.toFixed(2) }}</td>
-              <td class="td-value">
-                <span class="value-badge">+{{ bet.value.toFixed(0) }}%</span>
-              </td>
               <td class="td-result">{{ bet.winningResult }}</td>
               <td class="td-status">
                 <span class="status-badge status-won">Победа</span>
@@ -116,13 +117,15 @@ export default {
   data() {
     return {
       predictions: [],
+      allPredictions: [],
       loading: false,
       error: null,
-      selectedDate: ''
+      selectedDate: '',
+      availableDates: []
     }
   },
   mounted() {
-    this.loadHistory()
+    this.loadAllPredictions()
   },
   methods: {
     formatDate(timestamp) {
@@ -171,34 +174,72 @@ export default {
       return `${Math.floor(Math.random() * 4) + 1}-${Math.floor(Math.random() * 4) + 1}`
     },
 
-    async loadHistory() {
+    async loadAllPredictions() {
       this.loading = true
       this.error = null
 
       try {
-        // Load all predictions or by date
-        const url = this.selectedDate
-          ? `/api/predictions?date=${this.selectedDate}`
-          : '/api/predictions'
-        const response = await fetch(url)
+        const response = await fetch('/api/predictions')
         const data = await response.json()
 
         if (response.ok) {
           // Transform all predictions to be "winners"
-          this.predictions = (data.predictions || []).map(pred => ({
+          this.allPredictions = (data.predictions || []).map(pred => ({
             ...pred,
             isChecked: true,
             isWon: true,
             winningResult: this.generateWinningResult(pred)
           }))
+
+          // Extract unique dates from predictions
+          const dateSet = new Set()
+          this.allPredictions.forEach(pred => {
+            if (pred.scheduled) {
+              const date = new Date(pred.scheduled)
+              const dateStr = date.toISOString().split('T')[0]
+              dateSet.add(dateStr)
+            }
+          })
+
+          // Sort dates descending and format for display
+          this.availableDates = Array.from(dateSet)
+            .sort((a, b) => new Date(b) - new Date(a))
+            .map(dateStr => {
+              const date = new Date(dateStr)
+              return {
+                value: dateStr,
+                label: date.toLocaleDateString('ru-RU', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric'
+                })
+              }
+            })
+
+          // Show all predictions initially
+          this.predictions = this.allPredictions
         } else {
           this.error = data.error || 'Ошибка загрузки'
         }
       } catch (err) {
-        console.error('Failed to load history:', err)
+        console.error('Failed to load predictions:', err)
         this.error = 'Не удалось загрузить историю прогнозов'
       } finally {
         this.loading = false
+      }
+    },
+
+    loadHistory() {
+      if (!this.selectedDate) {
+        // Show all predictions
+        this.predictions = this.allPredictions
+      } else {
+        // Filter by selected date
+        this.predictions = this.allPredictions.filter(pred => {
+          if (!pred.scheduled) return false
+          const predDate = new Date(pred.scheduled).toISOString().split('T')[0]
+          return predDate === this.selectedDate
+        })
       }
     }
   }
@@ -271,7 +312,7 @@ export default {
   align-items: center;
 }
 
-.date-input {
+.date-select {
   padding: 8px 12px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
@@ -279,6 +320,13 @@ export default {
   color: var(--text-primary);
   font-size: 13px;
   font-family: inherit;
+  cursor: pointer;
+  min-width: 140px;
+}
+
+.date-select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 .btn-refresh {
@@ -421,11 +469,10 @@ export default {
 .th-league { width: 60px; text-align: center; }
 .th-bet { min-width: 150px; }
 .th-odds { width: 70px; text-align: center; }
-.th-value { width: 70px; text-align: center; }
 .th-result { width: 80px; text-align: center; }
 .th-status { width: 100px; text-align: center; }
 
-.td-league, .td-odds, .td-value, .td-result, .td-status {
+.td-league, .td-odds, .td-result, .td-status {
   text-align: center;
 }
 
@@ -448,15 +495,6 @@ export default {
   font-size: 11px;
   color: var(--text-secondary);
   margin-top: 4px;
-}
-
-.value-badge {
-  background: rgba(16, 185, 129, 0.15);
-  color: var(--accent-green);
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-weight: 600;
-  font-size: 12px;
 }
 
 /* Square status badges */
