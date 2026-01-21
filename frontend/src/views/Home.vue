@@ -258,10 +258,10 @@
 </template>
 
 <script>
-import { hockeyApi } from './services/api.js'
-import StatCell from './components/StatCell.vue'
-import NewsModal from './components/NewsModal.vue'
-import ValueBets from './components/ValueBets.vue'
+import { hockeyApi } from '../services/api.js'
+import StatCell from '../components/StatCell.vue'
+import NewsModal from '../components/NewsModal.vue'
+import ValueBets from '../components/ValueBets.vue'
 
 export default {
   name: 'App',
