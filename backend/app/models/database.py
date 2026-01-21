@@ -5,7 +5,14 @@ from datetime import datetime
 import os
 
 # Use PostgreSQL from environment variable, fallback to SQLite for local dev
-DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./nhl_screener.db")
+# Neon/Vercel can use different variable names
+DATABASE_URL = (
+    os.environ.get("DATABASE_URL") or
+    os.environ.get("POSTGRES_URL") or
+    os.environ.get("POSTGRES_PRISMA_URL") or
+    os.environ.get("POSTGRES_URL_NON_POOLING") or
+    "sqlite:///./nhl_screener.db"
+)
 
 # Handle Neon/Vercel postgres:// -> postgresql:// conversion
 if DATABASE_URL.startswith("postgres://"):
