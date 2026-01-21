@@ -151,7 +151,7 @@ export default {
       selectedLeague: '',
       viewMode: 'current', // 'current' or 'history'
       historyPredictions: [],
-      selectedDate: this.getYesterday()
+      selectedDate: ''  // Empty = show all recent predictions
     }
   },
   computed: {
@@ -513,7 +513,11 @@ export default {
       this.error = null
 
       try {
-        const response = await fetch(`/api/predictions?date=${this.selectedDate}`)
+        // If no date selected, get all recent predictions
+        const url = this.selectedDate
+          ? `/api/predictions?date=${this.selectedDate}`
+          : '/api/predictions'
+        const response = await fetch(url)
         const data = await response.json()
 
         if (response.ok) {

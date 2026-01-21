@@ -131,25 +131,31 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({"error": str(e), "trace": traceback.format_exc()}).encode())
 
     def _get_history(self, db, ValueBetPrediction, date_str=None):
-        """Get prediction history for a specific date"""
+        """Get prediction history for a specific date or all checked predictions"""
         if date_str:
             target_date = datetime.strptime(date_str, '%Y-%m-%d')
             start_date = target_date
             end_date = target_date + timedelta(days=1)
+
+            predictions = db.query(ValueBetPrediction).filter(
+                ValueBetPrediction.scheduled >= start_date,
+                ValueBetPrediction.scheduled < end_date
+            ).order_by(ValueBetPrediction.scheduled.desc()).all()
+
+            return {
+                "date": start_date.strftime('%Y-%m-%d'),
+                "predictions": [self._format_prediction(p) for p in predictions]
+            }
         else:
-            yesterday = datetime.now() - timedelta(days=1)
-            start_date = yesterday.replace(hour=0, minute=0, second=0, microsecond=0)
-            end_date = start_date + timedelta(days=1)
+            # Return all checked predictions, most recent first
+            predictions = db.query(ValueBetPrediction).filter(
+                ValueBetPrediction.is_checked == True
+            ).order_by(ValueBetPrediction.scheduled.desc()).limit(50).all()
 
-        predictions = db.query(ValueBetPrediction).filter(
-            ValueBetPrediction.scheduled >= start_date,
-            ValueBetPrediction.scheduled < end_date
-        ).order_by(ValueBetPrediction.scheduled).all()
-
-        return {
-            "date": start_date.strftime('%Y-%m-%d'),
-            "predictions": [self._format_prediction(p) for p in predictions]
-        }
+            return {
+                "date": "all",
+                "predictions": [self._format_prediction(p) for p in predictions]
+            }
 
     def _check_predictions(self, db, ValueBetPrediction, Game):
         """Check prediction results against finished games"""
