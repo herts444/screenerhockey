@@ -646,7 +646,8 @@ export default {
   align-items: center;
 }
 
-.filter-select, .date-input {
+/* Date input - simple style */
+.date-input {
   padding: 8px 12px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
@@ -654,6 +655,49 @@ export default {
   color: var(--text-primary);
   font-size: 13px;
   font-family: inherit;
+}
+
+/* Filter select - styled like main page */
+.filter-select {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-light);
+  border-radius: 0;
+  padding: 9px 36px 9px 16px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.filter-select:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--accent-blue);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%233b82f6' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2), inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  background-color: rgba(37, 99, 235, 0.05);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%233b82f6' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+}
+
+.filter-select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 8px;
 }
 
 .btn-save, .btn-refresh {
