@@ -99,7 +99,7 @@
               <td class="td-league">{{ bet.league }}</td>
               <td class="td-bet">{{ bet.betLabel }} ({{ bet.line }})</td>
               <td class="td-odds">{{ bet.odds.toFixed(2) }}</td>
-              <td class="td-result">{{ bet.winningResult }}</td>
+              <td class="td-result">{{ bet.actualResult }}</td>
               <td class="td-status">
                 <span class="status-badge status-won">Победа</span>
               </td>
@@ -139,41 +139,6 @@ export default {
       })
     },
 
-    generateWinningResult(bet) {
-      const line = bet.line
-      const betType = bet.betType
-
-      if (betType.includes('home-it-over')) {
-        const homeScore = Math.ceil(line) + Math.floor(Math.random() * 3)
-        const awayScore = Math.floor(Math.random() * 4)
-        return `${homeScore}-${awayScore}`
-      } else if (betType.includes('home-it-under')) {
-        const homeScore = Math.max(0, Math.floor(line) - 1)
-        const awayScore = Math.floor(Math.random() * 5) + 2
-        return `${homeScore}-${awayScore}`
-      } else if (betType.includes('away-it-over')) {
-        const homeScore = Math.floor(Math.random() * 4)
-        const awayScore = Math.ceil(line) + Math.floor(Math.random() * 3)
-        return `${homeScore}-${awayScore}`
-      } else if (betType.includes('away-it-under')) {
-        const homeScore = Math.floor(Math.random() * 5) + 2
-        const awayScore = Math.max(0, Math.floor(line) - 1)
-        return `${homeScore}-${awayScore}`
-      } else if (betType.includes('total-over')) {
-        const total = Math.ceil(line) + Math.floor(Math.random() * 4) + 1
-        const homeScore = Math.floor(total / 2) + Math.floor(Math.random() * 2)
-        const awayScore = total - homeScore
-        return `${homeScore}-${awayScore}`
-      } else if (betType.includes('total-under')) {
-        const total = Math.max(1, Math.floor(line) - 1 - Math.floor(Math.random() * 2))
-        const homeScore = Math.floor(total / 2)
-        const awayScore = total - homeScore
-        return `${homeScore}-${awayScore}`
-      }
-
-      return `${Math.floor(Math.random() * 4) + 1}-${Math.floor(Math.random() * 4) + 1}`
-    },
-
     async loadAllPredictions() {
       this.loading = true
       this.error = null
@@ -187,8 +152,7 @@ export default {
           this.allPredictions = (data.predictions || []).map(pred => ({
             ...pred,
             isChecked: true,
-            isWon: true,
-            winningResult: this.generateWinningResult(pred)
+            isWon: true
           }))
 
           // Extract unique dates from predictions
