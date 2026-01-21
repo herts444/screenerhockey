@@ -5,23 +5,33 @@ import sys
 import os
 from datetime import datetime, timedelta
 from urllib.parse import urlparse, parse_qs
+import traceback
 
 # Add backend to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'backend'))
 
-from app.models.database import SessionLocal, ValueBetPrediction, Game, init_db
+_db_initialized = False
 
-# Initialize database tables on cold start
-try:
-    init_db()
-except Exception as e:
-    print(f"DB init error (may be ok if tables exist): {e}")
+
+def ensure_db():
+    """Ensure database is initialized"""
+    global _db_initialized
+    if not _db_initialized:
+        try:
+            from app.models.database import init_db
+            init_db()
+        except Exception as e:
+            print(f"DB init warning: {e}")
+        _db_initialized = True
 
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         """Save predictions"""
         try:
+            ensure_db()
+            from app.models.database import SessionLocal, ValueBetPrediction
+
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
             data = json.loads(post_data.decode('utf-8'))
@@ -82,7 +92,7 @@ class handler(BaseHTTPRequestHandler):
             self.send_header("Content-type", "application/json")
             self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
-            self.wfile.write(json.dumps({"error": str(e)}).encode())
+            self.wfile.write(json.dumps({"error": str(e), "trace": traceback.format_exc()}).encode())
 
     def do_GET(self):
         """Get prediction history or check results"""
@@ -92,15 +102,16 @@ class handler(BaseHTTPRequestHandler):
         action = params.get('action', ['history'])[0]
 
         try:
+            ensure_db()
+            from app.models.database import SessionLocal, ValueBetPrediction, Game
+
             db = SessionLocal()
             try:
                 if action == 'check':
-                    # Check and update prediction results
-                    result = self._check_predictions(db)
+                    result = self._check_predictions(db, ValueBetPrediction, Game)
                 else:
-                    # Get history
                     date_str = params.get('date', [None])[0]
-                    result = self._get_history(db, date_str)
+                    result = self._get_history(db, ValueBetPrediction, date_str)
 
                 self.send_response(200)
                 self.send_header("Content-type", "application/json")
@@ -117,16 +128,15 @@ class handler(BaseHTTPRequestHandler):
             self.send_header("Content-type", "application/json")
             self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
-            self.wfile.write(json.dumps({"error": str(e)}).encode())
+            self.wfile.write(json.dumps({"error": str(e), "trace": traceback.format_exc()}).encode())
 
-    def _get_history(self, db, date_str=None):
+    def _get_history(self, db, ValueBetPrediction, date_str=None):
         """Get prediction history for a specific date"""
         if date_str:
             target_date = datetime.strptime(date_str, '%Y-%m-%d')
             start_date = target_date
             end_date = target_date + timedelta(days=1)
         else:
-            # Default to yesterday
             yesterday = datetime.now() - timedelta(days=1)
             start_date = yesterday.replace(hour=0, minute=0, second=0, microsecond=0)
             end_date = start_date + timedelta(days=1)
@@ -141,9 +151,8 @@ class handler(BaseHTTPRequestHandler):
             "predictions": [self._format_prediction(p) for p in predictions]
         }
 
-    def _check_predictions(self, db):
+    def _check_predictions(self, db, ValueBetPrediction, Game):
         """Check prediction results against finished games"""
-        # Get unchecked predictions from last 7 days
         cutoff_date = datetime.now() - timedelta(days=7)
         predictions = db.query(ValueBetPrediction).filter(
             ValueBetPrediction.is_checked == False,
@@ -155,7 +164,6 @@ class handler(BaseHTTPRequestHandler):
         won_count = 0
 
         for pred in predictions:
-            # Find corresponding game
             game = db.query(Game).filter(
                 Game.league == pred.league,
                 Game.date >= pred.scheduled - timedelta(hours=2),
@@ -168,7 +176,6 @@ class handler(BaseHTTPRequestHandler):
             if not game or not game.is_finished or game.home_score is None:
                 continue
 
-            # Check bet result
             is_won = self._check_bet_result(pred, game)
 
             if is_won is not None:
