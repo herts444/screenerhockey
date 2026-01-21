@@ -97,7 +97,7 @@
                 <div class="match-time">{{ formatDate(bet.scheduled) }}</div>
               </td>
               <td class="td-league">{{ bet.league }}</td>
-              <td class="td-bet">{{ bet.betLabel }} ({{ bet.line }})</td>
+              <td class="td-bet">{{ bet.betLabel }}</td>
               <td class="td-odds">{{ bet.odds.toFixed(2) }}</td>
               <td class="td-result">{{ bet.actualResult }}</td>
               <td class="td-status">
