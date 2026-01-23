@@ -187,7 +187,7 @@ async def get_ahl_schedule(days: int):
 
 async def get_liiga_schedule(days: int):
     async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
-        response = await client.get("https://liiga.fi/api/v2/games?tournament=runkosarja&season=2026")
+        response = await client.get("https://liiga.fi/api/v2/games?tournament=runkosarja&season=2025")
         response.raise_for_status()
         all_games = response.json()
 
