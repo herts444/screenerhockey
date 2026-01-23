@@ -27,7 +27,10 @@
               </svg>
               Value Bets
             </button>
-            <router-link to="/lineups" class="nav-btn nav-btn-lineups">
+            <button
+              :class="['nav-btn', 'nav-btn-lineups', { active: activeTab === 'lineups' }]"
+              @click="activeTab = 'lineups'"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
                 <circle cx="9" cy="7" r="4"/>
@@ -35,12 +38,12 @@
                 <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
               </svg>
               Составы
-            </router-link>
+            </button>
           </nav>
         </div>
       </div>
 
-      <!-- Row 2: Context-specific controls (Stats only) -->
+      <!-- Row 2: Context-specific controls (Stats) -->
       <div v-if="activeTab === 'stats'" class="header-row header-row-controls">
         <div class="controls-group">
           <div class="league-switcher">
@@ -99,6 +102,35 @@
           </button>
         </div>
       </div>
+
+      <!-- Row 2: Context-specific controls (Lineups) -->
+      <div v-if="activeTab === 'lineups'" class="header-row header-row-controls">
+        <div class="controls-group">
+          <div class="league-switcher">
+            <button
+              v-for="league in lineupsLeagues"
+              :key="league.code"
+              :class="['league-btn', { active: lineupsSelectedLeague === league.code }]"
+              @click="switchLineupsLeague(league.code)"
+            >
+              {{ league.name }}
+            </button>
+          </div>
+        </div>
+
+        <div class="controls-group">
+          <div class="day-switcher">
+            <button
+              v-for="day in lineupsDays"
+              :key="day.offset"
+              :class="['day-btn', { active: lineupsSelectedDay === day.offset }]"
+              @click="switchLineupsDay(day.offset)"
+            >
+              {{ day.label }}
+            </button>
+          </div>
+        </div>
+      </div>
     </header>
 
     <!-- Value Bets Tab -->
@@ -108,8 +140,130 @@
       @stats-loaded="onValueBetsStatsLoaded"
     />
 
+    <!-- Lineups Tab -->
+    <div v-else-if="activeTab === 'lineups'" class="lineups-content">
+      <!-- Loading State -->
+      <div v-if="lineupsLoading" class="loading">
+        <div class="spinner"></div>
+        <span>Загрузка матчей...</span>
+      </div>
+
+      <!-- Matches List -->
+      <div v-else-if="Object.keys(lineupsMatches).length" class="lineups-matches-container">
+        <div v-for="(matches, leagueName) in lineupsMatches" :key="leagueName" class="lineups-league-group">
+          <h3 class="lineups-league-name">{{ leagueName }}</h3>
+          <div class="lineups-matches-list">
+            <div
+              v-for="match in matches"
+              :key="match.id"
+              :class="['lineups-match-card', { selected: lineupsSelectedMatch?.id === match.id }]"
+              @click="selectLineupsMatch(match)"
+            >
+              <div class="lineups-match-teams">
+                <span class="team home">{{ match.home }}</span>
+                <span class="vs">vs</span>
+                <span class="team away">{{ match.away }}</span>
+              </div>
+              <div class="lineups-match-action">
+                <span v-if="lineupsSelectedMatch?.id === match.id" class="selected-label">Выбран</span>
+                <span v-else class="select-label">Выбрать</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Matches -->
+      <div v-else class="empty-state">
+        <div class="empty-state-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <p class="empty-state-text">Нет матчей на выбранную дату</p>
+      </div>
+
+      <!-- Selected Match Lineups -->
+      <div v-if="lineupsSelectedMatch" class="lineups-detail-container">
+        <div class="lineups-detail-header">
+          <h2>{{ lineupsSelectedMatch.home }} vs {{ lineupsSelectedMatch.away }}</h2>
+          <button class="lineups-close-btn" @click="lineupsSelectedMatch = null">×</button>
+        </div>
+
+        <!-- Team Selector -->
+        <div class="lineups-team-selector">
+          <button
+            :class="['team-btn', { active: lineupsViewMode === 'home' }]"
+            @click="lineupsViewMode = 'home'"
+          >
+            {{ lineupsSelectedMatch.home }}
+          </button>
+          <button
+            :class="['team-btn', { active: lineupsViewMode === 'away' }]"
+            @click="lineupsViewMode = 'away'"
+          >
+            {{ lineupsSelectedMatch.away }}
+          </button>
+          <button
+            :class="['team-btn both', { active: lineupsViewMode === 'both' }]"
+            @click="lineupsViewMode = 'both'"
+          >
+            Обе команды
+          </button>
+        </div>
+
+        <!-- Loading Lineup -->
+        <div v-if="lineupsLoadingDetail" class="loading">
+          <div class="spinner"></div>
+          <span>Загрузка состава... (до 30 сек)</span>
+        </div>
+
+        <!-- Lineup Tables -->
+        <div v-else class="lineups-grid" :class="{ 'two-columns': lineupsViewMode === 'both' }">
+          <LineupTable
+            v-if="(lineupsViewMode === 'home' || lineupsViewMode === 'both') && lineupsHome"
+            :team="lineupsHome.team"
+            :players="lineupsHome.players"
+            :total-players="lineupsHome.total_players"
+          />
+          <LineupTable
+            v-if="(lineupsViewMode === 'away' || lineupsViewMode === 'both') && lineupsAway"
+            :team="lineupsAway.team"
+            :players="lineupsAway.players"
+            :total-players="lineupsAway.total_players"
+          />
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="lineups-legend">
+        <h4>Обозначения:</h4>
+        <div class="legend-items">
+          <div class="legend-item">
+            <span class="legend-color yellow"></span>
+            <span>Лидеры в составе (>0.5 очков/матч, играл)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color orange"></span>
+            <span>Лидеры под вопросом (пропустил последний матч)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color red"></span>
+            <span>Отсутствуют (травма/не заявлен)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color gray"></span>
+            <span>Остальные игроки</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Stats Tab -->
-    <template v-else>
+    <template v-else-if="activeTab === 'stats'">
       <div v-if="loading" class="loading">
         <div class="spinner"></div>
         <span>Загрузка данных...</span>
@@ -267,17 +421,19 @@
 </template>
 
 <script>
-import { hockeyApi } from '../services/api.js'
+import { hockeyApi, lineupsApi } from '../services/api.js'
 import StatCell from '../components/StatCell.vue'
 import NewsModal from '../components/NewsModal.vue'
 import ValueBets from '../components/ValueBets.vue'
+import LineupTable from '../components/LineupTable.vue'
 
 export default {
   name: 'App',
   components: {
     StatCell,
     NewsModal,
-    ValueBets
+    ValueBets,
+    LineupTable
   },
   data() {
     return {
@@ -304,7 +460,23 @@ export default {
         { code: 'AHL', name: 'AHL', name_ru: 'АХЛ' },
         { code: 'LIIGA', name: 'Финляндия', name_ru: 'Финляндия' },
         { code: 'DEL', name: 'Германия', name_ru: 'Германия' }
-      ]
+      ],
+      // Lineups tab data
+      lineupsLeagues: [
+        { code: 'KHL', name: 'КХЛ' },
+        { code: 'NHL', name: 'NHL' },
+        { code: 'AHL', name: 'AHL' },
+        { code: 'LIIGA', name: 'Лиига' }
+      ],
+      lineupsSelectedLeague: 'KHL',
+      lineupsSelectedDay: 0,
+      lineupsMatches: {},
+      lineupsLoading: false,
+      lineupsLoadingDetail: false,
+      lineupsSelectedMatch: null,
+      lineupsViewMode: 'home',
+      lineupsHome: null,
+      lineupsAway: null
     }
   },
   computed: {
@@ -355,6 +527,18 @@ export default {
         Object.assign(combined, this.leagueData[league].statsCache)
       }
       return combined
+    },
+    lineupsDays() {
+      const result = [{ offset: 0, label: 'Сегодня' }]
+      const today = new Date()
+      for (let i = 1; i <= 5; i++) {
+        const date = new Date(today)
+        date.setDate(date.getDate() + i)
+        const day = date.getDate().toString().padStart(2, '0')
+        const month = (date.getMonth() + 1).toString().padStart(2, '0')
+        result.push({ offset: i, label: `${day}.${month}` })
+      }
+      return result
     }
   },
   async mounted() {
@@ -595,6 +779,65 @@ export default {
       // Find which league this team belongs to
       for (const league of Object.keys(this.leagueData)) {
         this.leagueData[league].statsCache[abbrev] = stats
+      }
+    },
+
+    // Lineups methods
+    async loadLineupsMatches() {
+      this.lineupsLoading = true
+      this.lineupsMatches = {}
+      try {
+        const response = await lineupsApi.getMatches(this.lineupsSelectedLeague, this.lineupsSelectedDay)
+        if (response.success) {
+          this.lineupsMatches = response.leagues || {}
+        }
+      } catch (error) {
+        console.error('Error loading lineups matches:', error)
+      } finally {
+        this.lineupsLoading = false
+      }
+    },
+
+    async switchLineupsLeague(code) {
+      this.lineupsSelectedLeague = code
+      this.lineupsSelectedMatch = null
+      this.lineupsHome = null
+      this.lineupsAway = null
+      await this.loadLineupsMatches()
+    },
+
+    async switchLineupsDay(offset) {
+      this.lineupsSelectedDay = offset
+      this.lineupsSelectedMatch = null
+      this.lineupsHome = null
+      this.lineupsAway = null
+      await this.loadLineupsMatches()
+    },
+
+    async selectLineupsMatch(match) {
+      this.lineupsSelectedMatch = match
+      this.lineupsHome = null
+      this.lineupsAway = null
+      this.lineupsViewMode = 'home'
+      this.lineupsLoadingDetail = true
+      try {
+        const response = await lineupsApi.getMatchLineup(match.url)
+        if (response.success) {
+          this.lineupsHome = response.home
+          this.lineupsAway = response.away
+        }
+      } catch (error) {
+        console.error('Error loading lineup:', error)
+      } finally {
+        this.lineupsLoadingDetail = false
+      }
+    }
+  },
+
+  watch: {
+    activeTab(newTab) {
+      if (newTab === 'lineups' && Object.keys(this.lineupsMatches).length === 0) {
+        this.loadLineupsMatches()
       }
     }
   }
@@ -914,6 +1157,245 @@ export default {
 
 .mode-btn.active::after {
   transform: scaleX(1);
+}
+
+/* Day switcher for lineups */
+.day-switcher {
+  display: flex;
+  gap: 2px;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 4px;
+  border-radius: 0;
+  border: 1px solid var(--border-light);
+}
+
+.day-btn {
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.day-btn:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.day-btn.active {
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.2) 0%, rgba(37, 99, 235, 0.1) 100%);
+  color: var(--accent-blue-light);
+}
+
+/* Lineups content */
+.lineups-content {
+  margin-top: 20px;
+}
+
+.lineups-matches-container {
+  margin-bottom: 24px;
+}
+
+.lineups-league-group {
+  margin-bottom: 20px;
+}
+
+.lineups-league-name {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lineups-matches-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+}
+
+.lineups-match-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lineups-match-card:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-blue);
+}
+
+.lineups-match-card.selected {
+  background: rgba(37, 99, 235, 0.1);
+  border-color: var(--accent-blue);
+}
+
+.lineups-match-teams {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lineups-match-teams .team {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.lineups-match-teams .vs {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.lineups-match-action {
+  font-size: 11px;
+}
+
+.lineups-match-action .select-label {
+  color: var(--text-muted);
+}
+
+.lineups-match-action .selected-label {
+  color: var(--accent-blue);
+  font-weight: 500;
+}
+
+.lineups-detail-container {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.lineups-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.lineups-detail-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.lineups-close-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lineups-close-btn:hover {
+  background: var(--accent-red);
+  border-color: var(--accent-red);
+  color: white;
+}
+
+.lineups-team-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.lineups-team-selector .team-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+}
+
+.lineups-team-selector .team-btn:hover {
+  background: var(--bg-hover);
+}
+
+.lineups-team-selector .team-btn.active {
+  background: rgba(37, 99, 235, 0.15);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.lineups-team-selector .team-btn.both {
+  flex: 0.7;
+}
+
+.lineups-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.lineups-grid.two-columns {
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+}
+
+.lineups-legend {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 14px 18px;
+  margin-top: 20px;
+}
+
+.lineups-legend h4 {
+  margin: 0 0 10px 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.legend-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.legend-color {
+  width: 14px;
+  height: 14px;
+}
+
+.legend-color.yellow {
+  background: #ffd700;
+}
+
+.legend-color.orange {
+  background: #ffa500;
+}
+
+.legend-color.red {
+  background: #ff4d4d;
+}
+
+.legend-color.gray {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 </style>
