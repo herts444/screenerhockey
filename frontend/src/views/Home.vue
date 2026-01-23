@@ -168,15 +168,8 @@
           <!-- Match Header -->
           <div class="lineup-match-header">
             <span class="match-title">{{ match.home }} — {{ match.away }}</span>
-            <button
-              v-if="!match.lineups && !match.loading"
-              class="btn-load-lineup"
-              @click="loadMatchLineup(match)"
-            >
-              Загрузить составы
-            </button>
             <span v-if="match.loading" class="loading-indicator">
-              <span class="spinner-small"></span> Загрузка...
+              <span class="spinner-small"></span> Загрузка составов...
             </span>
           </div>
 
@@ -837,17 +830,48 @@ export default {
               allMatches.push({
                 ...match,
                 leagueName,
-                loading: false,
+                loading: true, // Start with loading=true since we'll load lineups automatically
                 lineups: null
               })
             }
           }
           this.lineupsAllMatches = allMatches
+          this.lineupsLoading = false
+
+          // Auto-load lineups for all matches in parallel
+          await this.loadAllMatchLineups()
         }
       } catch (error) {
         console.error('Error loading lineups matches:', error)
-      } finally {
         this.lineupsLoading = false
+      }
+    },
+
+    // Load lineups for all matches in parallel
+    async loadAllMatchLineups() {
+      const promises = this.lineupsAllMatches.map((match, idx) =>
+        this.loadMatchLineupByIndex(idx)
+      )
+      await Promise.all(promises)
+    },
+
+    // Load lineup for a specific match by index
+    async loadMatchLineupByIndex(idx) {
+      const match = this.lineupsAllMatches[idx]
+      if (!match) return
+
+      try {
+        const response = await lineupsApi.getMatchLineup(match.url)
+        if (response.success) {
+          this.lineupsAllMatches[idx].lineups = {
+            home: response.home,
+            away: response.away
+          }
+        }
+      } catch (error) {
+        console.error('Error loading lineup for', match.home, '-', match.away, ':', error)
+      } finally {
+        this.lineupsAllMatches[idx].loading = false
       }
     },
 
@@ -862,24 +886,10 @@ export default {
     },
 
     async loadMatchLineup(match) {
-      // Find the match in our array and update its loading state
+      // Find the match in our array and load by index
       const idx = this.lineupsAllMatches.findIndex(m => m.id === match.id)
       if (idx === -1) return
-
-      this.lineupsAllMatches[idx].loading = true
-      try {
-        const response = await lineupsApi.getMatchLineup(match.url)
-        if (response.success) {
-          this.lineupsAllMatches[idx].lineups = {
-            home: response.home,
-            away: response.away
-          }
-        }
-      } catch (error) {
-        console.error('Error loading lineup:', error)
-      } finally {
-        this.lineupsAllMatches[idx].loading = false
-      }
+      await this.loadMatchLineupByIndex(idx)
     }
   },
 

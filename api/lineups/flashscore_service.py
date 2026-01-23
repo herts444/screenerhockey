@@ -24,6 +24,18 @@ LEAGUE_FEEDS = {
     "AUSTRIA": "f_4_0_3_en_5",  # Австрия ICE Hockey League
 }
 
+# League name patterns for filtering (what Flashscore returns in ~ZA field)
+LEAGUE_NAME_PATTERNS = {
+    "KHL": ["KHL"],
+    "NHL": ["NHL"],
+    "AHL": ["AHL"],
+    "LIIGA": ["Liiga"],
+    "DEL": ["DEL"],
+    "CZECH": ["Extraliga"],
+    "DENMARK": ["Metal Ligaen"],
+    "AUSTRIA": ["ICE Hockey League"],
+}
+
 HEADERS = {"x-fsign": "SW9D1eZo"}
 
 
@@ -43,17 +55,20 @@ async def get_matches_list(league: str, day_offset: int = 0) -> list:
     Get list of matches for a league on a specific day.
 
     Args:
-        league: League code (KHL, NHL, AHL, LIIGA)
+        league: League code (KHL, NHL, AHL, LIIGA, DEL, CZECH, DENMARK, AUSTRIA)
         day_offset: 0 = today, 1 = tomorrow, etc.
 
     Returns:
-        List of match dictionaries
+        List of match dictionaries filtered by league
     """
     base_feed = LEAGUE_FEEDS.get(league.upper(), LEAGUE_FEEDS["KHL"])
     # Replace day offset in feed code
     feed = base_feed.replace("_0_", f"_{day_offset}_")
 
     url = f'https://2.flashscore.ninja/2/x/feed/{feed}'
+
+    # Get league name patterns for filtering
+    target_patterns = LEAGUE_NAME_PATTERNS.get(league.upper(), [])
 
     try:
         async with httpx.AsyncClient(follow_redirects=True, timeout=30.0) as client:
@@ -96,6 +111,11 @@ async def get_matches_list(league: str, day_offset: int = 0) -> list:
             league_id = game.get('ZC', '')
 
         if 'AA' in keys[0]:
+            # Filter by league name patterns
+            is_target_league = any(pattern.lower() in league_name.lower() for pattern in target_patterns)
+            if not is_target_league:
+                continue
+
             event_id = game.get("~AA", "")
             match_url = f'https://www.flashscore.com.ua/match/{event_id}/#/match-summary/match-summary'
             team_1 = game.get("AE", "")
