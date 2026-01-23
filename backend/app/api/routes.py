@@ -5,6 +5,7 @@ from typing import Optional
 from ..models.database import get_db, Team
 from ..services.cache_service import cache
 from ..services.sync_service import sync_service
+from ..services.flashscore_service import get_matches_list, get_team_lineup, get_match_lineups
 
 router = APIRouter()
 
@@ -172,6 +173,73 @@ async def get_leagues():
                 "name": "Liiga",
                 "name_ru": "Лиига (Финляндия)",
                 "cached": cache.is_loaded.get("LIIGA", False)
+            },
+            {
+                "code": "KHL",
+                "name": "KHL",
+                "name_ru": "КХЛ",
+                "cached": False  # Flashscore-based, no caching
             }
         ]
     }
+
+
+# ============== LINEUPS (Flashscore) ==============
+
+@router.get("/lineups/matches")
+async def get_lineups_matches(
+    league: str = Query("KHL", description="League: KHL, NHL, AHL, LIIGA"),
+    day: int = Query(0, ge=0, le=7, description="Day offset: 0=today, 1=tomorrow, etc.")
+):
+    """Get list of matches for lineup analysis from Flashscore"""
+    try:
+        matches = await get_matches_list(league.upper(), day)
+
+        # Group by league name
+        leagues = {}
+        for match in matches:
+            league_name = match.get('league', 'Unknown')
+            if league_name not in leagues:
+                leagues[league_name] = []
+            leagues[league_name].append(match)
+
+        return {
+            "success": True,
+            "league": league.upper(),
+            "day": day,
+            "leagues": leagues,
+            "total_matches": len(matches)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/lineups/team")
+async def get_lineup_for_team(
+    url: str = Query(..., description="Flashscore team page URL")
+):
+    """Get team lineup with categorized players"""
+    try:
+        lineup = await get_team_lineup(url)
+        return {
+            "success": True,
+            **lineup
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/lineups/match")
+async def get_lineup_for_match(
+    url: str = Query(..., description="Flashscore match page URL")
+):
+    """Get lineups for both teams in a match"""
+    try:
+        lineups = await get_match_lineups(url)
+        return {
+            "success": True,
+            "home": lineups.get('home'),
+            "away": lineups.get('away')
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
