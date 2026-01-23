@@ -6,14 +6,8 @@ GET /api/lineups/lineup?type=team&url=<team_url>    - Get single team
 
 from http.server import BaseHTTPRequestHandler
 import json
-import sys
-import os
-
-# Add backend to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'backend'))
-
 import asyncio
-from app.services.flashscore_service import get_team_lineup, get_match_lineups
+from .flashscore_service import get_team_lineup, get_match_lineups
 
 
 class handler(BaseHTTPRequestHandler):

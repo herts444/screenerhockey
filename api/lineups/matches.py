@@ -5,14 +5,8 @@ GET /api/lineups/matches?league=KHL&day=0
 
 from http.server import BaseHTTPRequestHandler
 import json
-import sys
-import os
-
-# Add backend to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'backend'))
-
 import asyncio
-from app.services.flashscore_service import get_matches_list
+from .flashscore_service import get_matches_list
 
 
 class handler(BaseHTTPRequestHandler):
