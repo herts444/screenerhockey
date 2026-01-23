@@ -12,11 +12,16 @@ from bs4 import BeautifulSoup
 
 
 # Flashscore feed codes for different leagues
+# f_4_0_3_en_5 is the hockey feed (4=hockey, 0=day offset, 3=?, en=language, 5=?)
 LEAGUE_FEEDS = {
-    "KHL": "f_4_0_3_ru_5",      # КХЛ
-    "NHL": "f_1_0_3_ru_5",      # НХЛ
-    "AHL": "f_3_0_3_ru_5",      # АХЛ
-    "LIIGA": "f_6_0_3_ru_5",   # Финская лига
+    "KHL": "f_4_0_3_en_5",      # КХЛ (Russia)
+    "NHL": "f_1_0_3_en_5",      # НХЛ (North America)
+    "AHL": "f_3_0_3_en_5",      # АХЛ (North America)
+    "LIIGA": "f_4_0_3_en_5",    # Финская лига
+    "DEL": "f_4_0_3_en_5",      # Германия
+    "CZECH": "f_4_0_3_en_5",    # Чехия Extraliga
+    "DENMARK": "f_4_0_3_en_5",  # Дания Metal Ligaen
+    "AUSTRIA": "f_4_0_3_en_5",  # Австрия ICE Hockey League
 }
 
 HEADERS = {"x-fsign": "SW9D1eZo"}

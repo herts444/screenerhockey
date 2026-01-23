@@ -145,36 +145,11 @@
       <!-- Loading State -->
       <div v-if="lineupsLoading" class="loading">
         <div class="spinner"></div>
-        <span>Загрузка матчей...</span>
-      </div>
-
-      <!-- Matches List -->
-      <div v-else-if="Object.keys(lineupsMatches).length" class="lineups-matches-container">
-        <div v-for="(matches, leagueName) in lineupsMatches" :key="leagueName" class="lineups-league-group">
-          <h3 class="lineups-league-name">{{ leagueName }}</h3>
-          <div class="lineups-matches-list">
-            <div
-              v-for="match in matches"
-              :key="match.id"
-              :class="['lineups-match-card', { selected: lineupsSelectedMatch?.id === match.id }]"
-              @click="selectLineupsMatch(match)"
-            >
-              <div class="lineups-match-teams">
-                <span class="team home">{{ match.home }}</span>
-                <span class="vs">vs</span>
-                <span class="team away">{{ match.away }}</span>
-              </div>
-              <div class="lineups-match-action">
-                <span v-if="lineupsSelectedMatch?.id === match.id" class="selected-label">Выбран</span>
-                <span v-else class="select-label">Выбрать</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <span>Загрузка матчей и составов...</span>
       </div>
 
       <!-- No Matches -->
-      <div v-else class="empty-state">
+      <div v-else-if="lineupsAllMatches.length === 0" class="empty-state">
         <div class="empty-state-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
@@ -187,77 +162,118 @@
         <p class="empty-state-hint">Попробуйте выбрать другую дату или лигу</p>
       </div>
 
-      <!-- Selected Match Lineups -->
-      <div v-if="lineupsSelectedMatch" class="lineups-detail-container">
-        <div class="lineups-detail-header">
-          <h2>{{ lineupsSelectedMatch.home }} vs {{ lineupsSelectedMatch.away }}</h2>
-          <button class="lineups-close-btn" @click="lineupsSelectedMatch = null">×</button>
-        </div>
+      <!-- All Matches with Lineups -->
+      <div v-else class="lineups-all-matches">
+        <div v-for="match in lineupsAllMatches" :key="match.id" class="lineup-match-block">
+          <!-- Match Header -->
+          <div class="lineup-match-header">
+            <span class="match-title">{{ match.home }} — {{ match.away }}</span>
+            <button
+              v-if="!match.lineups && !match.loading"
+              class="btn-load-lineup"
+              @click="loadMatchLineup(match)"
+            >
+              Загрузить составы
+            </button>
+            <span v-if="match.loading" class="loading-indicator">
+              <span class="spinner-small"></span> Загрузка...
+            </span>
+          </div>
 
-        <!-- Team Selector -->
-        <div class="lineups-team-selector">
-          <button
-            :class="['team-btn', { active: lineupsViewMode === 'home' }]"
-            @click="lineupsViewMode = 'home'"
-          >
-            {{ lineupsSelectedMatch.home }}
-          </button>
-          <button
-            :class="['team-btn', { active: lineupsViewMode === 'away' }]"
-            @click="lineupsViewMode = 'away'"
-          >
-            {{ lineupsSelectedMatch.away }}
-          </button>
-          <button
-            :class="['team-btn both', { active: lineupsViewMode === 'both' }]"
-            @click="lineupsViewMode = 'both'"
-          >
-            Обе команды
-          </button>
-        </div>
+          <!-- Lineups Grid -->
+          <div v-if="match.lineups" class="lineup-match-grid">
+            <!-- Home Team -->
+            <div class="lineup-team-block">
+              <div class="lineup-team-name home">{{ match.lineups.home?.team || match.home }}</div>
+              <div v-if="match.lineups.home?.players" class="lineup-players-compact">
+                <!-- Leaders Active (Yellow) -->
+                <div v-if="match.lineups.home.players.leaders_active?.length" class="player-category yellow">
+                  <div class="category-label">Лидеры в составе</div>
+                  <div v-for="p in match.lineups.home.players.leaders_active" :key="p.name" class="player-row-compact yellow">
+                    <span class="player-name">{{ p.name }}</span>
+                    <span class="player-stats-compact">{{ p.matches }}м {{ p.goals }}г {{ p.assists }}п <b>{{ p.points }}о</b> ({{ p.efficiency.toFixed(2) }}/м)</span>
+                  </div>
+                </div>
+                <!-- Leaders Questionable (Orange) -->
+                <div v-if="match.lineups.home.players.leaders_questionable?.length" class="player-category orange">
+                  <div class="category-label">Лидеры под вопросом</div>
+                  <div v-for="p in match.lineups.home.players.leaders_questionable" :key="p.name" class="player-row-compact orange">
+                    <span class="player-name">{{ p.name }}</span>
+                    <span class="player-status">{{ p.status }}</span>
+                    <span class="player-stats-compact">{{ p.matches }}м {{ p.goals }}г {{ p.assists }}п <b>{{ p.points }}о</b></span>
+                  </div>
+                </div>
+                <!-- Absent (Red) -->
+                <div v-if="match.lineups.home.players.absent?.length" class="player-category red">
+                  <div class="category-label">Отсутствуют</div>
+                  <div v-for="p in match.lineups.home.players.absent.slice(0, 10)" :key="p.name" class="player-row-compact red">
+                    <span class="player-name">{{ p.name }}</span>
+                    <span class="player-status">{{ p.status }}</span>
+                    <span class="player-stats-compact" v-if="p.points">{{ p.points }}о</span>
+                  </div>
+                  <div v-if="match.lineups.home.players.absent.length > 10" class="more-players">
+                    +{{ match.lineups.home.players.absent.length - 10 }} ещё
+                  </div>
+                </div>
+              </div>
+              <div v-else class="no-lineup-data">Нет данных</div>
+            </div>
 
-        <!-- Loading Lineup -->
-        <div v-if="lineupsLoadingDetail" class="loading">
-          <div class="spinner"></div>
-          <span>Загрузка состава... (до 30 сек)</span>
-        </div>
-
-        <!-- Lineup Tables -->
-        <div v-else class="lineups-grid" :class="{ 'two-columns': lineupsViewMode === 'both' }">
-          <LineupTable
-            v-if="(lineupsViewMode === 'home' || lineupsViewMode === 'both') && lineupsHome"
-            :team="lineupsHome.team"
-            :players="lineupsHome.players"
-            :total-players="lineupsHome.total_players"
-          />
-          <LineupTable
-            v-if="(lineupsViewMode === 'away' || lineupsViewMode === 'both') && lineupsAway"
-            :team="lineupsAway.team"
-            :players="lineupsAway.players"
-            :total-players="lineupsAway.total_players"
-          />
+            <!-- Away Team -->
+            <div class="lineup-team-block">
+              <div class="lineup-team-name away">{{ match.lineups.away?.team || match.away }}</div>
+              <div v-if="match.lineups.away?.players" class="lineup-players-compact">
+                <!-- Leaders Active (Yellow) -->
+                <div v-if="match.lineups.away.players.leaders_active?.length" class="player-category yellow">
+                  <div class="category-label">Лидеры в составе</div>
+                  <div v-for="p in match.lineups.away.players.leaders_active" :key="p.name" class="player-row-compact yellow">
+                    <span class="player-name">{{ p.name }}</span>
+                    <span class="player-stats-compact">{{ p.matches }}м {{ p.goals }}г {{ p.assists }}п <b>{{ p.points }}о</b> ({{ p.efficiency.toFixed(2) }}/м)</span>
+                  </div>
+                </div>
+                <!-- Leaders Questionable (Orange) -->
+                <div v-if="match.lineups.away.players.leaders_questionable?.length" class="player-category orange">
+                  <div class="category-label">Лидеры под вопросом</div>
+                  <div v-for="p in match.lineups.away.players.leaders_questionable" :key="p.name" class="player-row-compact orange">
+                    <span class="player-name">{{ p.name }}</span>
+                    <span class="player-status">{{ p.status }}</span>
+                    <span class="player-stats-compact">{{ p.matches }}м {{ p.goals }}г {{ p.assists }}п <b>{{ p.points }}о</b></span>
+                  </div>
+                </div>
+                <!-- Absent (Red) -->
+                <div v-if="match.lineups.away.players.absent?.length" class="player-category red">
+                  <div class="category-label">Отсутствуют</div>
+                  <div v-for="p in match.lineups.away.players.absent.slice(0, 10)" :key="p.name" class="player-row-compact red">
+                    <span class="player-name">{{ p.name }}</span>
+                    <span class="player-status">{{ p.status }}</span>
+                    <span class="player-stats-compact" v-if="p.points">{{ p.points }}о</span>
+                  </div>
+                  <div v-if="match.lineups.away.players.absent.length > 10" class="more-players">
+                    +{{ match.lineups.away.players.absent.length - 10 }} ещё
+                  </div>
+                </div>
+              </div>
+              <div v-else class="no-lineup-data">Нет данных</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- Legend -->
-      <div class="lineups-legend">
+      <div v-if="lineupsAllMatches.length > 0" class="lineups-legend">
         <h4>Обозначения:</h4>
         <div class="legend-items">
           <div class="legend-item">
             <span class="legend-color yellow"></span>
-            <span>Лидеры в составе (>0.5 очков/матч, играл)</span>
+            <span>Лидеры в составе (>0.5 очков/матч)</span>
           </div>
           <div class="legend-item">
             <span class="legend-color orange"></span>
-            <span>Лидеры под вопросом (пропустил последний матч)</span>
+            <span>Лидеры под вопросом (не играл в последнем матче)</span>
           </div>
           <div class="legend-item">
             <span class="legend-color red"></span>
-            <span>Отсутствуют (травма/не заявлен)</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-color gray"></span>
-            <span>Остальные игроки</span>
+            <span>Отсутствуют (травма/не заявлен) - по очкам</span>
           </div>
         </div>
       </div>
@@ -426,15 +442,13 @@ import { hockeyApi, lineupsApi } from '../services/api.js'
 import StatCell from '../components/StatCell.vue'
 import NewsModal from '../components/NewsModal.vue'
 import ValueBets from '../components/ValueBets.vue'
-import LineupTable from '../components/LineupTable.vue'
 
 export default {
   name: 'App',
   components: {
     StatCell,
     NewsModal,
-    ValueBets,
-    LineupTable
+    ValueBets
   },
   data() {
     return {
@@ -470,22 +484,22 @@ export default {
         { code: 'DENMARK', name: 'Дания', name_ru: 'Дания' },
         { code: 'AUSTRIA', name: 'Австрия', name_ru: 'Австрия' }
       ],
-      // Lineups tab data
+      // Lineups tab data - same leagues as stats tab
       lineupsLeagues: [
-        { code: 'KHL', name: 'КХЛ' },
         { code: 'NHL', name: 'NHL' },
         { code: 'AHL', name: 'AHL' },
-        { code: 'LIIGA', name: 'Лиига' }
+        { code: 'KHL', name: 'КХЛ' },
+        { code: 'LIIGA', name: 'Финляндия' },
+        { code: 'DEL', name: 'Германия' },
+        { code: 'CZECH', name: 'Чехия' },
+        { code: 'DENMARK', name: 'Дания' },
+        { code: 'AUSTRIA', name: 'Австрия' }
       ],
       lineupsSelectedLeague: 'KHL',
       lineupsSelectedDay: 0,
       lineupsMatches: {},
-      lineupsLoading: false,
-      lineupsLoadingDetail: false,
-      lineupsSelectedMatch: null,
-      lineupsViewMode: 'home',
-      lineupsHome: null,
-      lineupsAway: null
+      lineupsAllMatches: [], // Array of matches with lineups data
+      lineupsLoading: false
     }
   },
   computed: {
@@ -812,11 +826,23 @@ export default {
     // Lineups methods
     async loadLineupsMatches() {
       this.lineupsLoading = true
-      this.lineupsMatches = {}
+      this.lineupsAllMatches = []
       try {
         const response = await lineupsApi.getMatches(this.lineupsSelectedLeague, this.lineupsSelectedDay)
         if (response.success) {
-          this.lineupsMatches = response.leagues || {}
+          // Flatten all matches from all leagues into a single array
+          const allMatches = []
+          for (const [leagueName, matches] of Object.entries(response.leagues || {})) {
+            for (const match of matches) {
+              allMatches.push({
+                ...match,
+                leagueName,
+                loading: false,
+                lineups: null
+              })
+            }
+          }
+          this.lineupsAllMatches = allMatches
         }
       } catch (error) {
         console.error('Error loading lineups matches:', error)
@@ -827,43 +853,39 @@ export default {
 
     async switchLineupsLeague(code) {
       this.lineupsSelectedLeague = code
-      this.lineupsSelectedMatch = null
-      this.lineupsHome = null
-      this.lineupsAway = null
       await this.loadLineupsMatches()
     },
 
     async switchLineupsDay(offset) {
       this.lineupsSelectedDay = offset
-      this.lineupsSelectedMatch = null
-      this.lineupsHome = null
-      this.lineupsAway = null
       await this.loadLineupsMatches()
     },
 
-    async selectLineupsMatch(match) {
-      this.lineupsSelectedMatch = match
-      this.lineupsHome = null
-      this.lineupsAway = null
-      this.lineupsViewMode = 'home'
-      this.lineupsLoadingDetail = true
+    async loadMatchLineup(match) {
+      // Find the match in our array and update its loading state
+      const idx = this.lineupsAllMatches.findIndex(m => m.id === match.id)
+      if (idx === -1) return
+
+      this.lineupsAllMatches[idx].loading = true
       try {
         const response = await lineupsApi.getMatchLineup(match.url)
         if (response.success) {
-          this.lineupsHome = response.home
-          this.lineupsAway = response.away
+          this.lineupsAllMatches[idx].lineups = {
+            home: response.home,
+            away: response.away
+          }
         }
       } catch (error) {
         console.error('Error loading lineup:', error)
       } finally {
-        this.lineupsLoadingDetail = false
+        this.lineupsAllMatches[idx].loading = false
       }
     }
   },
 
   watch: {
     activeTab(newTab) {
-      if (newTab === 'lineups' && Object.keys(this.lineupsMatches).length === 0) {
+      if (newTab === 'lineups' && this.lineupsAllMatches.length === 0) {
         this.loadLineupsMatches()
       }
     }
@@ -1222,159 +1244,6 @@ export default {
   margin-top: 20px;
 }
 
-.lineups-matches-container {
-  margin-bottom: 24px;
-}
-
-.lineups-league-group {
-  margin-bottom: 20px;
-}
-
-.lineups-league-name {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin: 0 0 12px 0;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border-color);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.lineups-matches-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 10px;
-}
-
-.lineups-match-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.lineups-match-card:hover {
-  background: var(--bg-hover);
-  border-color: var(--accent-blue);
-}
-
-.lineups-match-card.selected {
-  background: rgba(37, 99, 235, 0.1);
-  border-color: var(--accent-blue);
-}
-
-.lineups-match-teams {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.lineups-match-teams .team {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.lineups-match-teams .vs {
-  color: var(--text-muted);
-  font-size: 12px;
-}
-
-.lineups-match-action {
-  font-size: 11px;
-}
-
-.lineups-match-action .select-label {
-  color: var(--text-muted);
-}
-
-.lineups-match-action .selected-label {
-  color: var(--accent-blue);
-  font-weight: 500;
-}
-
-.lineups-detail-container {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  padding: 20px;
-  margin-bottom: 24px;
-}
-
-.lineups-detail-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.lineups-detail-header h2 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.lineups-close-btn {
-  width: 28px;
-  height: 28px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-tertiary);
-  color: var(--text-secondary);
-  font-size: 18px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lineups-close-btn:hover {
-  background: var(--accent-red);
-  border-color: var(--accent-red);
-  color: white;
-}
-
-.lineups-team-selector {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.lineups-team-selector .team-btn {
-  flex: 1;
-  padding: 10px 16px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-tertiary);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 13px;
-}
-
-.lineups-team-selector .team-btn:hover {
-  background: var(--bg-hover);
-}
-
-.lineups-team-selector .team-btn.active {
-  background: rgba(37, 99, 235, 0.15);
-  border-color: var(--accent-blue);
-  color: var(--accent-blue);
-}
-
-.lineups-team-selector .team-btn.both {
-  flex: 0.7;
-}
-
-.lineups-grid {
-  display: grid;
-  gap: 16px;
-}
-
-.lineups-grid.two-columns {
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-}
-
 .lineups-legend {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
@@ -1429,6 +1298,197 @@ export default {
   font-size: 13px;
   color: var(--text-muted);
   margin-top: 8px;
+}
+
+/* New Lineups Styles */
+.lineups-all-matches {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.lineup-match-block {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.lineup-match-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.match-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.btn-load-lineup {
+  padding: 6px 14px;
+  background: var(--accent-blue);
+  border: none;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-load-lineup:hover {
+  background: #1d4ed8;
+}
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.lineup-match-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border-color);
+}
+
+.lineup-team-block {
+  background: var(--bg-primary);
+  padding: 12px;
+}
+
+.lineup-team-name {
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border-left: 3px solid;
+}
+
+.lineup-team-name.home {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.lineup-team-name.away {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.lineup-players-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.player-category {
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.player-category.yellow {
+  background: rgba(255, 215, 0, 0.1);
+  border-left: 3px solid #ffd700;
+}
+
+.player-category.orange {
+  background: rgba(255, 165, 0, 0.1);
+  border-left: 3px solid #ffa500;
+}
+
+.player-category.red {
+  background: rgba(255, 77, 77, 0.1);
+  border-left: 3px solid #ff4d4d;
+}
+
+.category-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  color: var(--text-secondary);
+}
+
+.player-row-compact {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+.player-row-compact.yellow {
+  background: rgba(255, 215, 0, 0.15);
+}
+
+.player-row-compact.orange {
+  background: rgba(255, 165, 0, 0.15);
+}
+
+.player-row-compact.red {
+  background: rgba(255, 77, 77, 0.15);
+}
+
+.player-row-compact .player-name {
+  flex: 1;
+  font-weight: 500;
+  color: var(--text-primary);
+  min-width: 120px;
+}
+
+.player-row-compact .player-status {
+  font-size: 10px;
+  color: var(--text-muted);
+  background: rgba(0,0,0,0.2);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.player-row-compact .player-stats-compact {
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.player-row-compact .player-stats-compact b {
+  color: var(--accent-blue);
+}
+
+.more-players {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 4px 8px;
+  font-style: italic;
+}
+
+.no-lineup-data {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .lineup-match-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .player-row-compact {
+    flex-wrap: wrap;
+  }
+
+  .player-row-compact .player-name {
+    min-width: 100%;
+  }
 }
 
 </style>
