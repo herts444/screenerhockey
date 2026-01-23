@@ -1,6 +1,14 @@
 <template>
   <div id="winners-page">
-    <AppHeader />
+    <header class="header">
+      <div class="header-row header-row-main">
+        <div class="header-brand">
+          <router-link to="/" class="logo">
+            <span class="logo-text">Hockey Screener</span>
+          </router-link>
+        </div>
+      </div>
+    </header>
 
     <div class="winners-container">
       <div class="winners-header">
@@ -106,13 +114,8 @@
 </template>
 
 <script>
-import AppHeader from '../components/AppHeader.vue'
-
 export default {
   name: 'Winners',
-  components: {
-    AppHeader
-  },
   data() {
     return {
       predictions: [],
