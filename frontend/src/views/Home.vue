@@ -502,14 +502,22 @@ export default {
     },
     availableDates() {
       const dates = []
-      const today = new Date()
+      // Use Kyiv timezone (UTC+2) for date calculations to match backend
+      const kyivOffset = 2 * 60 // Kyiv is UTC+2
+      const now = new Date()
+      const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000)
+      const kyivTime = new Date(utcTime + (kyivOffset * 60000))
+
       for (let i = 0; i <= 7; i++) {
-        const date = new Date(today)
-        date.setDate(today.getDate() + i)
-        const value = date.toISOString().split('T')[0]
+        const date = new Date(kyivTime)
+        date.setDate(kyivTime.getDate() + i)
+        const year = date.getFullYear()
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const day = String(date.getDate()).padStart(2, '0')
+        const value = `${year}-${month}-${day}`
         const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
         const dayName = dayNames[date.getDay()]
-        const label = `${dayName}, ${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}`
+        const label = `${dayName}, ${day}.${month}`
         dates.push({ value, label })
       }
       return dates
@@ -539,10 +547,15 @@ export default {
     },
     lineupsDays() {
       const result = [{ offset: 0, label: 'Сегодня' }]
-      const today = new Date()
+      // Use Kyiv timezone (UTC+2)
+      const kyivOffset = 2 * 60
+      const now = new Date()
+      const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000)
+      const kyivTime = new Date(utcTime + (kyivOffset * 60000))
+
       for (let i = 1; i <= 5; i++) {
-        const date = new Date(today)
-        date.setDate(date.getDate() + i)
+        const date = new Date(kyivTime)
+        date.setDate(kyivTime.getDate() + i)
         const day = date.getDate().toString().padStart(2, '0')
         const month = (date.getMonth() + 1).toString().padStart(2, '0')
         result.push({ offset: i, label: `${day}.${month}` })
@@ -551,10 +564,15 @@ export default {
     }
   },
   async mounted() {
-    // По умолчанию выбираем завтрашний день
-    const tomorrow = new Date()
-    tomorrow.setDate(tomorrow.getDate() + 1)
-    this.selectedDate = tomorrow.toISOString().split('T')[0]
+    // По умолчанию выбираем сегодня по Киевскому времени
+    const kyivOffset = 2 * 60 // Kyiv is UTC+2
+    const now = new Date()
+    const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000)
+    const kyivTime = new Date(utcTime + (kyivOffset * 60000))
+    const year = kyivTime.getFullYear()
+    const month = String(kyivTime.getMonth() + 1).padStart(2, '0')
+    const day = String(kyivTime.getDate()).padStart(2, '0')
+    this.selectedDate = `${year}-${month}-${day}`
 
     await this.loadStatus()
     await this.loadGames()
