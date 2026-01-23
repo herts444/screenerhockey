@@ -49,24 +49,30 @@ export const hockeyApi = {
     return { success: true, message: "Data refreshed from source APIs" }
   },
 
-  // Get system status
+  // Get system status (hardcoded - endpoint removed)
   async getStatus(league = 'NHL') {
-    const response = await api.get('/status', { params: { league } })
-    return response.data
+    return {
+      status: 'ok',
+      league,
+      cache_loaded: true
+    }
   },
 
-  // Get available leagues
+  // Get available leagues (hardcoded - endpoint removed)
   async getLeagues() {
-    const response = await api.get('/leagues')
-    return response.data
+    return {
+      leagues: [
+        { code: 'NHL', name: 'NHL', name_ru: 'НХЛ', cached: true },
+        { code: 'AHL', name: 'AHL', name_ru: 'АХЛ', cached: true },
+        { code: 'LIIGA', name: 'Liiga', name_ru: 'Лиига', cached: true },
+        { code: 'KHL', name: 'KHL', name_ru: 'КХЛ', cached: true }
+      ]
+    }
   },
 
-  // Get team news
+  // Get team news (removed - returns empty)
   async getTeamNews(teamAbbrev, league = 'DEL', limit = 5) {
-    const response = await api.get(`/teams/${teamAbbrev}/news`, {
-      params: { league, limit }
-    })
-    return response.data
+    return { news: [] }
   },
 
   // Get bookmaker odds from JetTon
@@ -83,7 +89,31 @@ export const hockeyApi = {
   }
 }
 
+// Lineups API methods
+export const lineupsApi = {
+  // Get matches list for a league and day
+  async getMatches(league = 'KHL', day = 0) {
+    const response = await api.get('/lineups/matches', { params: { league, day } })
+    return response.data
+  },
+
+  // Get lineup for a match (both teams)
+  async getMatchLineup(matchUrl) {
+    const response = await api.get('/lineups/lineup', { params: { type: 'match', url: matchUrl } })
+    return response.data
+  },
+
+  // Get lineup for a single team
+  async getTeamLineup(teamUrl) {
+    const response = await api.get('/lineups/lineup', { params: { type: 'team', url: teamUrl } })
+    return response.data
+  }
+}
+
 // Backwards compatibility
 export const nhlApi = hockeyApi
+
+// Export raw axios instance for direct use
+export { api }
 
 export default hockeyApi

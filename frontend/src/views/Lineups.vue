@@ -174,7 +174,7 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue'
-import api from '../services/api'
+import { lineupsApi } from '../services/api'
 import LineupTable from '../components/LineupTable.vue'
 
 export default {
@@ -240,15 +240,10 @@ export default {
       matchesByLeague.value = {}
 
       try {
-        const response = await api.get('/lineups/matches', {
-          params: {
-            league: selectedLeague.value,
-            day: selectedDay.value
-          }
-        })
+        const response = await lineupsApi.getMatches(selectedLeague.value, selectedDay.value)
 
-        if (response.data.success) {
-          matchesByLeague.value = response.data.leagues || {}
+        if (response.success) {
+          matchesByLeague.value = response.leagues || {}
         }
       } catch (error) {
         console.error('Error loading matches:', error)
@@ -263,16 +258,13 @@ export default {
       awayLineup.value = null
       viewMode.value = 'home'
 
-      // Get team URLs first
       try {
         loadingLineup.value = true
-        const response = await api.get('/lineups/lineup', {
-          params: { type: 'match', url: match.url }
-        })
+        const response = await lineupsApi.getMatchLineup(match.url)
 
-        if (response.data.success) {
-          homeLineup.value = response.data.home
-          awayLineup.value = response.data.away
+        if (response.success) {
+          homeLineup.value = response.home
+          awayLineup.value = response.away
         }
       } catch (error) {
         console.error('Error loading lineups:', error)
