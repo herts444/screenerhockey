@@ -266,8 +266,8 @@ export default {
       // Get team URLs first
       try {
         loadingLineup.value = true
-        const response = await api.get('/lineups/match', {
-          params: { url: match.url }
+        const response = await api.get('/lineups/lineup', {
+          params: { type: 'match', url: match.url }
         })
 
         if (response.data.success) {
