@@ -50,9 +50,20 @@ async def get_matches_list(league: str, day_offset: int = 0) -> list:
 
     url = f'https://d.flashscore.ru.com/x/feed/{feed}'
 
-    async with httpx.AsyncClient() as client:
-        response = await client.get(url, headers=HEADERS, timeout=30.0)
-        data = response.text.split('¬')
+    try:
+        async with httpx.AsyncClient(follow_redirects=True, timeout=30.0) as client:
+            response = await client.get(url, headers=HEADERS)
+            data = response.text
+
+            # If response is empty or just "0", Flashscore has no data
+            # This could mean: no matches scheduled, API changed, or rate limited
+            if not data or data.strip() in ('0', ''):
+                return []
+
+            data = data.split('¬')
+    except Exception as e:
+        print(f"Error fetching feed: {e}")
+        return []
 
     data_list = [{}]
     result = []

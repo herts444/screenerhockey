@@ -184,6 +184,7 @@
           </svg>
         </div>
         <p class="empty-state-text">Нет матчей на выбранную дату</p>
+        <p class="empty-state-hint">Попробуйте выбрать другую дату или лигу</p>
       </div>
 
       <!-- Selected Match Lineups -->
@@ -1396,6 +1397,12 @@ export default {
 
 .legend-color.gray {
   background: rgba(255, 255, 255, 0.3);
+}
+
+.empty-state-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 8px;
 }
 
 </style>
