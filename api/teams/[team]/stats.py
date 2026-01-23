@@ -491,8 +491,59 @@ async def get_del_team_stats(team_abbrev: str, last_n: int = 0):
     return {"team": team_info, "stats": get_full_team_stats(home_matches, away_matches)}
 
 
+async def fetch_flashscore_day(client, day_offset: int, target_league: str) -> list:
+    """Fetch one day of Flashscore results."""
+    try:
+        url = f"{FLASHSCORE_BASE_URL}/f_4_{day_offset}_3_en_5"
+        response = await client.get(url, headers=FLASHSCORE_HEADERS)
+        data = response.text
+
+        if not data or data.strip() in ('0', ''):
+            return []
+
+        items = data.split('¬')
+        current_league = None
+        current_match = {}
+        matches = []
+
+        for item in items:
+            if '÷' not in item:
+                continue
+            parts = item.split('÷')
+            key = parts[0]
+            value = parts[-1] if len(parts) > 1 else ''
+
+            if key == '~ZA':
+                current_league = value
+            elif key == '~AA':
+                if current_match and current_league and target_league.lower() in current_league.lower():
+                    matches.append(current_match)
+                current_match = {'id': value}
+            elif key == 'AE':
+                current_match['home'] = value
+            elif key == 'AF':
+                current_match['away'] = value
+            elif key == 'AG':
+                current_match['home_score'] = value
+            elif key == 'AH':
+                current_match['away_score'] = value
+            elif key == 'AB':
+                current_match['status'] = value
+            elif key == 'AD':
+                current_match['timestamp'] = value
+
+        if current_match and current_league and target_league.lower() in current_league.lower():
+            matches.append(current_match)
+
+        return matches
+    except Exception:
+        return []
+
+
 async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0):
     """Get team stats from Flashscore API by fetching past results."""
+    import asyncio
+
     league_config = {
         "KHL": ("KHL", KHL_TEAM_NAMES_RU),
         "CZECH": ("Extraliga", CZECH_TEAM_NAMES_RU),
@@ -505,53 +556,20 @@ async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0
 
     target_league, team_names = league_config[league.upper()]
 
-    # Fetch past 90 days of results
+    # Fetch past 60 days of results in parallel (batched)
     all_matches = []
-    async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
-        for day_offset in range(-90, 0):  # Past 90 days
-            try:
-                url = f"{FLASHSCORE_BASE_URL}/f_4_{day_offset}_3_en_5"
-                response = await client.get(url, headers=FLASHSCORE_HEADERS)
-                data = response.text
-
-                if not data or data.strip() in ('0', ''):
-                    continue
-
-                items = data.split('¬')
-                current_league = None
-                current_match = {}
-
-                for item in items:
-                    if '÷' not in item:
-                        continue
-                    parts = item.split('÷')
-                    key = parts[0]
-                    value = parts[-1] if len(parts) > 1 else ''
-
-                    if key == '~ZA':
-                        current_league = value
-                    elif key == '~AA':
-                        if current_match and current_league and target_league.lower() in current_league.lower():
-                            all_matches.append(current_match)
-                        current_match = {'id': value}
-                    elif key == 'AE':
-                        current_match['home'] = value
-                    elif key == 'AF':
-                        current_match['away'] = value
-                    elif key == 'AG':
-                        current_match['home_score'] = value
-                    elif key == 'AH':
-                        current_match['away_score'] = value
-                    elif key == 'AB':
-                        current_match['status'] = value
-                    elif key == 'AD':
-                        current_match['timestamp'] = value
-
-                if current_match and current_league and target_league.lower() in current_league.lower():
-                    all_matches.append(current_match)
-
-            except Exception as e:
-                continue
+    async with httpx.AsyncClient(timeout=15.0, follow_redirects=True) as client:
+        # Fetch in batches of 10 to avoid overwhelming the API
+        for batch_start in range(-60, 0, 10):
+            batch_end = min(batch_start + 10, 0)
+            tasks = [
+                fetch_flashscore_day(client, day, target_league)
+                for day in range(batch_start, batch_end)
+            ]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            for result in results:
+                if isinstance(result, list):
+                    all_matches.extend(result)
 
     # Filter for finished matches (status=3) involving the target team
     team_name_lower = team_name.lower()

@@ -48,7 +48,7 @@ async def get_matches_list(league: str, day_offset: int = 0) -> list:
     # Replace day offset in feed code
     feed = base_feed.replace("_0_", f"_{day_offset}_")
 
-    url = f'https://d.flashscore.ru.com/x/feed/{feed}'
+    url = f'https://2.flashscore.ninja/2/x/feed/{feed}'
 
     try:
         async with httpx.AsyncClient(follow_redirects=True, timeout=30.0) as client:

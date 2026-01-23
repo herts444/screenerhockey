@@ -390,6 +390,9 @@ async def get_del_schedule(days: int):
     return sorted(result, key=lambda g: g.get("date_iso", ""))
 
 
+FLASHSCORE_LOGO_BASE = "https://static.flashscore.com/res/image/data/"
+
+
 async def parse_flashscore_data(data: str, target_league: str, team_names_ru: dict) -> list:
     """Parse Flashscore feed data and extract matches for a specific league."""
     if not data or data.strip() in ('0', ''):
@@ -428,6 +431,10 @@ async def parse_flashscore_data(data: str, target_league: str, team_names_ru: di
             current_match['status'] = value  # 1=scheduled, 3=finished
         elif key == 'AD':
             current_match['timestamp'] = value
+        elif key == 'OA':
+            current_match['home_logo'] = value
+        elif key == 'OB':
+            current_match['away_logo'] = value
 
     if current_match and current_league:
         leagues[current_league].append(current_match)
@@ -439,6 +446,8 @@ async def parse_flashscore_data(data: str, target_league: str, team_names_ru: di
                 home = m.get('home', '')
                 away = m.get('away', '')
                 timestamp = m.get('timestamp', '')
+                home_logo = m.get('home_logo', '')
+                away_logo = m.get('away_logo', '')
 
                 try:
                     game_date = datetime.fromtimestamp(int(timestamp), tz=timezone.utc)
@@ -454,13 +463,13 @@ async def parse_flashscore_data(data: str, target_league: str, team_names_ru: di
                         "abbrev": home[:3].upper(),
                         "name": home,
                         "name_ru": team_names_ru.get(home, home),
-                        "logo_url": ""
+                        "logo_url": f"{FLASHSCORE_LOGO_BASE}{home_logo}" if home_logo else ""
                     },
                     "away_team": {
                         "abbrev": away[:3].upper(),
                         "name": away,
                         "name_ru": team_names_ru.get(away, away),
-                        "logo_url": ""
+                        "logo_url": f"{FLASHSCORE_LOGO_BASE}{away_logo}" if away_logo else ""
                     },
                     "venue": "",
                     "status": m.get('status', ''),
