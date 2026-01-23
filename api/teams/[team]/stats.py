@@ -73,6 +73,86 @@ DEL_TEAM_ABBREV_MAP = {
     "BHV": 5041, "RBM": 2773, "SWW": 2781, "STR": 351,
 }
 
+# KHL Team Names
+KHL_TEAM_NAMES_RU = {
+    "Tractor Chelyabinsk": "Трактор Челябинск",
+    "Magnitogorsk": "Металлург Магнитогорск",
+    "Bars Kazan": "Ак Барс Казань",
+    "Nizhny Novgorod": "Торпедо Нижний Новгород",
+    "SKA St. Petersburg": "СКА Санкт-Петербург",
+    "CSKA Moscow": "ЦСКА Москва",
+    "Dynamo Moscow": "Динамо Москва",
+    "Lokomotiv Yaroslavl": "Локомотив Ярославль",
+    "Avangard Omsk": "Авангард Омск",
+    "Novosibirsk": "Сибирь Новосибирск",
+    "Yekaterinburg": "Автомобилист Екатеринбург",
+    "Vladivostok": "Адмирал Владивосток",
+    "Khabarovsk": "Амур Хабаровск",
+    "Niznekamsk": "Нефтехимик Нижнекамск",
+    "Severstal": "Северсталь Череповец",
+    "Dinamo Minsk": "Динамо Минск",
+    "Barys Astana": "Барыс Астана",
+    "Kunlun Red Star": "Куньлунь Ред Стар",
+    "Shanghai": "Куньлунь Шанхай",
+    "Spartak Moscow": "Спартак Москва",
+    "Vityaz": "Витязь Подольск",
+    "Salavat Yulaev": "Салават Юлаев Уфа",
+}
+
+# Czech Extraliga Team Names
+CZECH_TEAM_NAMES_RU = {
+    "Sparta Praha": "Спарта Прага",
+    "Trinec": "Оцеларжи Тршинец",
+    "Pardubice": "Пардубице",
+    "Liberec": "Били Тигржи Либерец",
+    "Mlada Boleslav": "Млада Болеслав",
+    "Brno": "Комета Брно",
+    "Hradec Kralove": "Градец Кралове",
+    "Plzen": "Шкода Пльзень",
+    "Litvinov": "Литвинов",
+    "Ceske Budejovice": "Мотор Ческе-Будеёвице",
+    "Olomouc": "Оломоуц",
+    "Vitkovice": "Витковице Ридера",
+    "Kladno": "Рытиржи Кладно",
+    "Karlovy Vary": "Энергие Карловы Вары",
+}
+
+# Denmark Metal Ligaen Team Names
+DENMARK_TEAM_NAMES_RU = {
+    "Rungsted": "Рунгстед Сеир Капитал",
+    "Aalborg": "Ольборг Пайретс",
+    "Frederikshavn": "Фредериксхавн Уайт Хокс",
+    "Herning": "Хернинг Блю Фокс",
+    "Odense": "Оденсе Бульдогс",
+    "Esbjerg": "Эсбьерг Энерджи",
+    "SonderjyskE": "Сённерйюске",
+    "Rodovre": "Рёдовре Майти Буллз",
+    "Gentofte": "Гентофте Старс",
+    "Hvidovre": "Хвидовре Файтерс",
+}
+
+# Austria ICE Hockey League Team Names
+AUSTRIA_TEAM_NAMES_RU = {
+    "Salzburg": "Ред Булл Зальцбург",
+    "Vienna Capitals": "Вена Кэпиталз",
+    "KAC": "КАЦ Клагенфурт",
+    "Villach": "ВСВ Филлах",
+    "Graz 99ers": "Грац 99ерс",
+    "Innsbruck": "ХК Инсбрук",
+    "Dornbirn": "Дорнбирн Бульдогс",
+    "Linz": "Блэк Уингс Линц",
+    "Fehervar AV19": "Фехервар АВ19",
+    "Val Pusteria": "Пустерталь Вёльфе",
+    "Znojmo": "Орли Знойимо",
+    "Bratislava Capitals": "Братислава Кэпиталз",
+    "Bolzano": "ХК Больцано",
+    "Asiago": "Азиаго Хоккей",
+}
+
+# Flashscore API configuration
+FLASHSCORE_BASE_URL = "https://2.flashscore.ninja/2/x/feed"
+FLASHSCORE_HEADERS = {"x-fsign": "SW9D1eZo"}
+
 
 @dataclass
 class GameResult:
@@ -411,6 +491,137 @@ async def get_del_team_stats(team_abbrev: str, last_n: int = 0):
     return {"team": team_info, "stats": get_full_team_stats(home_matches, away_matches)}
 
 
+async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0):
+    """Get team stats from Flashscore API by fetching past results."""
+    league_config = {
+        "KHL": ("KHL", KHL_TEAM_NAMES_RU),
+        "CZECH": ("Extraliga", CZECH_TEAM_NAMES_RU),
+        "DENMARK": ("Metal Ligaen", DENMARK_TEAM_NAMES_RU),
+        "AUSTRIA": ("ICE Hockey League", AUSTRIA_TEAM_NAMES_RU),
+    }
+
+    if league.upper() not in league_config:
+        return {}
+
+    target_league, team_names = league_config[league.upper()]
+
+    # Fetch past 90 days of results
+    all_matches = []
+    async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
+        for day_offset in range(-90, 0):  # Past 90 days
+            try:
+                url = f"{FLASHSCORE_BASE_URL}/f_4_{day_offset}_3_en_5"
+                response = await client.get(url, headers=FLASHSCORE_HEADERS)
+                data = response.text
+
+                if not data or data.strip() in ('0', ''):
+                    continue
+
+                items = data.split('¬')
+                current_league = None
+                current_match = {}
+
+                for item in items:
+                    if '÷' not in item:
+                        continue
+                    parts = item.split('÷')
+                    key = parts[0]
+                    value = parts[-1] if len(parts) > 1 else ''
+
+                    if key == '~ZA':
+                        current_league = value
+                    elif key == '~AA':
+                        if current_match and current_league and target_league.lower() in current_league.lower():
+                            all_matches.append(current_match)
+                        current_match = {'id': value}
+                    elif key == 'AE':
+                        current_match['home'] = value
+                    elif key == 'AF':
+                        current_match['away'] = value
+                    elif key == 'AG':
+                        current_match['home_score'] = value
+                    elif key == 'AH':
+                        current_match['away_score'] = value
+                    elif key == 'AB':
+                        current_match['status'] = value
+                    elif key == 'AD':
+                        current_match['timestamp'] = value
+
+                if current_match and current_league and target_league.lower() in current_league.lower():
+                    all_matches.append(current_match)
+
+            except Exception as e:
+                continue
+
+    # Filter for finished matches (status=3) involving the target team
+    team_name_lower = team_name.lower()
+    home_matches = []
+    away_matches = []
+
+    for m in all_matches:
+        if m.get('status') != '3':
+            continue
+
+        home = m.get('home', '')
+        away = m.get('away', '')
+        home_score = int(m.get('home_score', 0) or 0)
+        away_score = int(m.get('away_score', 0) or 0)
+        timestamp = m.get('timestamp', '')
+
+        try:
+            game_date = datetime.fromtimestamp(int(timestamp), tz=timezone.utc).replace(tzinfo=None)
+        except:
+            continue
+
+        # Check if team played in this match (fuzzy matching)
+        is_home = team_name_lower in home.lower()
+        is_away = team_name_lower in away.lower()
+
+        if not is_home and not is_away:
+            continue
+
+        if is_home:
+            result = GameResult(
+                m.get('id', ''),
+                game_date,
+                team_names.get(away, away),
+                away[:3].upper(),
+                True,
+                home_score,
+                away_score,
+                home_score + away_score
+            )
+            home_matches.append(result)
+        else:
+            result = GameResult(
+                m.get('id', ''),
+                game_date,
+                team_names.get(home, home),
+                home[:3].upper(),
+                False,
+                away_score,
+                home_score,
+                home_score + away_score
+            )
+            away_matches.append(result)
+
+    home_matches.sort(key=lambda x: x.date, reverse=True)
+    away_matches.sort(key=lambda x: x.date, reverse=True)
+
+    if last_n > 0:
+        home_matches = home_matches[:last_n]
+        away_matches = away_matches[:last_n]
+
+    team_info = {
+        "abbrev": team_name[:3].upper(),
+        "name": team_name,
+        "name_ru": team_names.get(team_name, team_name),
+        "logo_url": None
+    }
+
+    return {"team": team_info, "stats": get_full_team_stats(home_matches, away_matches)}
+
+
 async def get_team_stats(league: str, team_abbrev: str, last_n: int = 0):
     if league == "NHL":
         return await get_nhl_team_stats(team_abbrev, last_n)
@@ -420,6 +631,8 @@ async def get_team_stats(league: str, team_abbrev: str, last_n: int = 0):
         return await get_liiga_team_stats(team_abbrev, last_n)
     elif league == "DEL":
         return await get_del_team_stats(team_abbrev, last_n)
+    elif league.upper() in ("KHL", "CZECH", "DENMARK", "AUSTRIA"):
+        return await get_flashscore_team_stats(team_abbrev, league, last_n)
     return {}
 
 

@@ -442,8 +442,12 @@ export default {
       leagueData: {
         NHL: { games: [], statsCache: {}, loaded: false },
         AHL: { games: [], statsCache: {}, loaded: false },
+        KHL: { games: [], statsCache: {}, loaded: false },
         LIIGA: { games: [], statsCache: {}, loaded: false },
-        DEL: { games: [], statsCache: {}, loaded: false }
+        DEL: { games: [], statsCache: {}, loaded: false },
+        CZECH: { games: [], statsCache: {}, loaded: false },
+        DENMARK: { games: [], statsCache: {}, loaded: false },
+        AUSTRIA: { games: [], statsCache: {}, loaded: false }
       },
       status: null,
       loading: false,
@@ -459,8 +463,12 @@ export default {
       leagues: [
         { code: 'NHL', name: 'NHL', name_ru: 'НХЛ' },
         { code: 'AHL', name: 'AHL', name_ru: 'АХЛ' },
+        { code: 'KHL', name: 'КХЛ', name_ru: 'КХЛ' },
         { code: 'LIIGA', name: 'Финляндия', name_ru: 'Финляндия' },
-        { code: 'DEL', name: 'Германия', name_ru: 'Германия' }
+        { code: 'DEL', name: 'Германия', name_ru: 'Германия' },
+        { code: 'CZECH', name: 'Чехия', name_ru: 'Чехия' },
+        { code: 'DENMARK', name: 'Дания', name_ru: 'Дания' },
+        { code: 'AUSTRIA', name: 'Австрия', name_ru: 'Австрия' }
       ],
       // Lineups tab data
       lineupsLeagues: [

@@ -79,6 +79,86 @@ DEL_TEAM_ID_MAP = {
     5041: "BHV", 2773: "RBM", 2781: "SWW", 351: "STR",
 }
 
+# KHL Team Names
+KHL_TEAM_NAMES_RU = {
+    "Tractor Chelyabinsk": "Трактор Челябинск",
+    "Magnitogorsk": "Металлург Магнитогорск",
+    "Bars Kazan": "Ак Барс Казань",
+    "Nizhny Novgorod": "Торпедо Нижний Новгород",
+    "SKA St. Petersburg": "СКА Санкт-Петербург",
+    "CSKA Moscow": "ЦСКА Москва",
+    "Dynamo Moscow": "Динамо Москва",
+    "Lokomotiv Yaroslavl": "Локомотив Ярославль",
+    "Avangard Omsk": "Авангард Омск",
+    "Novosibirsk": "Сибирь Новосибирск",
+    "Yekaterinburg": "Автомобилист Екатеринбург",
+    "Vladivostok": "Адмирал Владивосток",
+    "Khabarovsk": "Амур Хабаровск",
+    "Niznekamsk": "Нефтехимик Нижнекамск",
+    "Severstal": "Северсталь Череповец",
+    "Dinamo Minsk": "Динамо Минск",
+    "Barys Astana": "Барыс Астана",
+    "Kunlun Red Star": "Куньлунь Ред Стар",
+    "Shanghai": "Куньлунь Шанхай",
+    "Spartak Moscow": "Спартак Москва",
+    "Vityaz": "Витязь Подольск",
+    "Salavat Yulaev": "Салават Юлаев Уфа",
+}
+
+# Czech Extraliga Team Names
+CZECH_TEAM_NAMES_RU = {
+    "Sparta Praha": "Спарта Прага",
+    "Trinec": "Оцеларжи Тршинец",
+    "Pardubice": "Пардубице",
+    "Liberec": "Били Тигржи Либерец",
+    "Mlada Boleslav": "Млада Болеслав",
+    "Brno": "Комета Брно",
+    "Hradec Kralove": "Градец Кралове",
+    "Plzen": "Шкода Пльзень",
+    "Litvinov": "Литвинов",
+    "Ceske Budejovice": "Мотор Ческе-Будеёвице",
+    "Olomouc": "Оломоуц",
+    "Vítkovice": "Витковице Ридера",
+    "Kladno": "Рытиржи Кладно",
+    "Karlovy Vary": "Энергие Карловы Вары",
+}
+
+# Denmark Metal Ligaen Team Names
+DENMARK_TEAM_NAMES_RU = {
+    "Rungsted": "Рунгстед Сеир Капитал",
+    "Aalborg": "Ольборг Пайретс",
+    "Frederikshavn": "Фредериксхавн Уайт Хокс",
+    "Herning": "Хернинг Блю Фокс",
+    "Odense": "Оденсе Бульдогс",
+    "Esbjerg": "Эсбьерг Энерджи",
+    "SonderjyskE": "Сённерйюске",
+    "Rodovre": "Рёдовре Майти Буллз",
+    "Gentofte": "Гентофте Старс",
+    "Hvidovre": "Хвидовре Файтерс",
+}
+
+# Austria ICE Hockey League Team Names
+AUSTRIA_TEAM_NAMES_RU = {
+    "Salzburg": "Ред Булл Зальцбург",
+    "Vienna Capitals": "Вена Кэпиталз",
+    "KAC": "КАЦ Клагенфурт",
+    "Villach": "ВСВ Филлах",
+    "Graz 99ers": "Грац 99ерс",
+    "Innsbruck": "ХК Инсбрук",
+    "Dornbirn": "Дорнбирн Бульдогс",
+    "Linz": "Блэк Уингс Линц",
+    "Fehervar AV19": "Фехервар АВ19",
+    "Val Pusteria": "Пустерталь Вёльфе",
+    "Znojmo": "Орли Знойимо",
+    "Bratislava Capitals": "Братислава Кэпиталз",
+    "Bolzano": "ХК Больцано",
+    "Asiago": "Азиаго Хоккей",
+}
+
+# Flashscore API configuration
+FLASHSCORE_BASE_URL = "https://2.flashscore.ninja/2/x/feed"
+FLASHSCORE_HEADERS = {"x-fsign": "SW9D1eZo"}
+
 
 async def get_nhl_schedule(days: int):
     games = []
@@ -310,6 +390,116 @@ async def get_del_schedule(days: int):
     return sorted(result, key=lambda g: g.get("date_iso", ""))
 
 
+async def parse_flashscore_data(data: str, target_league: str, team_names_ru: dict) -> list:
+    """Parse Flashscore feed data and extract matches for a specific league."""
+    if not data or data.strip() in ('0', ''):
+        return []
+
+    items = data.split('¬')
+
+    leagues = {}
+    current_league = None
+    current_match = {}
+
+    for item in items:
+        if '÷' not in item:
+            continue
+        parts = item.split('÷')
+        key = parts[0]
+        value = parts[-1] if len(parts) > 1 else ''
+
+        if key == '~ZA':
+            current_league = value
+            if current_league not in leagues:
+                leagues[current_league] = []
+        elif key == '~AA':
+            if current_match and current_league:
+                leagues[current_league].append(current_match)
+            current_match = {'id': value}
+        elif key == 'AE':
+            current_match['home'] = value
+        elif key == 'AF':
+            current_match['away'] = value
+        elif key == 'AG':
+            current_match['home_score'] = value
+        elif key == 'AH':
+            current_match['away_score'] = value
+        elif key == 'AB':
+            current_match['status'] = value  # 1=scheduled, 3=finished
+        elif key == 'AD':
+            current_match['timestamp'] = value
+
+    if current_match and current_league:
+        leagues[current_league].append(current_match)
+
+    result = []
+    for league_name, matches in leagues.items():
+        if target_league.lower() in league_name.lower():
+            for m in matches:
+                home = m.get('home', '')
+                away = m.get('away', '')
+                timestamp = m.get('timestamp', '')
+
+                try:
+                    game_date = datetime.fromtimestamp(int(timestamp), tz=timezone.utc)
+                    game_date = to_kyiv_time(game_date)
+                except:
+                    continue
+
+                result.append({
+                    "game_id": f"fs_{m.get('id', '')}",
+                    "date": game_date.strftime("%d.%m.%Y %H:%M"),
+                    "date_iso": game_date.isoformat(),
+                    "home_team": {
+                        "abbrev": home[:3].upper(),
+                        "name": home,
+                        "name_ru": team_names_ru.get(home, home),
+                        "logo_url": ""
+                    },
+                    "away_team": {
+                        "abbrev": away[:3].upper(),
+                        "name": away,
+                        "name_ru": team_names_ru.get(away, away),
+                        "logo_url": ""
+                    },
+                    "venue": "",
+                    "status": m.get('status', ''),
+                    "home_score": m.get('home_score'),
+                    "away_score": m.get('away_score')
+                })
+
+    return sorted(result, key=lambda g: g.get("date_iso", ""))
+
+
+async def get_flashscore_schedule(league: str, days: int) -> list:
+    """Get schedule from Flashscore API for any league."""
+    league_config = {
+        "KHL": ("KHL", KHL_TEAM_NAMES_RU),
+        "CZECH": ("Extraliga", CZECH_TEAM_NAMES_RU),
+        "DENMARK": ("Metal Ligaen", DENMARK_TEAM_NAMES_RU),
+        "AUSTRIA": ("ICE Hockey League", AUSTRIA_TEAM_NAMES_RU),
+    }
+
+    if league.upper() not in league_config:
+        return []
+
+    target_name, team_names = league_config[league.upper()]
+
+    result = []
+    async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
+        for day_offset in range(days):
+            try:
+                url = f"{FLASHSCORE_BASE_URL}/f_4_{day_offset}_3_en_5"
+                response = await client.get(url, headers=FLASHSCORE_HEADERS)
+                matches = await parse_flashscore_data(response.text, target_name, team_names)
+                # Only add scheduled matches (status=1)
+                result.extend([m for m in matches if m.get('status') == '1'])
+            except Exception as e:
+                print(f"Error fetching Flashscore day {day_offset}: {e}")
+
+    return result
+
+
 async def get_schedule(league: str, days: int):
     if league == "NHL":
         return await get_nhl_schedule(days)
@@ -319,6 +509,8 @@ async def get_schedule(league: str, days: int):
         return await get_liiga_schedule(days)
     elif league == "DEL":
         return await get_del_schedule(days)
+    elif league.upper() in ("KHL", "CZECH", "DENMARK", "AUSTRIA"):
+        return await get_flashscore_schedule(league, days)
     return []
 
 
