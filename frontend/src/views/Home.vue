@@ -178,32 +178,72 @@
             <!-- Home Team -->
             <div class="lineup-team-block">
               <div class="lineup-team-name home">{{ match.lineups.home?.team || match.home }}</div>
-              <div v-if="match.lineups.home?.players" class="lineup-players-compact">
+              <div v-if="match.lineups.home?.players" class="lineup-players-tables">
                 <!-- Leaders Active (Yellow) -->
                 <div v-if="match.lineups.home.players.leaders_active?.length" class="player-category yellow">
                   <div class="category-label">Лидеры в составе</div>
-                  <div v-for="p in match.lineups.home.players.leaders_active" :key="p.name" class="player-row-compact yellow">
-                    <span class="player-name">{{ p.name }}</span>
-                    <span class="player-stats-compact">{{ p.matches }}м {{ p.goals }}г {{ p.assists }}п <b>{{ p.points }}о</b> ({{ p.efficiency.toFixed(2) }}/м)</span>
-                  </div>
+                  <table class="lineup-stats-table">
+                    <thead>
+                      <tr>
+                        <th class="col-name">Игрок</th>
+                        <th class="col-stat">М</th>
+                        <th class="col-stat">Г</th>
+                        <th class="col-stat">П</th>
+                        <th class="col-stat col-points">О</th>
+                        <th class="col-stat col-eff">О/М</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="p in match.lineups.home.players.leaders_active" :key="p.name">
+                        <td class="col-name">{{ p.name }}</td>
+                        <td class="col-stat">{{ p.matches }}</td>
+                        <td class="col-stat">{{ p.goals }}</td>
+                        <td class="col-stat">{{ p.assists }}</td>
+                        <td class="col-stat col-points">{{ p.points }}</td>
+                        <td class="col-stat col-eff">{{ p.efficiency?.toFixed(2) || '0.00' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
                 <!-- Leaders Questionable (Orange) -->
                 <div v-if="match.lineups.home.players.leaders_questionable?.length" class="player-category orange">
                   <div class="category-label">Лидеры под вопросом</div>
-                  <div v-for="p in match.lineups.home.players.leaders_questionable" :key="p.name" class="player-row-compact orange">
-                    <span class="player-name">{{ p.name }}</span>
-                    <span class="player-status">{{ p.status }}</span>
-                    <span class="player-stats-compact">{{ p.matches }}м {{ p.goals }}г {{ p.assists }}п <b>{{ p.points }}о</b></span>
-                  </div>
+                  <table class="lineup-stats-table">
+                    <thead>
+                      <tr>
+                        <th class="col-name">Игрок</th>
+                        <th class="col-status">Статус</th>
+                        <th class="col-stat col-points">О</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="p in match.lineups.home.players.leaders_questionable" :key="p.name">
+                        <td class="col-name">{{ p.name }}</td>
+                        <td class="col-status">{{ p.status }}</td>
+                        <td class="col-stat col-points">{{ p.points }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
                 <!-- Absent (Red) -->
                 <div v-if="match.lineups.home.players.absent?.length" class="player-category red">
                   <div class="category-label">Отсутствуют</div>
-                  <div v-for="p in match.lineups.home.players.absent.slice(0, 10)" :key="p.name" class="player-row-compact red">
-                    <span class="player-name">{{ p.name }}</span>
-                    <span class="player-status">{{ p.status }}</span>
-                    <span class="player-stats-compact" v-if="p.points">{{ p.points }}о</span>
-                  </div>
+                  <table class="lineup-stats-table">
+                    <thead>
+                      <tr>
+                        <th class="col-name">Игрок</th>
+                        <th class="col-status">Статус</th>
+                        <th class="col-stat col-points">О</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="p in match.lineups.home.players.absent.slice(0, 10)" :key="p.name">
+                        <td class="col-name">{{ p.name }}</td>
+                        <td class="col-status">{{ p.status || 'не заявлен' }}</td>
+                        <td class="col-stat col-points">{{ p.points }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                   <div v-if="match.lineups.home.players.absent.length > 10" class="more-players">
                     +{{ match.lineups.home.players.absent.length - 10 }} ещё
                   </div>
@@ -215,32 +255,72 @@
             <!-- Away Team -->
             <div class="lineup-team-block">
               <div class="lineup-team-name away">{{ match.lineups.away?.team || match.away }}</div>
-              <div v-if="match.lineups.away?.players" class="lineup-players-compact">
+              <div v-if="match.lineups.away?.players" class="lineup-players-tables">
                 <!-- Leaders Active (Yellow) -->
                 <div v-if="match.lineups.away.players.leaders_active?.length" class="player-category yellow">
                   <div class="category-label">Лидеры в составе</div>
-                  <div v-for="p in match.lineups.away.players.leaders_active" :key="p.name" class="player-row-compact yellow">
-                    <span class="player-name">{{ p.name }}</span>
-                    <span class="player-stats-compact">{{ p.matches }}м {{ p.goals }}г {{ p.assists }}п <b>{{ p.points }}о</b> ({{ p.efficiency.toFixed(2) }}/м)</span>
-                  </div>
+                  <table class="lineup-stats-table">
+                    <thead>
+                      <tr>
+                        <th class="col-name">Игрок</th>
+                        <th class="col-stat">М</th>
+                        <th class="col-stat">Г</th>
+                        <th class="col-stat">П</th>
+                        <th class="col-stat col-points">О</th>
+                        <th class="col-stat col-eff">О/М</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="p in match.lineups.away.players.leaders_active" :key="p.name">
+                        <td class="col-name">{{ p.name }}</td>
+                        <td class="col-stat">{{ p.matches }}</td>
+                        <td class="col-stat">{{ p.goals }}</td>
+                        <td class="col-stat">{{ p.assists }}</td>
+                        <td class="col-stat col-points">{{ p.points }}</td>
+                        <td class="col-stat col-eff">{{ p.efficiency?.toFixed(2) || '0.00' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
                 <!-- Leaders Questionable (Orange) -->
                 <div v-if="match.lineups.away.players.leaders_questionable?.length" class="player-category orange">
                   <div class="category-label">Лидеры под вопросом</div>
-                  <div v-for="p in match.lineups.away.players.leaders_questionable" :key="p.name" class="player-row-compact orange">
-                    <span class="player-name">{{ p.name }}</span>
-                    <span class="player-status">{{ p.status }}</span>
-                    <span class="player-stats-compact">{{ p.matches }}м {{ p.goals }}г {{ p.assists }}п <b>{{ p.points }}о</b></span>
-                  </div>
+                  <table class="lineup-stats-table">
+                    <thead>
+                      <tr>
+                        <th class="col-name">Игрок</th>
+                        <th class="col-status">Статус</th>
+                        <th class="col-stat col-points">О</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="p in match.lineups.away.players.leaders_questionable" :key="p.name">
+                        <td class="col-name">{{ p.name }}</td>
+                        <td class="col-status">{{ p.status }}</td>
+                        <td class="col-stat col-points">{{ p.points }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
                 <!-- Absent (Red) -->
                 <div v-if="match.lineups.away.players.absent?.length" class="player-category red">
                   <div class="category-label">Отсутствуют</div>
-                  <div v-for="p in match.lineups.away.players.absent.slice(0, 10)" :key="p.name" class="player-row-compact red">
-                    <span class="player-name">{{ p.name }}</span>
-                    <span class="player-status">{{ p.status }}</span>
-                    <span class="player-stats-compact" v-if="p.points">{{ p.points }}о</span>
-                  </div>
+                  <table class="lineup-stats-table">
+                    <thead>
+                      <tr>
+                        <th class="col-name">Игрок</th>
+                        <th class="col-status">Статус</th>
+                        <th class="col-stat col-points">О</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="p in match.lineups.away.players.absent.slice(0, 10)" :key="p.name">
+                        <td class="col-name">{{ p.name }}</td>
+                        <td class="col-status">{{ p.status || 'не заявлен' }}</td>
+                        <td class="col-stat col-points">{{ p.points }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                   <div v-if="match.lineups.away.players.absent.length > 10" class="more-players">
                     +{{ match.lineups.away.players.absent.length - 10 }} ещё
                   </div>
@@ -1467,6 +1547,89 @@ export default {
   padding: 20px;
   color: var(--text-muted);
   font-size: 13px;
+}
+
+/* Lineup Stats Table */
+.lineup-players-tables {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lineup-stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.lineup-stats-table thead {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.lineup-stats-table th {
+  padding: 6px 8px;
+  text-align: left;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lineup-stats-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.lineup-stats-table .col-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.lineup-stats-table .col-stat {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  width: 40px;
+}
+
+.lineup-stats-table .col-points {
+  color: #4fc3f7;
+  font-weight: 600;
+}
+
+.lineup-stats-table .col-eff {
+  color: #81c784;
+  font-weight: 600;
+}
+
+.lineup-stats-table .col-status {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+}
+
+.player-category.yellow .lineup-stats-table tbody tr {
+  background: rgba(255, 215, 0, 0.05);
+}
+
+.player-category.yellow .lineup-stats-table tbody tr:hover {
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.player-category.orange .lineup-stats-table tbody tr {
+  background: rgba(255, 165, 0, 0.05);
+}
+
+.player-category.orange .lineup-stats-table tbody tr:hover {
+  background: rgba(255, 165, 0, 0.1);
+}
+
+.player-category.red .lineup-stats-table tbody tr {
+  background: rgba(255, 77, 77, 0.05);
+}
+
+.player-category.red .lineup-stats-table tbody tr:hover {
+  background: rgba(255, 77, 77, 0.1);
 }
 
 @media (max-width: 768px) {
