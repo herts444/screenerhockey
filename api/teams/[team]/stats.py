@@ -566,12 +566,12 @@ async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0
 
     target_league, team_names = league_config[league.upper()]
 
-    # Fetch past 60 days of results in parallel (batched)
+    # Fetch full season of results (about 200 days from September to now)
     all_matches = []
-    async with httpx.AsyncClient(timeout=15.0, follow_redirects=True) as client:
-        # Fetch in batches of 10 to avoid overwhelming the API
-        for batch_start in range(-60, 1, 10):  # Include day 0 (today)
-            batch_end = min(batch_start + 10, 1)
+    async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
+        # Fetch in batches of 15 days in parallel
+        for batch_start in range(-200, 1, 15):
+            batch_end = min(batch_start + 15, 1)
             tasks = [
                 fetch_flashscore_day(client, day, target_league)
                 for day in range(batch_start, batch_end)
