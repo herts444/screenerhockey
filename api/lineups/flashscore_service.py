@@ -114,7 +114,7 @@ async def get_team_urls(match_url: str) -> dict:
     Get team page URLs from a match page.
     Same logic as working bot.
     """
-    async with httpx.AsyncClient(follow_redirects=True, timeout=30.0) as client:
+    async with httpx.AsyncClient(follow_redirects=True, timeout=15.0) as client:
         response = await client.get(match_url, headers=HEADERS)
         html_content = response.text
 
@@ -144,7 +144,7 @@ async def get_player_stats(player_url: str, player_name: str, team_name: str) ->
     Get individual player statistics.
     Same logic as working bot's player_status function.
     """
-    async with httpx.AsyncClient(follow_redirects=True, timeout=30.0) as client:
+    async with httpx.AsyncClient(follow_redirects=True, timeout=15.0) as client:
         response = await client.get(player_url, headers=HEADERS)
         player_html = response.text
 
@@ -217,9 +217,9 @@ async def get_player_stats(player_url: str, player_name: str, team_name: str) ->
 async def get_team_lineup(team_url: str) -> dict:
     """
     Get full team lineup with player statistics.
-    Same logic as working bot's get_players_list function.
+    Optimized: load all players in parallel.
     """
-    async with httpx.AsyncClient(follow_redirects=True, timeout=30.0) as client:
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60.0) as client:
         response = await client.get(team_url, headers=HEADERS)
         html_content = response.text
 
@@ -232,7 +232,8 @@ async def get_team_lineup(team_url: str) -> dict:
     # Get all players
     players_elements = soup.find_all("a", class_="lineupTable__cell--name")
 
-    players = []
+    # Collect unique players
+    player_data = []
     seen_links = set()
 
     for player_elem in players_elements:
@@ -242,13 +243,22 @@ async def get_team_lineup(team_url: str) -> dict:
         if player_link in seen_links:
             continue
         seen_links.add(player_link)
+        player_data.append((player_link, player_name))
 
+    # Load all player stats in parallel
+    import asyncio
+
+    async def safe_get_player(link, name):
         try:
-            player_stats = await get_player_stats(player_link, player_name, team_name)
-            players.append(player_stats)
+            return await get_player_stats(link, name, team_name)
         except Exception as e:
-            print(f"Error parsing player {player_name}: {e}")
-            continue
+            print(f"Error parsing player {name}: {e}")
+            return None
+
+    tasks = [safe_get_player(link, name) for link, name in player_data]
+    results = await asyncio.gather(*tasks)
+
+    players = [p for p in results if p is not None]
 
     # Categorize players
     categorized = categorize_players(players)
