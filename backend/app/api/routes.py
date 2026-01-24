@@ -175,10 +175,22 @@ async def get_leagues():
                 "cached": cache.is_loaded.get("LIIGA", False)
             },
             {
+                "code": "AUSTRIA",
+                "name": "ICE Hockey League",
+                "name_ru": "ICE HL (Австрия)",
+                "cached": cache.is_loaded.get("AUSTRIA", False)
+            },
+            {
+                "code": "SWISS",
+                "name": "National League",
+                "name_ru": "NL (Швейцария)",
+                "cached": cache.is_loaded.get("SWISS", False)
+            },
+            {
                 "code": "KHL",
                 "name": "KHL",
                 "name_ru": "КХЛ",
-                "cached": False  # Flashscore-based, no caching
+                "cached": False  # No non-.ru API available
             }
         ]
     }
