@@ -492,7 +492,7 @@ async def get_del_team_stats(team_abbrev: str, last_n: int = 0):
 
 
 async def fetch_flashscore_day(client, day_offset: int, target_league: str) -> list:
-    """Fetch one day of Flashscore results."""
+    """Fetch one day of Flashscore results using same parsing as parse_flashscore_data."""
     try:
         url = f"{FLASHSCORE_BASE_URL}/f_4_{day_offset}_3_en_5"
         response = await client.get(url, headers=FLASHSCORE_HEADERS)
@@ -502,10 +502,9 @@ async def fetch_flashscore_day(client, day_offset: int, target_league: str) -> l
             return []
 
         items = data.split('¬')
-        current_league = None
-        current_match = {}
-        matches = []
 
+        # Group items into dicts like parse_flashscore_data does
+        data_list = [{}]
         for item in items:
             if '÷' not in item:
                 continue
@@ -513,27 +512,38 @@ async def fetch_flashscore_day(client, day_offset: int, target_league: str) -> l
             key = parts[0]
             value = parts[-1] if len(parts) > 1 else ''
 
-            if key == '~ZA':
-                current_league = value
-            elif key == '~AA':
-                if current_match and current_league and target_league.lower() in current_league.lower():
-                    matches.append(current_match)
-                current_match = {'id': value}
-            elif key == 'AE':
-                current_match['home'] = value
-            elif key == 'AF':
-                current_match['away'] = value
-            elif key == 'AG':
-                current_match['home_score'] = value
-            elif key == 'AH':
-                current_match['away_score'] = value
-            elif key == 'AB':
-                current_match['status'] = value
-            elif key == 'AD':
-                current_match['timestamp'] = value
+            if '~' in key:
+                data_list.append({key: value})
+            else:
+                data_list[-1].update({key: value})
 
-        if current_match and current_league and target_league.lower() in current_league.lower():
-            matches.append(current_match)
+        matches = []
+        league_name = ''
+
+        for game in data_list:
+            keys = list(game.keys())
+            if not keys:
+                continue
+
+            # Check for league header
+            if '~ZA' in keys[0]:
+                league_name = game.get('~ZA', '')
+
+            # Check for match entry
+            if 'AA' in keys[0]:
+                # Filter by target league
+                if target_league.lower() not in league_name.lower():
+                    continue
+
+                matches.append({
+                    'id': game.get('~AA', ''),
+                    'home': game.get('AE', ''),
+                    'away': game.get('AF', ''),
+                    'home_score': game.get('AG', ''),
+                    'away_score': game.get('AH', ''),
+                    'status': game.get('AB', ''),
+                    'timestamp': game.get('AD', '')
+                })
 
         return matches
     except Exception:
@@ -546,7 +556,7 @@ async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0
 
     league_config = {
         "KHL": ("KHL", KHL_TEAM_NAMES_RU),
-        "CZECH": ("Extraliga", CZECH_TEAM_NAMES_RU),
+        "CZECH": ("Maxa liga", CZECH_TEAM_NAMES_RU),  # Was renamed from Extraliga
         "DENMARK": ("Metal Ligaen", DENMARK_TEAM_NAMES_RU),
         "AUSTRIA": ("ICE Hockey League", AUSTRIA_TEAM_NAMES_RU),
     }
@@ -560,8 +570,8 @@ async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0
     all_matches = []
     async with httpx.AsyncClient(timeout=15.0, follow_redirects=True) as client:
         # Fetch in batches of 10 to avoid overwhelming the API
-        for batch_start in range(-60, 0, 10):
-            batch_end = min(batch_start + 10, 0)
+        for batch_start in range(-60, 1, 10):  # Include day 0 (today)
+            batch_end = min(batch_start + 10, 1)
             tasks = [
                 fetch_flashscore_day(client, day, target_league)
                 for day in range(batch_start, batch_end)
@@ -591,9 +601,9 @@ async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0
         except:
             continue
 
-        # Check if team played in this match (fuzzy matching)
-        is_home = team_name_lower in home.lower()
-        is_away = team_name_lower in away.lower()
+        # Check if team played in this match (exact match on team name)
+        is_home = home.lower() == team_name_lower
+        is_away = away.lower() == team_name_lower
 
         if not is_home and not is_away:
             continue
