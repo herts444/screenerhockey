@@ -551,12 +551,21 @@ async def fetch_flashscore_day(client, day_offset: int, target_league: str) -> l
 
 
 async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0):
-    """Get team stats from Flashscore API by fetching past results."""
+    """Get team stats from Flashscore API by fetching past results.
+
+    Similar to NHL approach: fetch historical data, filter for team, apply last_n.
+    Days to fetch based on last_n (teams play ~2-3 games/week):
+    - last_n=0 (season): 150 days
+    - last_n=5: 15 days
+    - last_n=10: 30 days
+    - last_n=15: 45 days
+    - etc.
+    """
     import asyncio
 
     league_config = {
         "KHL": ("KHL", KHL_TEAM_NAMES_RU),
-        "CZECH": ("Maxa liga", CZECH_TEAM_NAMES_RU),  # Was renamed from Extraliga
+        "CZECH": ("Maxa liga", CZECH_TEAM_NAMES_RU),
         "DENMARK": ("Metal Ligaen", DENMARK_TEAM_NAMES_RU),
         "AUSTRIA": ("ICE Hockey League", AUSTRIA_TEAM_NAMES_RU),
     }
@@ -566,12 +575,18 @@ async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0
 
     target_league, team_names = league_config[league.upper()]
 
-    # Fetch full season of results (about 200 days from September to now)
+    # Calculate days to fetch based on last_n (like NHL does with season data)
+    if last_n == 0:
+        days_to_fetch = 150  # Full season
+    else:
+        days_to_fetch = max(last_n * 3, 20)  # ~3 days per game + buffer
+
+    # Fetch historical results in parallel batches
     all_matches = []
     async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
-        # Fetch in batches of 15 days in parallel
-        for batch_start in range(-200, 1, 15):
-            batch_end = min(batch_start + 15, 1)
+        # Fetch in batches of 10 days
+        for batch_start in range(-days_to_fetch, 1, 10):
+            batch_end = min(batch_start + 10, 1)
             tasks = [
                 fetch_flashscore_day(client, day, target_league)
                 for day in range(batch_start, batch_end)
