@@ -497,8 +497,8 @@ async def get_flashscore_schedule(league: str, days: int) -> list:
                 url = f"{FLASHSCORE_BASE_URL}/f_4_{day_offset}_3_en_5"
                 response = await client.get(url, headers=FLASHSCORE_HEADERS)
                 matches = await parse_flashscore_data(response.text, target_name, team_names)
-                # Only add scheduled matches (status=1)
-                result.extend([m for m in matches if m.get('status') == '1'])
+                # Include all matches (like flashscore_service.py does)
+                result.extend(matches)
             except Exception as e:
                 print(f"Error fetching Flashscore day {day_offset}: {e}")
 
