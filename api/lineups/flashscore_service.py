@@ -42,9 +42,9 @@ async def get_matches_list(league: str, day_offset: int = 0) -> list:
     Get list of matches for a league on a specific day.
     Uses same endpoint as working bot: d.flashscore.ru.com
     """
-    # Feed format: f_4_{day}_3_ru_5 for hockey
-    feed = f'f_4_{day_offset}_3_ru_5'
-    url = f'https://d.flashscore.ru.com/x/feed/{feed}'
+    # Feed format: f_4_{day}_3_en_5 for hockey
+    feed = f'f_4_{day_offset}_3_en_5'
+    url = f'https://2.flashscore.ninja/2/x/feed/{feed}'
 
     target_patterns = LEAGUE_NAME_PATTERNS.get(league.upper(), [])
 
