@@ -2,123 +2,66 @@
   <div class="lineup-table">
     <div class="team-header">
       <h3>{{ team }}</h3>
-      <span class="player-count">{{ totalPlayers }} игроков</span>
     </div>
 
     <!-- Leaders Active (Yellow) -->
     <div v-if="players.leaders_active?.length" class="player-group">
-      <div class="group-header yellow">
-        <span class="group-icon">🟡</span>
-        <span class="group-title">Лидеры в составе</span>
-        <span class="group-count">{{ players.leaders_active.length }}</span>
-      </div>
-      <div class="players-list">
-        <div
-          v-for="player in players.leaders_active"
-          :key="player.name"
-          class="player-row yellow"
-        >
-          <div class="player-name">{{ player.name }}</div>
-          <div class="player-stats">
-            <span class="stat" title="Матчи">{{ player.matches }} М</span>
-            <span class="stat" title="Голы">{{ player.goals }} Г</span>
-            <span class="stat" title="Передачи">{{ player.assists }} П</span>
-            <span class="stat points" title="Очки">{{ player.points }} О</span>
-            <span class="stat efficiency" title="Очков за матч">{{ player.efficiency.toFixed(2) }}/м</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Leaders Questionable (Orange) -->
-    <div v-if="players.leaders_questionable?.length" class="player-group">
-      <div class="group-header orange">
-        <span class="group-icon">🟠</span>
-        <span class="group-title">Лидеры под вопросом</span>
-        <span class="group-subtitle">(не играли в последнем матче)</span>
-        <span class="group-count">{{ players.leaders_questionable.length }}</span>
-      </div>
-      <div class="players-list">
-        <div
-          v-for="player in players.leaders_questionable"
-          :key="player.name"
-          class="player-row orange"
-        >
-          <div class="player-name">{{ player.name }}</div>
-          <div class="player-status">{{ player.status }}</div>
-          <div class="player-stats">
-            <span class="stat" title="Матчи">{{ player.matches }} М</span>
-            <span class="stat" title="Голы">{{ player.goals }} Г</span>
-            <span class="stat" title="Передачи">{{ player.assists }} П</span>
-            <span class="stat points" title="Очки">{{ player.points }} О</span>
-            <span class="stat efficiency" title="Очков за матч">{{ player.efficiency.toFixed(2) }}/м</span>
-          </div>
-        </div>
-      </div>
+      <div class="group-header yellow">Лидеры в составе</div>
+      <table class="players-table">
+        <thead>
+          <tr>
+            <th class="th-name">Игрок</th>
+            <th class="th-stat">М</th>
+            <th class="th-stat">Г</th>
+            <th class="th-stat">П</th>
+            <th class="th-stat">О</th>
+            <th class="th-stat">О/М</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="player in players.leaders_active" :key="player.name" class="row-yellow">
+            <td class="td-name">{{ player.name }}</td>
+            <td class="td-stat">{{ player.matches }}</td>
+            <td class="td-stat">{{ player.goals }}</td>
+            <td class="td-stat">{{ player.assists }}</td>
+            <td class="td-stat td-points">{{ player.points }}</td>
+            <td class="td-stat td-efficiency">{{ player.efficiency?.toFixed(2) || '0.00' }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- Absent (Red) -->
     <div v-if="players.absent?.length" class="player-group">
-      <div class="group-header red">
-        <span class="group-icon">🔴</span>
-        <span class="group-title">Отсутствуют</span>
-        <span class="group-subtitle">(травма / не заявлены)</span>
-        <span class="group-count">{{ players.absent.length }}</span>
-      </div>
-      <div class="players-list">
-        <div
-          v-for="player in players.absent"
-          :key="player.name"
-          class="player-row red"
-        >
-          <div class="player-name">{{ player.name }}</div>
-          <div class="player-status">{{ player.status }}</div>
-          <div class="player-stats">
-            <span class="stat" title="Матчи">{{ player.matches }} М</span>
-            <span class="stat" title="Голы">{{ player.goals }} Г</span>
-            <span class="stat" title="Передачи">{{ player.assists }} П</span>
-            <span class="stat points" title="Очки">{{ player.points }} О</span>
-            <span class="stat efficiency" title="Очков за матч">{{ player.efficiency.toFixed(2) }}/м</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Others (No color) -->
-    <div v-if="players.others?.length" class="player-group">
-      <div class="group-header others">
-        <span class="group-icon">⚪</span>
-        <span class="group-title">Остальные игроки</span>
-        <span class="group-count">{{ players.others.length }}</span>
-      </div>
-      <div class="players-list collapsed" :class="{ expanded: showOthers }">
-        <div
-          v-for="player in players.others"
-          :key="player.name"
-          class="player-row"
-        >
-          <div class="player-name">{{ player.name }}</div>
-          <div class="player-stats">
-            <span class="stat" title="Матчи">{{ player.matches }} М</span>
-            <span class="stat" title="Голы">{{ player.goals }} Г</span>
-            <span class="stat" title="Передачи">{{ player.assists }} П</span>
-            <span class="stat points" title="Очки">{{ player.points }} О</span>
-            <span class="stat efficiency" title="Очков за матч">{{ player.efficiency.toFixed(2) }}/м</span>
-          </div>
-        </div>
-      </div>
+      <div class="group-header red">Отсутствуют</div>
+      <table class="players-table">
+        <thead>
+          <tr>
+            <th class="th-name">Игрок</th>
+            <th class="th-status">Статус</th>
+            <th class="th-stat">О</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="player in displayedAbsent" :key="player.name" class="row-red">
+            <td class="td-name">{{ player.name }}</td>
+            <td class="td-status">{{ player.status || 'не заявлен' }}</td>
+            <td class="td-stat td-points">{{ player.points }}</td>
+          </tr>
+        </tbody>
+      </table>
       <button
-        v-if="players.others?.length > 5"
-        class="toggle-others"
-        @click="showOthers = !showOthers"
+        v-if="players.absent?.length > 5"
+        class="toggle-btn"
+        @click="showAllAbsent = !showAllAbsent"
       >
-        {{ showOthers ? 'Скрыть' : `Показать всех (${players.others.length})` }}
+        {{ showAllAbsent ? 'Скрыть' : `+${players.absent.length - 5} ещё` }}
       </button>
     </div>
 
     <!-- Empty state -->
     <div v-if="isEmpty" class="empty-state">
-      Нет данных об игроках
+      Нет данных
     </div>
   </div>
 </template>
@@ -149,7 +92,7 @@ export default {
     }
   },
   setup(props) {
-    const showOthers = ref(false)
+    const showAllAbsent = ref(false)
 
     const isEmpty = computed(() => {
       const p = props.players
@@ -159,9 +102,17 @@ export default {
              !p.others?.length
     })
 
+    const displayedAbsent = computed(() => {
+      if (showAllAbsent.value || props.players.absent?.length <= 5) {
+        return props.players.absent || []
+      }
+      return props.players.absent?.slice(0, 5) || []
+    })
+
     return {
-      showOthers,
-      isEmpty
+      showAllAbsent,
+      isEmpty,
+      displayedAbsent
     }
   }
 }
@@ -170,217 +121,148 @@ export default {
 <style scoped>
 .lineup-table {
   background: var(--card-bg, #1a1a2e);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .team-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
+  padding: 12px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .team-header h3 {
   margin: 0;
-  font-size: 1.25rem;
-  color: #fff;
-}
-
-.player-count {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.875rem;
+  font-size: 1rem;
+  color: #4fc3f7;
+  font-weight: 600;
 }
 
 .player-group {
-  margin-bottom: 16px;
+  margin-bottom: 0;
 }
 
 .group-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  font-weight: 500;
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .group-header.yellow {
   background: rgba(255, 215, 0, 0.15);
+  color: #ffd700;
   border-left: 3px solid #ffd700;
-}
-
-.group-header.orange {
-  background: rgba(255, 165, 0, 0.15);
-  border-left: 3px solid #ffa500;
 }
 
 .group-header.red {
   background: rgba(255, 77, 77, 0.15);
+  color: #ff6b6b;
   border-left: 3px solid #ff4d4d;
 }
 
-.group-header.others {
-  background: rgba(255, 255, 255, 0.05);
-  border-left: 3px solid rgba(255, 255, 255, 0.3);
+.players-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
 }
 
-.group-icon {
-  font-size: 0.875rem;
+.players-table thead {
+  background: rgba(0, 0, 0, 0.3);
 }
 
-.group-title {
-  color: #fff;
-  flex-grow: 1;
-}
-
-.group-subtitle {
+.players-table th {
+  padding: 6px 8px;
+  text-align: left;
+  font-weight: 500;
   color: rgba(255, 255, 255, 0.5);
-  font-size: 0.75rem;
-  font-weight: normal;
+  font-size: 0.7rem;
+  text-transform: uppercase;
 }
 
-.group-count {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.7);
+.th-name {
+  width: 50%;
+  padding-left: 16px !important;
 }
 
-.players-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.th-stat {
+  width: 10%;
+  text-align: center !important;
 }
 
-.players-list.collapsed {
-  max-height: 200px;
-  overflow: hidden;
+.th-status {
+  width: 30%;
+  text-align: center !important;
 }
 
-.players-list.expanded {
-  max-height: none;
+.players-table td {
+  padding: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.player-row {
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.03);
-  transition: background 0.2s;
-}
-
-.player-row:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.player-row.yellow {
-  background: rgba(255, 215, 0, 0.08);
-}
-
-.player-row.yellow:hover {
-  background: rgba(255, 215, 0, 0.15);
-}
-
-.player-row.orange {
-  background: rgba(255, 165, 0, 0.08);
-}
-
-.player-row.orange:hover {
-  background: rgba(255, 165, 0, 0.15);
-}
-
-.player-row.red {
-  background: rgba(255, 77, 77, 0.08);
-}
-
-.player-row.red:hover {
-  background: rgba(255, 77, 77, 0.15);
-}
-
-.player-name {
-  flex: 1;
+.td-name {
   color: #fff;
   font-weight: 500;
-  min-width: 150px;
+  padding-left: 16px !important;
 }
 
-.player-status {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.75rem;
-  margin-right: 16px;
-  min-width: 80px;
-}
-
-.player-stats {
-  display: flex;
-  gap: 12px;
-  font-size: 0.875rem;
-}
-
-.stat {
+.td-stat {
+  text-align: center;
   color: rgba(255, 255, 255, 0.7);
-  min-width: 45px;
-  text-align: right;
 }
 
-.stat.points {
+.td-points {
   color: #4fc3f7;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-.stat.efficiency {
+.td-efficiency {
   color: #81c784;
   font-weight: 600;
-  min-width: 55px;
 }
 
-.toggle-others {
+.td-status {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+}
+
+.row-yellow {
+  background: rgba(255, 215, 0, 0.05);
+}
+
+.row-yellow:hover {
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.row-red {
+  background: rgba(255, 77, 77, 0.05);
+}
+
+.row-red:hover {
+  background: rgba(255, 77, 77, 0.1);
+}
+
+.toggle-btn {
   width: 100%;
   padding: 8px;
-  margin-top: 8px;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  color: rgba(255, 255, 255, 0.7);
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
+  font-size: 0.75rem;
   transition: all 0.2s;
 }
 
-.toggle-others:hover {
+.toggle-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
 }
 
 .empty-state {
   text-align: center;
-  padding: 32px;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-@media (max-width: 768px) {
-  .player-row {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .player-name {
-    min-width: 100%;
-  }
-
-  .player-stats {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .stat {
-    min-width: 40px;
-  }
+  padding: 24px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.875rem;
 }
 </style>
