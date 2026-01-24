@@ -200,7 +200,7 @@
                       <td class="col-stat">{{ p.assists }}</td>
                       <td class="col-stat col-points">{{ p.points }}</td>
                       <td class="col-stat col-eff">{{ p.efficiency?.toFixed(2) || '0.00' }}</td>
-                      <td class="col-status status-ok">в составе</td>
+                      <td class="col-status status-ok">заявлен</td>
                     </tr>
                     <!-- Leaders Questionable (Orange) - 0.5+ ppg, missed last match -->
                     <tr v-for="p in match.lineups.home.players.leaders_questionable" :key="'quest-'+p.name" class="row-orange">
@@ -256,7 +256,7 @@
                       <td class="col-stat">{{ p.assists }}</td>
                       <td class="col-stat col-points">{{ p.points }}</td>
                       <td class="col-stat col-eff">{{ p.efficiency?.toFixed(2) || '0.00' }}</td>
-                      <td class="col-status status-ok">в составе</td>
+                      <td class="col-status status-ok">заявлен</td>
                     </tr>
                     <!-- Leaders Questionable (Orange) - 0.5+ ppg, missed last match -->
                     <tr v-for="p in match.lineups.away.players.leaders_questionable" :key="'quest-'+p.name" class="row-orange">

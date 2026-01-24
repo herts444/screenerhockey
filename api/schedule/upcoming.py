@@ -460,13 +460,13 @@ async def parse_flashscore_data(data: str, target_league: str, team_names_ru: di
                     "date": game_date.strftime("%d.%m.%Y %H:%M"),
                     "date_iso": game_date.isoformat(),
                     "home_team": {
-                        "abbrev": home[:3].upper(),
+                        "abbrev": home,  # Use full team name for Flashscore leagues
                         "name": home,
                         "name_ru": team_names_ru.get(home, home),
                         "logo_url": f"{FLASHSCORE_LOGO_BASE}{home_logo}" if home_logo else ""
                     },
                     "away_team": {
-                        "abbrev": away[:3].upper(),
+                        "abbrev": away,  # Use full team name for Flashscore leagues
                         "name": away,
                         "name_ru": team_names_ru.get(away, away),
                         "logo_url": f"{FLASHSCORE_LOGO_BASE}{away_logo}" if away_logo else ""

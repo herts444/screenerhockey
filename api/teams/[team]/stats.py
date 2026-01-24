@@ -668,9 +668,14 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({"error": "Invalid path"}).encode())
             return
 
-        team_abbrev = match.group(1).upper()
+        from urllib.parse import unquote
+        team_abbrev = unquote(match.group(1))  # URL decode team name
         league = params.get("league", ["NHL"])[0].upper()
         last_n = int(params.get("last_n", ["0"])[0])
+
+        # Uppercase only for leagues with standardized abbrevs
+        if league not in ("KHL", "CZECH", "DENMARK", "AUSTRIA"):
+            team_abbrev = team_abbrev.upper()
 
         try:
             stats = asyncio.run(get_team_stats(league, team_abbrev, last_n))
