@@ -394,16 +394,16 @@ FLASHSCORE_LOGO_BASE = "https://static.flashscore.com/res/image/data/"
 
 
 async def parse_flashscore_data(data: str, target_league: str, team_names_ru: dict) -> list:
-    """Parse Flashscore feed data and extract matches for a specific league."""
+    """Parse Flashscore feed data and extract matches for a specific league.
+    Uses same parsing approach as flashscore_service.py which works correctly.
+    """
     if not data or data.strip() in ('0', ''):
         return []
 
     items = data.split('¬')
 
-    leagues = {}
-    current_league = None
-    current_match = {}
-
+    # Group items into dicts like flashscore_service.py does
+    data_list = [{}]
     for item in items:
         if '÷' not in item:
             continue
@@ -411,71 +411,67 @@ async def parse_flashscore_data(data: str, target_league: str, team_names_ru: di
         key = parts[0]
         value = parts[-1] if len(parts) > 1 else ''
 
-        if key == '~ZA':
-            current_league = value
-            if current_league not in leagues:
-                leagues[current_league] = []
-        elif key == '~AA':
-            if current_match and current_league:
-                leagues[current_league].append(current_match)
-            current_match = {'id': value}
-        elif key == 'AE':
-            current_match['home'] = value
-        elif key == 'AF':
-            current_match['away'] = value
-        elif key == 'AG':
-            current_match['home_score'] = value
-        elif key == 'AH':
-            current_match['away_score'] = value
-        elif key == 'AB':
-            current_match['status'] = value  # 1=scheduled, 3=finished
-        elif key == 'AD':
-            current_match['timestamp'] = value
-        elif key == 'OA':
-            current_match['home_logo'] = value
-        elif key == 'OB':
-            current_match['away_logo'] = value
-
-    if current_match and current_league:
-        leagues[current_league].append(current_match)
+        if '~' in key:
+            data_list.append({key: value})
+        else:
+            data_list[-1].update({key: value})
 
     result = []
-    for league_name, matches in leagues.items():
-        if target_league.lower() in league_name.lower():
-            for m in matches:
-                home = m.get('home', '')
-                away = m.get('away', '')
-                timestamp = m.get('timestamp', '')
-                home_logo = m.get('home_logo', '')
-                away_logo = m.get('away_logo', '')
+    league_name = ''
 
-                try:
-                    game_date = datetime.fromtimestamp(int(timestamp), tz=timezone.utc)
-                    game_date = to_kyiv_time(game_date)
-                except:
-                    continue
+    for game in data_list:
+        keys = list(game.keys())
+        if not keys:
+            continue
 
-                result.append({
-                    "game_id": f"fs_{m.get('id', '')}",
-                    "date": game_date.strftime("%d.%m.%Y %H:%M"),
-                    "date_iso": game_date.isoformat(),
-                    "home_team": {
-                        "abbrev": home,  # Use full team name for Flashscore leagues
-                        "name": home,
-                        "name_ru": team_names_ru.get(home, home),
-                        "logo_url": f"{FLASHSCORE_LOGO_BASE}{home_logo}" if home_logo else ""
-                    },
-                    "away_team": {
-                        "abbrev": away,  # Use full team name for Flashscore leagues
-                        "name": away,
-                        "name_ru": team_names_ru.get(away, away),
-                        "logo_url": f"{FLASHSCORE_LOGO_BASE}{away_logo}" if away_logo else ""
-                    },
-                    "venue": "",
-                    "status": m.get('status', ''),
-                    "home_score": m.get('home_score'),
-                    "away_score": m.get('away_score')
-                })
+        # Check for league header
+        if '~ZA' in keys[0]:
+            league_name = game.get('~ZA', '')
+
+        # Check for match entry
+        if 'AA' in keys[0]:
+            # Filter by target league
+            if target_league.lower() not in league_name.lower():
+                continue
+
+            match_id = game.get('~AA', '')
+            home = game.get('AE', '')
+            away = game.get('AF', '')
+            timestamp = game.get('AD', '')
+            status = game.get('AB', '')
+            home_logo = game.get('OA', '')
+            away_logo = game.get('OB', '')
+            home_score = game.get('AG', '')
+            away_score = game.get('AH', '')
+
+            try:
+                game_date = datetime.fromtimestamp(int(timestamp), tz=timezone.utc)
+                game_date = to_kyiv_time(game_date)
+            except:
+                continue
+
+            result.append({
+                "game_id": f"fs_{match_id}",
+                "date": game_date.strftime("%d.%m.%Y %H:%M"),
+                "date_iso": game_date.isoformat(),
+                "home_team": {
+                    "abbrev": home,
+                    "name": home,
+                    "name_ru": team_names_ru.get(home, home),
+                    "logo_url": f"{FLASHSCORE_LOGO_BASE}{home_logo}" if home_logo else ""
+                },
+                "away_team": {
+                    "abbrev": away,
+                    "name": away,
+                    "name_ru": team_names_ru.get(away, away),
+                    "logo_url": f"{FLASHSCORE_LOGO_BASE}{away_logo}" if away_logo else ""
+                },
+                "venue": "",
+                "status": status,
+                "home_score": home_score,
+                "away_score": away_score,
+                "league": league_name
+            })
 
     return sorted(result, key=lambda g: g.get("date_iso", ""))
 
