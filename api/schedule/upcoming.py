@@ -480,7 +480,7 @@ async def get_flashscore_schedule(league: str, days: int) -> list:
     """Get schedule from Flashscore API for any league."""
     league_config = {
         "KHL": ("KHL", KHL_TEAM_NAMES_RU),
-        "CZECH": ("Extraliga", CZECH_TEAM_NAMES_RU),
+        "CZECH": ("Maxa liga", CZECH_TEAM_NAMES_RU),  # Was renamed from Extraliga
         "DENMARK": ("Metal Ligaen", DENMARK_TEAM_NAMES_RU),
         "AUSTRIA": ("ICE Hockey League", AUSTRIA_TEAM_NAMES_RU),
     }

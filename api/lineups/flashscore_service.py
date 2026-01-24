@@ -20,7 +20,7 @@ LEAGUE_NAME_PATTERNS = {
     "AHL": ["AHL"],
     "LIIGA": ["Liiga"],
     "DEL": ["DEL"],
-    "CZECH": ["Extraliga"],
+    "CZECH": ["Maxa liga"],  # Was renamed from Extraliga
     "DENMARK": ["Metal Ligaen"],
     "AUSTRIA": ["ICE Hockey League"],
 }
