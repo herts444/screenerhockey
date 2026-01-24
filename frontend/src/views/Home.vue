@@ -252,24 +252,6 @@
         </div>
       </div>
 
-      <!-- Legend -->
-      <div v-if="lineupsAllMatches.length > 0" class="lineups-legend">
-        <h4>Обозначения:</h4>
-        <div class="legend-items">
-          <div class="legend-item">
-            <span class="legend-color yellow"></span>
-            <span>Лидеры в составе (>0.5 очков/матч)</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-color orange"></span>
-            <span>Лидеры под вопросом (не играл в последнем матче)</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-color red"></span>
-            <span>Отсутствуют (травма/не заявлен) - по очкам</span>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Stats Tab -->
