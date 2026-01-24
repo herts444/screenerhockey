@@ -49,6 +49,56 @@ DEL_TEAM_NAMES_RU = {
     "STR": "Штраубинг Тайгерс", "Dresdner": "Дрезднер Айслёвен",
 }
 
+AUSTRIA_TEAM_NAMES_RU = {
+    "RBS": "Ред Булл Зальцбург",
+    "VIC": "Вена Кэпиталз",
+    "KAC": "КАЦ Клагенфурт",
+    "VSV": "ВСВ Филлах",
+    "G99": "Грац 99ерс",
+    "HCI": "ХК Инсбрук",
+    "DEC": "Дорнбирн Бульдогс",
+    "BWL": "Блэк Уингс Линц",
+    "AVS": "Фехервар АВ19",
+    "PUS": "Пустерталь Вёльфе",
+    "ZNO": "Орли Знойимо",
+    "BRC": "Братислава Кэпиталз",
+    "HCB": "ХК Больцано",
+    "ASH": "Азиаго Хоккей",
+    "TWK": "ТВК Инсбрук",
+}
+
+SWISS_TEAM_NAMES_RU = {
+    "ZSC": "Цюрих Лайонс",
+    "SCB": "СК Берн",
+    "EVZ": "ЭВ Цуг",
+    "HCL": "ХК Лугано",
+    "FRI": "Фрибур-Готтерон",
+    "LAU": "Лозанна",
+    "LHC": "Лозанна ХК",
+    "KLO": "ЭХК Клотен",
+    "SCRJ": "Раппершвиль-Йона Лейкерс",
+    "GEN": "Женева-Сервет",
+    "GSH": "Женева-Сервет",
+    "BIE": "ЭХК Биль",
+    "EHCB": "ЭХК Биль",
+    "DAV": "ХК Давос",
+    "HCD": "ХК Давос",
+    "AMB": "ХК Амбри-Пиотта",
+    "HCA": "ХК Амбри-Пиотта",
+    "SCL": "СЦЛ Тигерс",
+    "LAN": "СЦЛ Тигерс",
+    "AJO": "ХК Ажуа",
+}
+
+# Known Swiss National League teams (for filtering)
+NL_TEAMS = {
+    "ZSC Lions", "SC Bern", "EV Zug", "HC Lugano",
+    "Fribourg-Gottéron", "Lausanne HC", "EHC Kloten",
+    "SC Rapperswil-Jona Lakers", "Genève-Servette HC",
+    "EHC Biel-Bienne", "HC Davos", "HC Ambri-Piotta",
+    "SCL Tigers", "HC Ajoie"
+}
+
 
 async def get_nhl_teams():
     async with httpx.AsyncClient(timeout=30.0) as client:
@@ -127,6 +177,95 @@ async def get_del_teams():
     return teams
 
 
+async def get_austria_teams():
+    """Get Austria ICE HL teams from S3 API"""
+    base_url = "https://s3.dualstack.eu-west-1.amazonaws.com/icehl.hokejovyzapis.cz"
+    season = "2025"
+    league_id = "1"
+
+    async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
+        url = f"{base_url}/data/export/season/{season}/league/{league_id}/schedule_export.json"
+        response = await client.get(url)
+        response.raise_for_status()
+        all_matches = response.json()
+
+    teams = {}
+    for match in all_matches:
+        for team_key in ["home", "guest"]:
+            team = match.get(team_key, {})
+            team_id = str(team.get("id", ""))
+            abbrev = team.get("abbr", "")
+            if team_id and team_id not in teams:
+                teams[team_id] = {
+                    "abbrev": abbrev,
+                    "name": team.get("name", ""),
+                    "name_ru": AUSTRIA_TEAM_NAMES_RU.get(abbrev, team.get("name", "")),
+                    "logo_url": team.get("logo", "")
+                }
+
+    return list(teams.values())
+
+
+def is_nl_team(team_name: str) -> bool:
+    """Check if team is in Swiss National League"""
+    if not team_name:
+        return False
+    if team_name in NL_TEAMS:
+        return True
+    name_lower = team_name.lower()
+    for nl_team in NL_TEAMS:
+        if nl_team.lower() in name_lower or name_lower in nl_team.lower():
+            return True
+    return False
+
+
+async def get_swiss_teams():
+    """Get Swiss National League teams from SIHF API"""
+    base_url = "https://data.sihf.ch/Statistic/api/cms"
+    league_id = "1"
+
+    async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
+        # Get first page to collect teams
+        url = f"{base_url}/cache600?alias=results&searchQuery={league_id}//&page=1"
+        response = await client.get(url)
+        response.raise_for_status()
+        data = response.json()
+        total_pages = data.get("pages", 1)
+
+        teams = {}
+        for page in range(1, total_pages + 1):
+            if page > 1:
+                url = f"{base_url}/cache600?alias=results&searchQuery={league_id}//&page={page}"
+                response = await client.get(url)
+                data = response.json()
+
+            rows = data.get("data", [])
+            for row in rows:
+                if not isinstance(row, list) or len(row) < 5:
+                    continue
+
+                try:
+                    home_team = row[3] if isinstance(row[3], dict) else {}
+                    away_team = row[4] if isinstance(row[4], dict) else {}
+
+                    for team in [home_team, away_team]:
+                        team_id = str(team.get("id", ""))
+                        team_name = team.get("name", "")
+                        abbrev = team.get("acronym", "")
+
+                        if team_id and team_id not in teams and is_nl_team(team_name):
+                            teams[team_id] = {
+                                "abbrev": abbrev,
+                                "name": team_name,
+                                "name_ru": SWISS_TEAM_NAMES_RU.get(abbrev, team_name),
+                                "logo_url": None
+                            }
+                except:
+                    continue
+
+    return list(teams.values())
+
+
 async def get_teams(league: str):
     if league == "NHL":
         return await get_nhl_teams()
@@ -136,6 +275,10 @@ async def get_teams(league: str):
         return await get_liiga_teams()
     elif league == "DEL":
         return await get_del_teams()
+    elif league == "AUSTRIA":
+        return await get_austria_teams()
+    elif league == "SWISS":
+        return await get_swiss_teams()
     return []
 
 

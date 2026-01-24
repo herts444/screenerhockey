@@ -153,6 +153,54 @@ AUSTRIA_TEAM_NAMES_RU = {
     "Bratislava Capitals": "Братислава Кэпиталз",
     "Bolzano": "ХК Больцано",
     "Asiago": "Азиаго Хоккей",
+    # ICE HL S3 API abbreviations
+    "RBS": "Ред Булл Зальцбург",
+    "VIC": "Вена Кэпиталз",
+    "VSV": "ВСВ Филлах",
+    "G99": "Грац 99ерс",
+    "HCI": "ХК Инсбрук",
+    "DEC": "Дорнбирн Бульдогс",
+    "BWL": "Блэк Уингс Линц",
+    "AVS": "Фехервар АВ19",
+    "PUS": "Пустерталь Вёльфе",
+    "ZNO": "Орли Знойимо",
+    "BRC": "Братислава Кэпиталз",
+    "HCB": "ХК Больцано",
+    "ASH": "Азиаго Хоккей",
+    "TWK": "ТВК Инсбрук",
+}
+
+# Swiss National League Team Names
+SWISS_TEAM_NAMES_RU = {
+    "ZSC": "Цюрих Лайонс",
+    "SCB": "СК Берн",
+    "EVZ": "ЭВ Цуг",
+    "HCL": "ХК Лугано",
+    "FRI": "Фрибур-Готтерон",
+    "LAU": "Лозанна",
+    "LHC": "Лозанна ХК",
+    "KLO": "ЭХК Клотен",
+    "SCRJ": "Раппершвиль-Йона Лейкерс",
+    "GEN": "Женева-Сервет",
+    "GSH": "Женева-Сервет",
+    "BIE": "ЭХК Биль",
+    "EHCB": "ЭХК Биль",
+    "DAV": "ХК Давос",
+    "HCD": "ХК Давос",
+    "AMB": "ХК Амбри-Пиотта",
+    "HCA": "ХК Амбри-Пиотта",
+    "SCL": "СЦЛ Тигерс",
+    "LAN": "СЦЛ Тигерс",
+    "AJO": "ХК Ажуа",
+}
+
+# Known Swiss National League teams (for filtering)
+NL_TEAMS = {
+    "ZSC Lions", "SC Bern", "EV Zug", "HC Lugano",
+    "Fribourg-Gottéron", "Lausanne HC", "EHC Kloten",
+    "SC Rapperswil-Jona Lakers", "Genève-Servette HC",
+    "EHC Biel-Bienne", "HC Davos", "HC Ambri-Piotta",
+    "SCL Tigers", "HC Ajoie"
 }
 
 # Flashscore API configuration
@@ -393,6 +441,198 @@ async def get_del_schedule(days: int):
 FLASHSCORE_LOGO_BASE = "https://static.flashscore.com/res/image/data/"
 
 
+def is_nl_team(team_name: str) -> bool:
+    """Check if team is in Swiss National League"""
+    if not team_name:
+        return False
+    if team_name in NL_TEAMS:
+        return True
+    name_lower = team_name.lower()
+    for nl_team in NL_TEAMS:
+        if nl_team.lower() in name_lower or name_lower in nl_team.lower():
+            return True
+    return False
+
+
+async def get_austria_schedule(days: int):
+    """Get Austria ICE HL schedule from S3 API"""
+    base_url = "https://s3.dualstack.eu-west-1.amazonaws.com/icehl.hokejovyzapis.cz"
+    season = "2025"
+    league_id = "1"
+
+    async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
+        url = f"{base_url}/data/export/season/{season}/league/{league_id}/schedule_export.json"
+        response = await client.get(url)
+        response.raise_for_status()
+        all_matches = response.json()
+
+    # Use Kyiv time for date calculations
+    now_kyiv = datetime.now(KYIV_TZ)
+    start = datetime(now_kyiv.year, now_kyiv.month, now_kyiv.day, tzinfo=KYIV_TZ)
+    end = start + timedelta(days=days + 1)
+
+    result = []
+    seen_ids = set()
+
+    for match in all_matches:
+        match_id = match.get("id")
+        if match_id in seen_ids:
+            continue
+
+        # Skip finished matches
+        if match.get("status") == "AFTER_MATCH":
+            continue
+
+        game_date_str = match.get("start_date", "")
+        if not game_date_str:
+            continue
+
+        try:
+            # Format: "2025-09-12 19:15:00"
+            game_date = datetime.strptime(game_date_str, "%Y-%m-%d %H:%M:%S")
+            game_date = game_date.replace(tzinfo=KYIV_TZ)
+            if not (start <= game_date < end):
+                continue
+        except:
+            continue
+
+        seen_ids.add(match_id)
+
+        home = match.get("home", {})
+        away = match.get("guest", {})
+        home_abbrev = home.get("abbr", "")
+        away_abbrev = away.get("abbr", "")
+
+        result.append({
+            "game_id": f"austria_{match_id}",
+            "date": game_date.strftime("%d.%m.%Y %H:%M"),
+            "date_iso": game_date.isoformat(),
+            "home_team": {
+                "abbrev": home_abbrev,
+                "name": home.get("name", home_abbrev),
+                "name_ru": AUSTRIA_TEAM_NAMES_RU.get(home_abbrev, home.get("name", home_abbrev)),
+                "logo_url": home.get("logo", "")
+            },
+            "away_team": {
+                "abbrev": away_abbrev,
+                "name": away.get("name", away_abbrev),
+                "name_ru": AUSTRIA_TEAM_NAMES_RU.get(away_abbrev, away.get("name", away_abbrev)),
+                "logo_url": away.get("logo", "")
+            },
+            "venue": ""
+        })
+
+    return sorted(result, key=lambda g: g.get("date_iso", ""))
+
+
+async def get_swiss_schedule(days: int):
+    """Get Swiss National League schedule from SIHF API"""
+    base_url = "https://data.sihf.ch/Statistic/api/cms"
+    league_id = "1"
+
+    async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
+        # Get all pages of results
+        all_matches = []
+        page = 1
+
+        url = f"{base_url}/cache600?alias=results&searchQuery={league_id}//&page={page}"
+        response = await client.get(url)
+        response.raise_for_status()
+        data = response.json()
+        total_pages = data.get("pages", 1)
+
+        for page in range(1, total_pages + 1):
+            if page > 1:
+                url = f"{base_url}/cache600?alias=results&searchQuery={league_id}//&page={page}"
+                response = await client.get(url)
+                data = response.json()
+
+            rows = data.get("data", [])
+            for row in rows:
+                if not isinstance(row, list) or len(row) < 9:
+                    continue
+
+                try:
+                    date_str = row[1] if isinstance(row[1], str) else ""
+                    time_str = row[2] if isinstance(row[2], str) else ""
+                    home_team = row[3] if isinstance(row[3], dict) else {}
+                    away_team = row[4] if isinstance(row[4], dict) else {}
+                    status = row[8] if isinstance(row[8], dict) else {}
+
+                    is_finished = status.get("id") == 12 or status.get("percent", 0) == 100
+                    if is_finished:
+                        continue
+
+                    home_name = home_team.get("name", "")
+                    away_name = away_team.get("name", "")
+
+                    # Filter for National League only
+                    if not is_nl_team(home_name) or not is_nl_team(away_name):
+                        continue
+
+                    all_matches.append({
+                        "date": date_str,
+                        "time": time_str,
+                        "home": {
+                            "id": str(home_team.get("id", "")),
+                            "name": home_name,
+                            "abbrev": home_team.get("acronym", "")
+                        },
+                        "away": {
+                            "id": str(away_team.get("id", "")),
+                            "name": away_name,
+                            "abbrev": away_team.get("acronym", "")
+                        }
+                    })
+                except:
+                    continue
+
+    # Use Kyiv time for date calculations
+    now_kyiv = datetime.now(KYIV_TZ)
+    start = datetime(now_kyiv.year, now_kyiv.month, now_kyiv.day, tzinfo=KYIV_TZ)
+    end = start + timedelta(days=days + 1)
+
+    result = []
+    for match in all_matches:
+        date_str = match.get("date", "")
+        time_str = match.get("time", "00:00")
+
+        try:
+            # Format: "DD.MM.YYYY HH:MM"
+            game_date = datetime.strptime(f"{date_str} {time_str}", "%d.%m.%Y %H:%M")
+            game_date = game_date.replace(tzinfo=KYIV_TZ)
+            if not (start <= game_date < end):
+                continue
+        except:
+            continue
+
+        home = match.get("home", {})
+        away = match.get("away", {})
+        home_abbrev = home.get("abbrev", "")
+        away_abbrev = away.get("abbrev", "")
+
+        result.append({
+            "game_id": f"swiss_{home.get('id')}_{away.get('id')}_{date_str}",
+            "date": game_date.strftime("%d.%m.%Y %H:%M"),
+            "date_iso": game_date.isoformat(),
+            "home_team": {
+                "abbrev": home_abbrev,
+                "name": home.get("name", home_abbrev),
+                "name_ru": SWISS_TEAM_NAMES_RU.get(home_abbrev, home.get("name", home_abbrev)),
+                "logo_url": None
+            },
+            "away_team": {
+                "abbrev": away_abbrev,
+                "name": away.get("name", away_abbrev),
+                "name_ru": SWISS_TEAM_NAMES_RU.get(away_abbrev, away.get("name", away_abbrev)),
+                "logo_url": None
+            },
+            "venue": ""
+        })
+
+    return sorted(result, key=lambda g: g.get("date_iso", ""))
+
+
 async def parse_flashscore_data(data: str, target_league: str, team_names_ru: dict) -> list:
     """Parse Flashscore feed data and extract matches for a specific league.
     Uses same parsing approach as flashscore_service.py which works correctly.
@@ -514,7 +754,11 @@ async def get_schedule(league: str, days: int):
         return await get_liiga_schedule(days)
     elif league == "DEL":
         return await get_del_schedule(days)
-    elif league.upper() in ("KHL", "CZECH", "DENMARK", "AUSTRIA"):
+    elif league.upper() == "AUSTRIA":
+        return await get_austria_schedule(days)
+    elif league.upper() == "SWISS":
+        return await get_swiss_schedule(days)
+    elif league.upper() in ("KHL", "CZECH", "DENMARK"):
         return await get_flashscore_schedule(league, days)
     return []
 

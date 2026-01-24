@@ -474,7 +474,8 @@ export default {
         DEL: { games: [], statsCache: {}, loaded: false },
         CZECH: { games: [], statsCache: {}, loaded: false },
         DENMARK: { games: [], statsCache: {}, loaded: false },
-        AUSTRIA: { games: [], statsCache: {}, loaded: false }
+        AUSTRIA: { games: [], statsCache: {}, loaded: false },
+        SWISS: { games: [], statsCache: {}, loaded: false }
       },
       status: null,
       loading: false,
@@ -495,7 +496,8 @@ export default {
         { code: 'DEL', name: 'Германия', name_ru: 'Германия' },
         { code: 'CZECH', name: 'Чехия', name_ru: 'Чехия' },
         { code: 'DENMARK', name: 'Дания', name_ru: 'Дания' },
-        { code: 'AUSTRIA', name: 'Австрия', name_ru: 'Австрия' }
+        { code: 'AUSTRIA', name: 'Австрия', name_ru: 'Австрия' },
+        { code: 'SWISS', name: 'Швейцария', name_ru: 'Швейцария' }
       ],
       // Lineups tab data - same leagues as stats tab
       lineupsLeagues: [
@@ -506,7 +508,8 @@ export default {
         { code: 'DEL', name: 'Германия' },
         { code: 'CZECH', name: 'Чехия' },
         { code: 'DENMARK', name: 'Дания' },
-        { code: 'AUSTRIA', name: 'Австрия' }
+        { code: 'AUSTRIA', name: 'Австрия' },
+        { code: 'SWISS', name: 'Швейцария' }
       ],
       lineupsSelectedLeague: 'KHL',
       lineupsSelectedDay: 0,
