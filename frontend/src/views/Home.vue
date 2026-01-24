@@ -1577,12 +1577,12 @@ export default {
 }
 
 .lineup-stats-table .row-orange {
-  background: rgba(255, 152, 0, 0.15);
-  border-left: 3px solid #ff9800;
+  background: rgba(30, 64, 175, 0.25);
+  border-left: 3px solid #1e40af;
 }
 
 .lineup-stats-table .row-orange:hover {
-  background: rgba(255, 152, 0, 0.25);
+  background: rgba(30, 64, 175, 0.35);
 }
 
 .lineup-stats-table .row-red {
@@ -1601,7 +1601,7 @@ export default {
 }
 
 .status-quest {
-  color: #ff9800;
+  color: #60a5fa;
   font-weight: 500;
 }
 
