@@ -38,6 +38,13 @@ LEAGUE_NAME_PATTERNS = {
 
 HEADERS = {"x-fsign": "SW9D1eZo"}
 
+# Headers for HTML page parsing (need User-Agent for regular pages)
+PAGE_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
+}
+
 
 def is_in_season(season: str) -> bool:
     """Check if current date is within the season."""
@@ -140,8 +147,8 @@ async def get_team_urls(match_url: str) -> dict:
     Returns:
         Dict with 'home' and 'away' team URLs
     """
-    async with httpx.AsyncClient() as client:
-        response = await client.get(match_url, headers=HEADERS, timeout=30.0)
+    async with httpx.AsyncClient(follow_redirects=True) as client:
+        response = await client.get(match_url, headers=PAGE_HEADERS, timeout=30.0)
         html_content = response.text
 
     soup = BeautifulSoup(html_content, 'lxml')
@@ -172,8 +179,8 @@ async def get_player_stats(player_url: str, player_name: str, team_name: str) ->
     Returns:
         Dict with player stats including status, games, goals, assists, points
     """
-    async with httpx.AsyncClient() as client:
-        response = await client.get(player_url, headers=HEADERS, timeout=30.0)
+    async with httpx.AsyncClient(follow_redirects=True) as client:
+        response = await client.get(player_url, headers=PAGE_HEADERS, timeout=30.0)
         player_html = response.text
 
     soup = BeautifulSoup(player_html, 'lxml')
@@ -245,8 +252,8 @@ async def get_team_lineup(team_url: str) -> dict:
     Returns:
         Dict with team name and categorized players
     """
-    async with httpx.AsyncClient() as client:
-        response = await client.get(team_url, headers=HEADERS, timeout=30.0)
+    async with httpx.AsyncClient(follow_redirects=True) as client:
+        response = await client.get(team_url, headers=PAGE_HEADERS, timeout=30.0)
         html_content = response.text
 
     soup = BeautifulSoup(html_content, 'lxml')
