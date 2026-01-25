@@ -73,62 +73,65 @@ DEL_TEAM_ABBREV_MAP = {
     "BHV": 5041, "RBM": 2773, "SWW": 2781, "STR": 351,
 }
 
-# KHL Team Names
+# KHL Team Names (matching Flashscore Russian short names)
 KHL_TEAM_NAMES_RU = {
-    "Tractor Chelyabinsk": "Трактор Челябинск",
-    "Magnitogorsk": "Металлург Магнитогорск",
-    "Bars Kazan": "Ак Барс Казань",
-    "Nizhny Novgorod": "Торпедо Нижний Новгород",
-    "SKA St. Petersburg": "СКА Санкт-Петербург",
-    "CSKA Moscow": "ЦСКА Москва",
+    "Tractor Chelyabinsk": "Трактор",  # Flashscore uses short "Трактор"
+    "Magnitogorsk": "Металлург",  # Flashscore uses short "Металлург"
+    "Bars Kazan": "Ак Барс",  # Flashscore uses "Ак Барс"
+    "Nizhny Novgorod": "Торпедо",  # Flashscore uses short "Торпедо"
+    "SKA St. Petersburg": "СКА",  # Flashscore uses short "СКА"
+    "CSKA Moscow": "ЦСКА",  # Flashscore uses short "ЦСКА"
     "Dynamo Moscow": "Динамо Москва",
-    "Lokomotiv Yaroslavl": "Локомотив Ярославль",
-    "Avangard Omsk": "Авангард Омск",
-    "Novosibirsk": "Сибирь Новосибирск",
-    "Yekaterinburg": "Автомобилист Екатеринбург",
-    "Vladivostok": "Адмирал Владивосток",
-    "Khabarovsk": "Амур Хабаровск",
-    "Niznekamsk": "Нефтехимик Нижнекамск",
-    "Severstal": "Северсталь Череповец",
+    "Lokomotiv Yaroslavl": "Локомотив",  # Flashscore uses short "Локомотив"
+    "Avangard Omsk": "Авангард",  # Flashscore uses short "Авангард"
+    "Novosibirsk": "Сибирь",  # Flashscore uses short "Сибирь"
+    "Yekaterinburg": "Автомобилист",  # Flashscore uses short "Автомобилист"
+    "Vladivostok": "Адмирал",  # Flashscore uses short "Адмирал"
+    "Khabarovsk": "Амур",  # Flashscore uses short "Амур"
+    "Niznekamsk": "Нефтехимик",  # Flashscore uses short "Нефтехимик"
+    "Severstal": "Северсталь",  # Flashscore uses short "Северсталь"
     "Dinamo Minsk": "Динамо Минск",
-    "Barys Astana": "Барыс Астана",
+    "Barys Astana": "Барыс",  # Flashscore uses short "Барыс"
     "Kunlun Red Star": "Куньлунь Ред Стар",
-    "Shanghai": "Куньлунь Шанхай",
+    "Shanghai": "Шанхайские Драконы",  # Flashscore uses this name
     "Spartak Moscow": "Спартак Москва",
-    "Vityaz": "Витязь Подольск",
-    "Salavat Yulaev": "Салават Юлаев Уфа",
+    "Vityaz": "Витязь",  # Flashscore uses short "Витязь"
+    "Salavat Yulaev": "Салават Юлаев",  # Flashscore uses short version
+    "Sochi": "Сочи",  # Direct match
+    "Lada": "Лада",  # Direct match
 }
 
-# Czech Extraliga Team Names
+# Czech Extraliga Team Names (mapping to Flashscore English API names)
+# Key: our input name, Value: Flashscore API name (English)
 CZECH_TEAM_NAMES_RU = {
-    "Sparta Praha": "Спарта Прага",
-    "Trinec": "Оцеларжи Тршинец",
-    "Pardubice": "Пардубице",
-    "Liberec": "Били Тигржи Либерец",
-    "Mlada Boleslav": "Млада Болеслав",
-    "Brno": "Комета Брно",
-    "Hradec Kralove": "Градец Кралове",
-    "Plzen": "Шкода Пльзень",
-    "Litvinov": "Литвинов",
-    "Ceske Budejovice": "Мотор Ческе-Будеёвице",
-    "Olomouc": "Оломоуц",
-    "Vitkovice": "Витковице Ридера",
-    "Kladno": "Рытиржи Кладно",
-    "Karlovy Vary": "Энергие Карловы Вары",
+    "Sparta Praha": "Sparta Prague",  # Flashscore uses "Sparta Prague"
+    "Trinec": "Trinec",
+    "Pardubice": "Pardubice",
+    "Liberec": "Liberec",
+    "Mlada Boleslav": "Mlada Boleslav",
+    "Brno": "Kometa Brno",  # Flashscore uses "Kometa Brno"
+    "Hradec Kralove": "Mountfield HK",  # Flashscore uses "Mountfield HK"
+    "Plzen": "Plzen",
+    "Litvinov": "Litvinov",
+    "Ceske Budejovice": "Ceske Budejovice",
+    "Olomouc": "Olomouc",
+    "Vitkovice": "Vitkovice",
+    "Kladno": "Kladno",
+    "Karlovy Vary": "Karlovy Vary",
 }
 
-# Denmark Metal Ligaen Team Names
+# Denmark Metal Ligaen Team Names (mapping to Flashscore English API names)
+# Key: our input name, Value: Flashscore API name (English)
 DENMARK_TEAM_NAMES_RU = {
-    "Rungsted": "Рунгстед Сеир Капитал",
-    "Aalborg": "Ольборг Пайретс",
-    "Frederikshavn": "Фредериксхавн Уайт Хокс",
-    "Herning": "Хернинг Блю Фокс",
-    "Odense": "Оденсе Бульдогс",
-    "Esbjerg": "Эсбьерг Энерджи",
-    "SonderjyskE": "Сённерйюске",
-    "Rodovre": "Рёдовре Майти Буллз",
-    "Gentofte": "Гентофте Старс",
-    "Hvidovre": "Хвидовре Файтерс",
+    "Rungsted": "Rungsted",
+    "Aalborg": "Aalborg",
+    "Frederikshavn": "Frederikshavn",
+    "Herning": "Herning Blue Fox",  # Flashscore uses "Herning Blue Fox"
+    "Odense": "Odense Bulldogs",  # Flashscore uses "Odense Bulldogs"
+    "Esbjerg": "Esbjerg",
+    "SonderjyskE": "Sonderjyske Ishockey",  # Flashscore uses "Sonderjyske Ishockey"
+    "Rodovre": "Rodovre Mighty Bulls",  # Flashscore uses "Rodovre Mighty Bulls"
+    "Herlev": "Herlev",
 }
 
 # Austria ICE Hockey League Team Names
@@ -868,8 +871,18 @@ async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0
 
     tournament_id, stage_id, team_names = league_config[league.upper()]
 
+    # Create reverse mapping: Russian short name -> English name
+    # Flashscore returns short Russian names like "ЦСКА" but we need to match "CSKA Moscow"
+    ru_to_en = {}
+    for en_name, ru_full_name in team_names.items():
+        # Extract short name (first word or known abbreviation)
+        ru_short = ru_full_name.split()[0]  # e.g. "ЦСКА Москва" -> "ЦСКА"
+        ru_to_en[ru_short.lower()] = en_name
+        ru_to_en[ru_full_name.lower()] = en_name
+
     # Fetch all season matches from tournament overview endpoint
-    url = f"{FLASHSCORE_BASE_URL}/to_{tournament_id}_{stage_id}_5_en_5"
+    # Use _ru_5 to get Russian team names (matches our mapping)
+    url = f"{FLASHSCORE_BASE_URL}/to_{tournament_id}_{stage_id}_5_ru_5"
 
     async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
         response = await client.get(url, headers=FLASHSCORE_HEADERS)
@@ -880,7 +893,8 @@ async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0
 
     # Parse matches from the response
     # Format: ~LMS÷W¬LMU÷win¬LME÷{matchId}¬LMH÷{homeTeamId}¬LMA÷{awayTeamId}¬LMC÷{timestamp}¬LMD÷{status}¬LMF÷{homeScore}¬LMG÷{awayScore}¬LMJ÷{homeTeamName}¬LMK÷{awayTeamName}¬LMN÷0¬
-    matches = []
+    # Note: Each match appears multiple times (once per team in standings), so we dedupe by match ID
+    matches_dict = {}  # Use dict to dedupe by match ID
     current_match = {}
 
     for item in data.split('¬'):
@@ -889,29 +903,42 @@ async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0
         key, value = item.split('÷', 1)
 
         if key == '~LMS' or key == 'LMS':
-            # New match block starts
-            if current_match and current_match.get('LMD') == '3':  # status 3 = finished
-                matches.append(current_match)
+            # New match block starts - save previous if valid
+            match_id = current_match.get('LME')
+            status = current_match.get('LMD')
+            # Accept status 3 (regular win), 10 (OT win for home), 11 (OT win for away)
+            if match_id and status in ('3', '10', '11'):
+                matches_dict[match_id] = current_match
             current_match = {'LMS': value}
         elif key.startswith('LM'):
             current_match[key] = value
 
     # Don't forget the last match
-    if current_match and current_match.get('LMD') == '3':
-        matches.append(current_match)
+    match_id = current_match.get('LME')
+    status = current_match.get('LMD')
+    if match_id and status in ('3', '10', '11'):
+        matches_dict[match_id] = current_match
 
-    # Find team matches
+    matches = list(matches_dict.values())
+
+    # Find team matches - need to match English team name with Russian data
     team_name_lower = team_name.lower()
+    # Get Russian name if we have mapping
+    team_ru_full = team_names.get(team_name, team_name)
+    team_ru_short = team_ru_full.split()[0].lower() if team_ru_full else team_name_lower
+
     home_matches = []
     away_matches = []
 
     for m in matches:
         home = m.get('LMJ', '')
         away = m.get('LMK', '')
+        home_lower = home.lower()
+        away_lower = away.lower()
 
-        # Check if team played in this match
-        is_home = home.lower() == team_name_lower
-        is_away = away.lower() == team_name_lower
+        # Check if team played in this match (match by short Russian name or full name)
+        is_home = home_lower == team_ru_short or home_lower == team_ru_full.lower() or home_lower == team_name_lower
+        is_away = away_lower == team_ru_short or away_lower == team_ru_full.lower() or away_lower == team_name_lower
 
         if not is_home and not is_away:
             continue
