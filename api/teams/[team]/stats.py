@@ -619,25 +619,27 @@ async def get_austria_team_stats(team_abbrev: str, last_n: int = 0):
     league_id = "1"
 
     async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
-        # Get all matches
-        url = f"{base_url}/data/export/season/{season}/league/{league_id}/schedule_export.json"
+        # Get all matches using correct endpoint
+        url = f"{base_url}/league-matches/{season}/{league_id}.json"
         response = await client.get(url)
         response.raise_for_status()
-        all_matches = response.json()
+        data = response.json()
+        all_matches = data.get("matches", data) if isinstance(data, dict) else data
 
-    # Find team by abbreviation
+    # Find team by abbreviation (API uses 'shortcut' field)
     team_info = None
     team_id = None
     for match in all_matches:
         for team_key in ["home", "guest"]:
             team = match.get(team_key, {})
-            if team.get("abbr", "").upper() == team_abbrev.upper():
+            team_shortcut = team.get("shortcut", "")
+            if team_shortcut.upper() == team_abbrev.upper():
                 team_id = str(team.get("id", ""))
                 team_info = {
-                    "abbrev": team.get("abbr", ""),
+                    "abbrev": team_shortcut,
                     "name": team.get("name", ""),
-                    "name_ru": AUSTRIA_TEAM_NAMES_RU.get(team.get("abbr", "").upper(), team.get("name", "")),
-                    "logo_url": team.get("logo", "")
+                    "name_ru": AUSTRIA_TEAM_NAMES_RU.get(team_shortcut.upper(), team.get("name", "")),
+                    "logo_url": None
                 }
                 break
         if team_id:
@@ -676,11 +678,11 @@ async def get_austria_team_stats(team_abbrev: str, last_n: int = 0):
         is_home = home_id == team_id
         if is_home:
             team_score, opp_score = home_score, away_score
-            opp_abbrev = away.get("abbr", "")
+            opp_abbrev = away.get("shortcut", "")
             opp_name = away.get("name", "")
         else:
             team_score, opp_score = away_score, home_score
-            opp_abbrev = home.get("abbr", "")
+            opp_abbrev = home.get("shortcut", "")
             opp_name = home.get("name", "")
 
         result = GameResult(
@@ -850,81 +852,81 @@ async def get_swiss_team_stats(team_abbrev: str, last_n: int = 0):
 
 
 async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0):
-    """Get team stats from Flashscore API by fetching past results.
+    """Get team stats from Flashscore API using tournament overview endpoint.
 
-    Similar to NHL approach: fetch historical data, filter for team, apply last_n.
-    Days to fetch based on last_n (teams play ~2-3 games/week):
-    - last_n=0 (season): 150 days
-    - last_n=5: 15 days
-    - last_n=10: 30 days
-    - last_n=15: 45 days
-    - etc.
+    Uses the to_{tournamentId}_{stageId}_5_en_5 endpoint which returns all season matches.
     """
-    import asyncio
-
+    # Tournament configuration: (tournamentId, stageId, team_names_dict)
     league_config = {
-        "KHL": ("KHL", KHL_TEAM_NAMES_RU),
-        "CZECH": ("Maxa liga", CZECH_TEAM_NAMES_RU),
-        "DENMARK": ("Metal Ligaen", DENMARK_TEAM_NAMES_RU),
-        "AUSTRIA": ("ICE Hockey League", AUSTRIA_TEAM_NAMES_RU),
+        "KHL": ("n5fQZ1EF", "rNiLspwC", KHL_TEAM_NAMES_RU),
+        "CZECH": ("fsxDYk54", "K0tmQWEr", CZECH_TEAM_NAMES_RU),
+        "DENMARK": ("ARPjV1SI", "lAcXtgo9", DENMARK_TEAM_NAMES_RU),
     }
 
     if league.upper() not in league_config:
         return {}
 
-    target_league, team_names = league_config[league.upper()]
+    tournament_id, stage_id, team_names = league_config[league.upper()]
 
-    # Calculate days to fetch based on last_n (like NHL does with season data)
-    if last_n == 0:
-        days_to_fetch = 150  # Full season
-    else:
-        days_to_fetch = max(last_n * 3, 20)  # ~3 days per game + buffer
+    # Fetch all season matches from tournament overview endpoint
+    url = f"{FLASHSCORE_BASE_URL}/to_{tournament_id}_{stage_id}_5_en_5"
 
-    # Fetch historical results in parallel batches
-    all_matches = []
-    async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
-        # Fetch in batches of 10 days
-        for batch_start in range(-days_to_fetch, 1, 10):
-            batch_end = min(batch_start + 10, 1)
-            tasks = [
-                fetch_flashscore_day(client, day, target_league)
-                for day in range(batch_start, batch_end)
-            ]
-            results = await asyncio.gather(*tasks, return_exceptions=True)
-            for result in results:
-                if isinstance(result, list):
-                    all_matches.extend(result)
+    async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
+        response = await client.get(url, headers=FLASHSCORE_HEADERS)
+        data = response.text
 
-    # Filter for finished matches (status=3) involving the target team
+    if not data or data.strip() in ('0', ''):
+        return {}
+
+    # Parse matches from the response
+    # Format: ~LMS÷W¬LMU÷win¬LME÷{matchId}¬LMH÷{homeTeamId}¬LMA÷{awayTeamId}¬LMC÷{timestamp}¬LMD÷{status}¬LMF÷{homeScore}¬LMG÷{awayScore}¬LMJ÷{homeTeamName}¬LMK÷{awayTeamName}¬LMN÷0¬
+    matches = []
+    current_match = {}
+
+    for item in data.split('¬'):
+        if '÷' not in item:
+            continue
+        key, value = item.split('÷', 1)
+
+        if key == '~LMS' or key == 'LMS':
+            # New match block starts
+            if current_match and current_match.get('LMD') == '3':  # status 3 = finished
+                matches.append(current_match)
+            current_match = {'LMS': value}
+        elif key.startswith('LM'):
+            current_match[key] = value
+
+    # Don't forget the last match
+    if current_match and current_match.get('LMD') == '3':
+        matches.append(current_match)
+
+    # Find team matches
     team_name_lower = team_name.lower()
     home_matches = []
     away_matches = []
 
-    for m in all_matches:
-        if m.get('status') != '3':
-            continue
+    for m in matches:
+        home = m.get('LMJ', '')
+        away = m.get('LMK', '')
 
-        home = m.get('home', '')
-        away = m.get('away', '')
-        home_score = int(m.get('home_score', 0) or 0)
-        away_score = int(m.get('away_score', 0) or 0)
-        timestamp = m.get('timestamp', '')
-
-        try:
-            game_date = datetime.fromtimestamp(int(timestamp), tz=timezone.utc).replace(tzinfo=None)
-        except:
-            continue
-
-        # Check if team played in this match (exact match on team name)
+        # Check if team played in this match
         is_home = home.lower() == team_name_lower
         is_away = away.lower() == team_name_lower
 
         if not is_home and not is_away:
             continue
 
+        try:
+            home_score = int(m.get('LMF', 0) or 0)
+            away_score = int(m.get('LMG', 0) or 0)
+            timestamp = int(m.get('LMC', 0) or 0)
+            game_date = datetime.fromtimestamp(timestamp, tz=timezone.utc).replace(tzinfo=None)
+        except:
+            continue
+
         if is_home:
             result = GameResult(
-                m.get('id', ''),
+                m.get('LME', ''),
                 game_date,
                 team_names.get(away, away),
                 away[:3].upper(),
@@ -936,7 +938,7 @@ async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0
             home_matches.append(result)
         else:
             result = GameResult(
-                m.get('id', ''),
+                m.get('LME', ''),
                 game_date,
                 team_names.get(home, home),
                 home[:3].upper(),
