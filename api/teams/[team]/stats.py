@@ -632,11 +632,16 @@ async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0
     team_name_lower = team_name.lower()
 
     async with httpx.AsyncClient(timeout=30.0) as client:
-        # Fetch past 60 days of results
+        # Fetch past 60 days of results in parallel batches
         all_matches = []
-        for day_offset in range(-60, 1):  # -60 to 0 (past 60 days)
-            matches = await fetch_flashscore_day(client, day_offset, target_league)
-            all_matches.extend(matches)
+        batch_size = 10  # Fetch 10 days at a time to avoid overwhelming the API
+        for batch_start in range(-60, 1, batch_size):
+            batch_end = min(batch_start + batch_size, 1)
+            tasks = [fetch_flashscore_day(client, day_offset, target_league)
+                     for day_offset in range(batch_start, batch_end)]
+            results = await asyncio.gather(*tasks)
+            for matches in results:
+                all_matches.extend(matches)
 
     # Find team and collect matches
     team_info = None
