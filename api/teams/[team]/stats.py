@@ -854,19 +854,19 @@ async def get_swiss_team_stats(team_abbrev: str, last_n: int = 0):
     return {"team": team_info, "stats": get_full_team_stats(home_matches, away_matches)}
 
 
-async def get_api_sports_team_stats(team_name: str, league: str, last_n: int = 0):
-    """Get team stats from API-Sports.
+def get_db_team_stats(team_name: str, league: str, last_n: int = 0):
+    """Get team stats from database (synced from API-Sports).
 
-    Uses API-Sports Hockey API for KHL, Czech Extraliga, Denmark Metal Ligaen.
+    Reads from pre-synced database for KHL, Czech Extraliga, Denmark Metal Ligaen.
+    Data is synced daily via cron job at 10:00 UTC.
     """
+    import sys
     import os
 
-    # League IDs in API-Sports
-    league_ids = {
-        "KHL": 35,
-        "CZECH": 10,
-        "DENMARK": 12,
-    }
+    # Add backend to path for database models
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', 'backend'))
+
+    from app.models.database import SessionLocal, Team, Game
 
     # Team name mappings for Russian names
     team_names_ru = {
@@ -875,120 +875,96 @@ async def get_api_sports_team_stats(team_name: str, league: str, last_n: int = 0
         "DENMARK": DENMARK_TEAM_NAMES_RU,
     }
 
-    if league.upper() not in league_ids:
+    league_upper = league.upper()
+    if league_upper not in team_names_ru:
         return {}
 
-    league_id = league_ids[league.upper()]
-    names_ru = team_names_ru.get(league.upper(), {})
+    names_ru = team_names_ru.get(league_upper, {})
 
-    api_key = os.getenv("API_SPORTS_KEY", "58586d14273e6cff445ae9c658b00a11")
-    headers = {"x-apisports-key": api_key}
-    base_url = "https://v1.hockey.api-sports.io"
+    db = SessionLocal()
+    try:
+        # Find team by name (case-insensitive partial match)
+        team_name_lower = team_name.lower()
+        teams = db.query(Team).filter(Team.league == league_upper).all()
 
-    async with httpx.AsyncClient(timeout=60.0) as client:
-        # Get all games for the league
-        response = await client.get(
-            f"{base_url}/games",
-            params={"league": league_id, "season": 2024},
-            headers=headers
-        )
-        response.raise_for_status()
-        data = response.json()
-
-    if data.get("errors"):
-        return {}
-
-    games = data.get("response", [])
-
-    # Find team by name (case-insensitive partial match)
-    team_name_lower = team_name.lower()
-    team_info = None
-    team_id = None
-
-    for game in games:
-        for team_key in ["home", "away"]:
-            team_data = game.get("teams", {}).get(team_key, {})
-            api_team_name = team_data.get("name", "")
-
-            # Match by name (partial match)
-            if team_name_lower in api_team_name.lower() or api_team_name.lower() in team_name_lower:
-                team_id = team_data.get("id")
-                team_info = {
-                    "abbrev": api_team_name[:3].upper(),
-                    "name": api_team_name,
-                    "name_ru": names_ru.get(api_team_name, api_team_name),
-                    "logo_url": team_data.get("logo")
-                }
+        team = None
+        for t in teams:
+            # Match by name, abbrev, or name_ru
+            if (team_name_lower in (t.name or "").lower() or
+                (t.name or "").lower() in team_name_lower or
+                team_name_lower == (t.abbrev or "").lower() or
+                team_name_lower in (t.name_ru or "").lower()):
+                team = t
                 break
-        if team_id:
-            break
 
-    if not team_id:
-        return {}
+        if not team:
+            return {}
 
-    # Collect matches for this team
-    home_matches = []
-    away_matches = []
+        # Get home matches
+        home_games = db.query(Game).filter(
+            Game.league == league_upper,
+            Game.home_team_id == team.id,
+            Game.is_finished == True
+        ).order_by(Game.date.desc())
 
-    for game in games:
-        # Only finished games
-        if game.get("status", {}).get("short") != "FT":
-            continue
+        if last_n > 0:
+            home_games = home_games.limit(last_n)
+        home_games = home_games.all()
 
-        home_data = game.get("teams", {}).get("home", {})
-        away_data = game.get("teams", {}).get("away", {})
-        home_id = home_data.get("id")
-        away_id = away_data.get("id")
+        # Get away matches
+        away_games = db.query(Game).filter(
+            Game.league == league_upper,
+            Game.away_team_id == team.id,
+            Game.is_finished == True
+        ).order_by(Game.date.desc())
 
-        if home_id != team_id and away_id != team_id:
-            continue
+        if last_n > 0:
+            away_games = away_games.limit(last_n)
+        away_games = away_games.all()
 
-        scores = game.get("scores", {})
-        home_score = scores.get("home", 0) or 0
-        away_score = scores.get("away", 0) or 0
-
-        try:
-            game_date_str = game.get("date", "")
-            game_date = datetime.fromisoformat(game_date_str.replace("Z", "+00:00")).replace(tzinfo=None)
-        except:
-            continue
-
-        is_home = home_id == team_id
-        if is_home:
-            opp_name = away_data.get("name", "")
-            result = GameResult(
-                str(game.get("id")),
-                game_date,
-                names_ru.get(opp_name, opp_name),
-                opp_name[:3].upper(),
+        # Convert to GameResult format
+        home_matches = []
+        for game in home_games:
+            opponent = game.away_team
+            home_matches.append(GameResult(
+                game.game_id,
+                game.date,
+                opponent.name_ru or opponent.name if opponent else "Unknown",
+                opponent.abbrev if opponent else "UNK",
                 True,
-                home_score,
-                away_score,
-                home_score + away_score
-            )
-            home_matches.append(result)
-        else:
-            opp_name = home_data.get("name", "")
-            result = GameResult(
-                str(game.get("id")),
-                game_date,
-                names_ru.get(opp_name, opp_name),
-                opp_name[:3].upper(),
+                game.home_score or 0,
+                game.away_score or 0,
+                (game.home_score or 0) + (game.away_score or 0)
+            ))
+
+        away_matches = []
+        for game in away_games:
+            opponent = game.home_team
+            away_matches.append(GameResult(
+                game.game_id,
+                game.date,
+                opponent.name_ru or opponent.name if opponent else "Unknown",
+                opponent.abbrev if opponent else "UNK",
                 False,
-                away_score,
-                home_score,
-                home_score + away_score
-            )
-            away_matches.append(result)
+                game.away_score or 0,
+                game.home_score or 0,
+                (game.home_score or 0) + (game.away_score or 0)
+            ))
 
-    home_matches.sort(key=lambda x: x.date, reverse=True)
-    away_matches.sort(key=lambda x: x.date, reverse=True)
+        team_info = {
+            "abbrev": team.abbrev,
+            "name": team.name,
+            "name_ru": team.name_ru or names_ru.get(team.name, team.name),
+            "logo_url": team.logo_url
+        }
 
-    if last_n > 0:
-        home_matches = home_matches[:last_n]
-        away_matches = away_matches[:last_n]
+        return {"team": team_info, "stats": get_full_team_stats(home_matches, away_matches)}
 
-    return {"team": team_info, "stats": get_full_team_stats(home_matches, away_matches)}
+    except Exception as e:
+        print(f"Database error: {e}")
+        return {}
+    finally:
+        db.close()
 
 
 async def get_team_stats(league: str, team_abbrev: str, last_n: int = 0):
@@ -1005,7 +981,7 @@ async def get_team_stats(league: str, team_abbrev: str, last_n: int = 0):
     elif league.upper() == "SWISS":
         return await get_swiss_team_stats(team_abbrev, last_n)
     elif league.upper() in ("KHL", "CZECH", "DENMARK"):
-        return await get_api_sports_team_stats(team_abbrev, league, last_n)
+        return get_db_team_stats(team_abbrev, league, last_n)
     return {}
 
 
