@@ -716,89 +716,31 @@ async def parse_flashscore_data(data: str, target_league: str, team_names_ru: di
     return sorted(result, key=lambda g: g.get("date_iso", ""))
 
 
-def get_db_schedule(league: str, days: int) -> list:
-    """Get schedule from database (synced from API-Sports).
-
-    Reads upcoming games from pre-synced database for KHL, Czech Extraliga, Denmark Metal Ligaen.
-    """
-    import sys
-    import os
-
-    # Add backend to path for database models
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'backend'))
-
-    from app.models.database import SessionLocal, Team, Game
-
-    # Team name mappings for Russian names
-    team_names_ru = {
-        "KHL": KHL_TEAM_NAMES_RU,
-        "CZECH": CZECH_TEAM_NAMES_RU,
-        "DENMARK": DENMARK_TEAM_NAMES_RU,
+async def get_flashscore_schedule(league: str, days: int) -> list:
+    """Get schedule from Flashscore API for KHL, Czech, Denmark."""
+    league_config = {
+        "KHL": ("RUSSIA: KHL", KHL_TEAM_NAMES_RU),
+        "CZECH": ("CZECH REPUBLIC: Extraliga", CZECH_TEAM_NAMES_RU),
+        "DENMARK": ("DENMARK: Metal Ligaen", DENMARK_TEAM_NAMES_RU),
     }
 
-    league_upper = league.upper()
-    if league_upper not in team_names_ru:
+    if league.upper() not in league_config:
         return []
 
-    names_ru = team_names_ru.get(league_upper, {})
+    target_name, team_names = league_config[league.upper()]
 
-    db = SessionLocal()
-    try:
-        # Calculate date range in Kyiv time
-        now_kyiv = datetime.now(KYIV_TZ)
-        start = datetime(now_kyiv.year, now_kyiv.month, now_kyiv.day, tzinfo=KYIV_TZ)
-        end = start + timedelta(days=days + 1)
+    result = []
+    async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
+        for day_offset in range(days):
+            try:
+                url = f"{FLASHSCORE_BASE_URL}/f_4_{day_offset}_3_en_5"
+                response = await client.get(url, headers=FLASHSCORE_HEADERS)
+                matches = await parse_flashscore_data(response.text, target_name, team_names)
+                result.extend(matches)
+            except Exception as e:
+                print(f"Error fetching Flashscore day {day_offset}: {e}")
 
-        # Convert to UTC for database query
-        start_utc = start.astimezone(timezone.utc).replace(tzinfo=None)
-        end_utc = end.astimezone(timezone.utc).replace(tzinfo=None)
-
-        # Get upcoming games (not finished, within date range)
-        games = db.query(Game).filter(
-            Game.league == league_upper,
-            Game.is_finished == False,
-            Game.date >= start_utc,
-            Game.date < end_utc
-        ).order_by(Game.date).all()
-
-        result = []
-        for game in games:
-            home_team = game.home_team
-            away_team = game.away_team
-
-            if not home_team or not away_team:
-                continue
-
-            # Convert game date to Kyiv time
-            game_date_utc = game.date.replace(tzinfo=timezone.utc) if game.date.tzinfo is None else game.date
-            game_date = to_kyiv_time(game_date_utc)
-
-            result.append({
-                "game_id": game.game_id,
-                "date": game_date.strftime("%d.%m.%Y %H:%M"),
-                "date_iso": game_date.isoformat(),
-                "home_team": {
-                    "abbrev": home_team.abbrev,
-                    "name": home_team.name,
-                    "name_ru": home_team.name_ru or names_ru.get(home_team.name, home_team.name),
-                    "logo_url": home_team.logo_url
-                },
-                "away_team": {
-                    "abbrev": away_team.abbrev,
-                    "name": away_team.name,
-                    "name_ru": away_team.name_ru or names_ru.get(away_team.name, away_team.name),
-                    "logo_url": away_team.logo_url
-                },
-                "venue": ""
-            })
-
-        return result
-
-    except Exception as e:
-        print(f"Database error: {e}")
-        return []
-    finally:
-        db.close()
+    return result
 
 
 async def get_schedule(league: str, days: int):
@@ -815,7 +757,7 @@ async def get_schedule(league: str, days: int):
     elif league.upper() == "SWISS":
         return await get_swiss_schedule(days)
     elif league.upper() in ("KHL", "CZECH", "DENMARK"):
-        return get_db_schedule(league, days)
+        return await get_flashscore_schedule(league, days)
     return []
 
 
