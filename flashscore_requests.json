@@ -1,0 +1,370 @@
+{
+  "feed_requests": [
+    {
+      "url": "https://static.flashscore.com/x/js/browsercompatibility_5.js",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      }
+    },
+    {
+      "url": "https://static.flashscore.com/x/js/core_2_2289000000.js",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      }
+    },
+    {
+      "url": "https://static.flashscore.com/x/js/translations-livetable.2.01c607c7.js",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      }
+    },
+    {
+      "url": "https://static.flashscore.com/x/js/translations-myteamsmenu.2.afcc66c0.js",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      }
+    },
+    {
+      "url": "https://static.flashscore.com/x/js/translations-headermenu.2.64d7e024.js",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      }
+    },
+    {
+      "url": "https://static.flashscore.com/x/js/translations-headerpromobar.2.a54dafc7.js",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      }
+    },
+    {
+      "url": "https://static.flashscore.com/x/js/translations-standings.2.26d64c8b.js",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      }
+    },
+    {
+      "url": "https://static.flashscore.com/x/js/translations-wdlicontooltip.2.2587999e.js",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      }
+    },
+    {
+      "url": "https://global.flashscore.ninja/2/x/feed/r_4_1",
+      "method": "OPTIONS",
+      "headers": {
+        "Accept": "*/*",
+        "Access-Control-Request-Headers": "x-fsign",
+        "Access-Control-Request-Method": "GET",
+        "Origin": "https://www.flashscore.com",
+        "Sec-Fetch-Mode": "cors",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+      }
+    },
+    {
+      "url": "https://global.flashscore.ninja/2/x/feed/t_4_158_v9k3aY5F_2_en_1",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "X-GeoIP": "1",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/mc_2",
+      "method": "OPTIONS",
+      "headers": {
+        "Accept": "*/*",
+        "Access-Control-Request-Headers": "x-fsign",
+        "Access-Control-Request-Method": "GET",
+        "Origin": "https://www.flashscore.com",
+        "Sec-Fetch-Mode": "cors",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/nl_4_59",
+      "method": "OPTIONS",
+      "headers": {
+        "Accept": "*/*",
+        "Access-Control-Request-Headers": "x-fsign",
+        "Access-Control-Request-Method": "GET",
+        "Origin": "https://www.flashscore.com",
+        "Sec-Fetch-Mode": "cors",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/nl_0_0",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/ul_4_2",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/tx_n5fQZ1EF_rNiLspwC",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://static.flashscore.com/x/js/prebid-9.25.0.js",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\""
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/to_n5fQZ1EF_rNiLspwC_1",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/r_4_1",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/t_4_158_v9k3aY5F_2_en_1",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/t_4_62_QR1GYbvD_2_en_1",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/tx_fsxDYk54_K0tmQWEr",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/to_fsxDYk54_K0tmQWEr_1",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/t_4_63_lOHn9MoQ_2_en_1",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/tx_ARPjV1SI_lAcXtgo9",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/to_ARPjV1SI_lAcXtgo9_1",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/t_4_25_v73nZK90_2_en_1",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/tx_MX1hEtNq_4hW4JWHl",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    },
+    {
+      "url": "https://2.flashscore.ninja/2/x/feed/to_MX1hEtNq_4hW4JWHl_1",
+      "method": "GET",
+      "headers": {
+        "Referer": "https://www.flashscore.com/",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "x-fsign": "SW9D1eZo"
+      }
+    }
+  ],
+  "all_urls": [
+    "https://2.flashscore.ninja/2/x/feed/tx_n5fQZ1EF_rNiLspwC",
+    "https://imasdk.googleapis.com/js/sdkloader/ima3.js",
+    "https://2.flashscore.ninja/2/x/feed/ul_4_2",
+    "https://static.flashscore.com/x/js/translations-myteamsmenu.2.afcc66c0.js",
+    "https://static.flashscore.com/x/js/translations-standings.2.26d64c8b.js",
+    "https://2.flashscore.ninja/2/x/feed/r_4_1",
+    "https://static.flashscore.com/x/js/core_2_2289000000.js",
+    "https://static.flashscore.com/x/js/browsercompatibility_5.js",
+    "https://2.flashscore.ninja/2/x/feed/nl_4_59",
+    "https://2.flashscore.ninja/2/x/feed/to_n5fQZ1EF_rNiLspwC_1",
+    "https://fonts.googleapis.com/icon?family=Material+Icons",
+    "https://2.flashscore.ninja/2/x/feed/tx_MX1hEtNq_4hW4JWHl",
+    "https://static.flashscore.com/x/js/translations-headerpromobar.2.a54dafc7.js",
+    "https://2.flashscore.ninja/2/x/feed/t_4_62_QR1GYbvD_2_en_1",
+    "https://content.livesportmedia.eu/api/v1/banners?zone-ids=21599&client-type=PC&programmatic=false&backup=true",
+    "https://static.flashscore.com/x/js/translations-wdlicontooltip.2.2587999e.js",
+    "https://cdn.id5-sync.com/api/1.0/id5-api.js",
+    "https://2.flashscore.ninja/2/x/feed/t_4_158_v9k3aY5F_2_en_1",
+    "https://2.flashscore.ninja/2/x/feed/to_ARPjV1SI_lAcXtgo9_1",
+    "https://2.flashscore.ninja/2/x/feed/to_fsxDYk54_K0tmQWEr_1",
+    "https://2.flashscore.ninja/2/x/feed/to_MX1hEtNq_4hW4JWHl_1",
+    "https://global.flashscore.ninja/2/x/feed/t_4_158_v9k3aY5F_2_en_1",
+    "https://global.flashscore.ninja/2/x/feed/r_4_1",
+    "https://2.flashscore.ninja/2/x/feed/t_4_25_v73nZK90_2_en_1",
+    "https://2.flashscore.ninja/2/x/feed/nl_0_0",
+    "https://content.livesportmedia.eu/api/v1/banners?zone-ids=9659%2C9655%2C9645%2C9643&client-type=PC&programmatic=false&backup=true",
+    "https://content.livesportmedia.eu/api/v1/banners?zone-ids=1050%2C68%2C6399%2C6400%2C6401%2C9421%2C256%2C72%2C73%2C74&client-type=PC&programmatic=false",
+    "https://2.flashscore.ninja/2/x/feed/tx_fsxDYk54_K0tmQWEr",
+    "https://2.flashscore.ninja/2/x/feed/tx_ARPjV1SI_lAcXtgo9",
+    "https://2.flashscore.ninja/2/x/feed/t_4_63_lOHn9MoQ_2_en_1",
+    "https://static.flashscore.com/x/js/translations-headermenu.2.64d7e024.js",
+    "https://static.flashscore.com/x/js/prebid-9.25.0.js",
+    "https://api.id5-sync.com/analytics/1313/id5-api-js",
+    "https://static.flashscore.com/x/js/translations-livetable.2.01c607c7.js",
+    "https://2.flashscore.ninja/2/x/feed/mc_2",
+    "https://imasdk.googleapis.com/js/core/bridge3.738.0_en.html"
+  ]
+}
