@@ -16,7 +16,7 @@ from app.models.database import SessionLocal, Team, Game, DataUpdate
 
 
 # API-Sports configuration
-API_SPORTS_KEY = os.getenv("API_SPORTS_KEY", "")
+API_SPORTS_KEY = os.getenv("API_SPORTS_KEY", "58586d14273e6cff445ae9c658b00a11")
 API_SPORTS_BASE_URL = "https://v1.hockey.api-sports.io"
 CURRENT_SEASON = 2024
 
