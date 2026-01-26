@@ -615,243 +615,111 @@ def is_nl_team(team_name: str) -> bool:
     return False
 
 
-async def get_austria_team_stats(team_abbrev: str, last_n: int = 0):
-    """Get Austria ICE HL team stats from S3 API - full season data"""
-    base_url = "https://s3.dualstack.eu-west-1.amazonaws.com/icehl.hokejovyzapis.cz"
-    season = "2025"
-    league_id = "1"
+async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0):
+    """Get team stats from Flashscore API for Austria and Swiss leagues."""
 
-    async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
-        # Get all matches using correct endpoint
-        url = f"{base_url}/league-matches/{season}/{league_id}.json"
-        response = await client.get(url)
-        response.raise_for_status()
-        data = response.json()
-        all_matches = data.get("matches", data) if isinstance(data, dict) else data
+    # League configuration
+    league_config = {
+        "AUSTRIA": ("AUSTRIA: ICE Hockey League", AUSTRIA_TEAM_NAMES_RU),
+        "SWISS": ("SWITZERLAND: National League", SWISS_TEAM_NAMES_RU),
+    }
 
-    # Find team by abbreviation (API uses 'shortcut' field)
-    team_info = None
-    team_id = None
-    for match in all_matches:
-        for team_key in ["home", "guest"]:
-            team = match.get(team_key, {})
-            team_shortcut = team.get("shortcut", "")
-            if team_shortcut.upper() == team_abbrev.upper():
-                team_id = str(team.get("id", ""))
-                team_info = {
-                    "abbrev": team_shortcut,
-                    "name": team.get("name", ""),
-                    "name_ru": AUSTRIA_TEAM_NAMES_RU.get(team_shortcut.upper(), team.get("name", "")),
-                    "logo_url": None
-                }
-                break
-        if team_id:
-            break
-
-    if not team_id:
+    league_upper = league.upper()
+    if league_upper not in league_config:
         return {}
 
-    # Filter finished games for this team
-    home_matches = []
-    away_matches = []
+    target_league, names_ru = league_config[league_upper]
+    team_name_lower = team_name.lower()
 
-    for match in all_matches:
-        if match.get("status") != "AFTER_MATCH":
-            continue
-
-        home = match.get("home", {})
-        away = match.get("guest", {})
-        home_id = str(home.get("id", ""))
-        away_id = str(away.get("id", ""))
-
-        if home_id != team_id and away_id != team_id:
-            continue
-
-        results = match.get("results", {})
-        score = results.get("score", {}).get("final", {})
-        home_score = score.get("score_home", 0) or 0
-        away_score = score.get("score_guest", 0) or 0
-
-        try:
-            game_date_str = match.get("start_date", "")
-            game_date = datetime.strptime(game_date_str.split()[0], "%Y-%m-%d")
-        except:
-            continue
-
-        is_home = home_id == team_id
-        if is_home:
-            team_score, opp_score = home_score, away_score
-            opp_abbrev = away.get("shortcut", "")
-            opp_name = away.get("name", "")
-        else:
-            team_score, opp_score = away_score, home_score
-            opp_abbrev = home.get("shortcut", "")
-            opp_name = home.get("name", "")
-
-        result = GameResult(
-            str(match.get("id", "")),
-            game_date,
-            AUSTRIA_TEAM_NAMES_RU.get(opp_abbrev.upper(), opp_name),
-            opp_abbrev,
-            is_home,
-            team_score,
-            opp_score,
-            team_score + opp_score
-        )
-        if is_home:
-            home_matches.append(result)
-        else:
-            away_matches.append(result)
-
-    home_matches.sort(key=lambda x: x.date, reverse=True)
-    away_matches.sort(key=lambda x: x.date, reverse=True)
-    if last_n > 0:
-        home_matches = home_matches[:last_n]
-        away_matches = away_matches[:last_n]
-
-    return {"team": team_info, "stats": get_full_team_stats(home_matches, away_matches)}
-
-
-async def get_swiss_team_stats(team_abbrev: str, last_n: int = 0):
-    """Get Swiss National League team stats from SIHF API - full season data"""
-    base_url = "https://data.sihf.ch/Statistic/api/cms"
-    league_id = "1"
-
-    async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
-        # Get all pages of results
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        # Fetch past 60 days of results
         all_matches = []
-        page = 1
+        for day_offset in range(-60, 1):  # -60 to 0 (past 60 days)
+            matches = await fetch_flashscore_day(client, day_offset, target_league)
+            all_matches.extend(matches)
 
-        # Get first page
-        url = f"{base_url}/cache600?alias=results&searchQuery={league_id}//&page={page}"
-        response = await client.get(url)
-        response.raise_for_status()
-        data = response.json()
-        total_pages = data.get("pages", 1)
-
-        # Parse all pages
-        for page in range(1, total_pages + 1):
-            if page > 1:
-                url = f"{base_url}/cache600?alias=results&searchQuery={league_id}//&page={page}"
-                response = await client.get(url)
-                data = response.json()
-
-            rows = data.get("data", [])
-            for row in rows:
-                if not isinstance(row, list) or len(row) < 9:
-                    continue
-
-                try:
-                    date_str = row[1] if isinstance(row[1], str) else ""
-                    time_str = row[2] if isinstance(row[2], str) else ""
-                    home_team = row[3] if isinstance(row[3], dict) else {}
-                    away_team = row[4] if isinstance(row[4], dict) else {}
-                    score = row[5] if isinstance(row[5], dict) else {}
-                    status = row[8] if isinstance(row[8], dict) else {}
-
-                    is_finished = status.get("id") == 12 or status.get("percent", 0) == 100
-                    if not is_finished:
-                        continue
-
-                    home_name = home_team.get("name", "")
-                    away_name = away_team.get("name", "")
-
-                    # Filter for National League only
-                    if not is_nl_team(home_name) or not is_nl_team(away_name):
-                        continue
-
-                    all_matches.append({
-                        "date": date_str,
-                        "home": {
-                            "id": str(home_team.get("id", "")),
-                            "name": home_name,
-                            "abbrev": home_team.get("acronym", "")
-                        },
-                        "away": {
-                            "id": str(away_team.get("id", "")),
-                            "name": away_name,
-                            "abbrev": away_team.get("acronym", "")
-                        },
-                        "home_score": int(score.get("homeTeam", 0)) if score.get("homeTeam") else 0,
-                        "away_score": int(score.get("awayTeam", 0)) if score.get("awayTeam") else 0,
-                    })
-                except:
-                    continue
-
-    # Find team by abbreviation
+    # Find team and collect matches
     team_info = None
-    team_id = None
-    for match in all_matches:
-        for team_key in ["home", "away"]:
-            team = match.get(team_key, {})
-            if team.get("abbrev", "").upper() == team_abbrev.upper():
-                team_id = team.get("id", "")
-                team_info = {
-                    "abbrev": team.get("abbrev", ""),
-                    "name": team.get("name", ""),
-                    "name_ru": SWISS_TEAM_NAMES_RU.get(team.get("abbrev", "").upper(), team.get("name", "")),
-                    "logo_url": None
-                }
-                break
-        if team_id:
-            break
-
-    if not team_id:
-        return {}
-
-    # Collect matches for this team
     home_matches = []
     away_matches = []
 
     for match in all_matches:
-        home = match.get("home", {})
-        away = match.get("away", {})
-        home_id = home.get("id", "")
-        away_id = away.get("id", "")
+        home = match.get('home', '')
+        away = match.get('away', '')
+        home_score_str = match.get('home_score', '')
+        away_score_str = match.get('away_score', '')
+        timestamp = match.get('timestamp', '')
+        status = match.get('status', '')
 
-        if home_id != team_id and away_id != team_id:
+        # Only finished matches (status 3 = finished)
+        if status != '3':
             continue
 
-        home_score = match.get("home_score", 0)
-        away_score = match.get("away_score", 0)
+        # Check if team is in this match
+        is_home = team_name_lower in home.lower() or home.lower() in team_name_lower
+        is_away = team_name_lower in away.lower() or away.lower() in team_name_lower
 
+        if not is_home and not is_away:
+            continue
+
+        # Set team info if not set
+        if not team_info:
+            matched_name = home if is_home else away
+            team_info = {
+                "abbrev": matched_name[:3].upper(),
+                "name": matched_name,
+                "name_ru": names_ru.get(matched_name, matched_name),
+                "logo_url": None
+            }
+
+        # Parse scores
         try:
-            game_date = datetime.strptime(match.get("date", ""), "%d.%m.%Y")
+            home_score = int(home_score_str) if home_score_str else 0
+            away_score = int(away_score_str) if away_score_str else 0
+            game_date = datetime.fromtimestamp(int(timestamp)) if timestamp else datetime.now()
         except:
             continue
 
-        is_home = home_id == team_id
         if is_home:
-            team_score, opp_score = home_score, away_score
-            opp_abbrev = away.get("abbrev", "")
-            opp_name = away.get("name", "")
-        else:
-            team_score, opp_score = away_score, home_score
-            opp_abbrev = home.get("abbrev", "")
-            opp_name = home.get("name", "")
-
-        result = GameResult(
-            f"swiss_{match.get('date')}_{home_id}_{away_id}",
-            game_date,
-            SWISS_TEAM_NAMES_RU.get(opp_abbrev.upper(), opp_name),
-            opp_abbrev,
-            is_home,
-            team_score,
-            opp_score,
-            team_score + opp_score
-        )
-        if is_home:
+            opp_name = away
+            result = GameResult(
+                match.get('id', ''),
+                game_date,
+                names_ru.get(opp_name, opp_name),
+                opp_name[:3].upper(),
+                True,
+                home_score,
+                away_score,
+                home_score + away_score
+            )
             home_matches.append(result)
         else:
+            opp_name = home
+            result = GameResult(
+                match.get('id', ''),
+                game_date,
+                names_ru.get(opp_name, opp_name),
+                opp_name[:3].upper(),
+                False,
+                away_score,
+                home_score,
+                home_score + away_score
+            )
             away_matches.append(result)
+
+    if not team_info:
+        return {}
 
     home_matches.sort(key=lambda x: x.date, reverse=True)
     away_matches.sort(key=lambda x: x.date, reverse=True)
+
     if last_n > 0:
         home_matches = home_matches[:last_n]
         away_matches = away_matches[:last_n]
 
     return {"team": team_info, "stats": get_full_team_stats(home_matches, away_matches)}
+
+
 
 
 def get_db_team_stats(team_name: str, league: str, last_n: int = 0):
@@ -976,10 +844,8 @@ async def get_team_stats(league: str, team_abbrev: str, last_n: int = 0):
         return await get_liiga_team_stats(team_abbrev, last_n)
     elif league == "DEL":
         return await get_del_team_stats(team_abbrev, last_n)
-    elif league.upper() == "AUSTRIA":
-        return await get_austria_team_stats(team_abbrev, last_n)
-    elif league.upper() == "SWISS":
-        return await get_swiss_team_stats(team_abbrev, last_n)
+    elif league.upper() in ("AUSTRIA", "SWISS"):
+        return await get_flashscore_team_stats(team_abbrev, league.upper(), last_n)
     elif league.upper() in ("KHL", "CZECH", "DENMARK"):
         return get_db_team_stats(team_abbrev, league, last_n)
     return {}
@@ -1005,7 +871,7 @@ class handler(BaseHTTPRequestHandler):
         last_n = int(params.get("last_n", ["0"])[0])
 
         # Uppercase only for leagues with standardized abbrevs
-        if league not in ("KHL", "CZECH", "DENMARK", "AUSTRIA"):
+        if league not in ("KHL", "CZECH", "DENMARK", "AUSTRIA", "SWISS"):
             team_abbrev = team_abbrev.upper()
 
         try:
