@@ -169,6 +169,12 @@ async def get_leagues():
                 "cached": cache.is_loaded.get("AHL", False)
             },
             {
+                "code": "KHL",
+                "name": "KHL",
+                "name_ru": "КХЛ",
+                "cached": cache.is_loaded.get("KHL", False)
+            },
+            {
                 "code": "LIIGA",
                 "name": "Liiga",
                 "name_ru": "Лиига (Финляндия)",
@@ -187,10 +193,16 @@ async def get_leagues():
                 "cached": cache.is_loaded.get("SWISS", False)
             },
             {
-                "code": "KHL",
-                "name": "KHL",
-                "name_ru": "КХЛ",
-                "cached": False  # No non-.ru API available
+                "code": "CZECH",
+                "name": "Extraliga",
+                "name_ru": "Экстралига (Чехия)",
+                "cached": cache.is_loaded.get("CZECH", False)
+            },
+            {
+                "code": "DENMARK",
+                "name": "Metal Ligaen",
+                "name_ru": "Метал Лигаен (Дания)",
+                "cached": cache.is_loaded.get("DENMARK", False)
             }
         ]
     }

@@ -854,109 +854,113 @@ async def get_swiss_team_stats(team_abbrev: str, last_n: int = 0):
     return {"team": team_info, "stats": get_full_team_stats(home_matches, away_matches)}
 
 
-async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0):
-    """Get team stats from Flashscore API using tournament overview endpoint.
+async def get_api_sports_team_stats(team_name: str, league: str, last_n: int = 0):
+    """Get team stats from API-Sports.
 
-    Uses the to_{tournamentId}_{stageId}_5_en_5 endpoint which returns all season matches.
+    Uses API-Sports Hockey API for KHL, Czech Extraliga, Denmark Metal Ligaen.
     """
-    # Tournament configuration: (tournamentId, stageId, team_names_dict)
-    league_config = {
-        "KHL": ("n5fQZ1EF", "rNiLspwC", KHL_TEAM_NAMES_RU),
-        "CZECH": ("fsxDYk54", "K0tmQWEr", CZECH_TEAM_NAMES_RU),
-        "DENMARK": ("ARPjV1SI", "lAcXtgo9", DENMARK_TEAM_NAMES_RU),
+    import os
+
+    # League IDs in API-Sports
+    league_ids = {
+        "KHL": 35,
+        "CZECH": 10,
+        "DENMARK": 12,
     }
 
-    if league.upper() not in league_config:
+    # Team name mappings for Russian names
+    team_names_ru = {
+        "KHL": KHL_TEAM_NAMES_RU,
+        "CZECH": CZECH_TEAM_NAMES_RU,
+        "DENMARK": DENMARK_TEAM_NAMES_RU,
+    }
+
+    if league.upper() not in league_ids:
         return {}
 
-    tournament_id, stage_id, team_names = league_config[league.upper()]
+    league_id = league_ids[league.upper()]
+    names_ru = team_names_ru.get(league.upper(), {})
 
-    # Create reverse mapping: Russian short name -> English name
-    # Flashscore returns short Russian names like "ЦСКА" but we need to match "CSKA Moscow"
-    ru_to_en = {}
-    for en_name, ru_full_name in team_names.items():
-        # Extract short name (first word or known abbreviation)
-        ru_short = ru_full_name.split()[0]  # e.g. "ЦСКА Москва" -> "ЦСКА"
-        ru_to_en[ru_short.lower()] = en_name
-        ru_to_en[ru_full_name.lower()] = en_name
+    api_key = os.getenv("API_SPORTS_KEY", "58586d14273e6cff445ae9c658b00a11")
+    headers = {"x-apisports-key": api_key}
+    base_url = "https://v1.hockey.api-sports.io"
 
-    # Fetch all season matches from tournament overview endpoint
-    # Use _ru_5 to get Russian team names (matches our mapping)
-    url = f"{FLASHSCORE_BASE_URL}/to_{tournament_id}_{stage_id}_5_ru_5"
+    async with httpx.AsyncClient(timeout=60.0) as client:
+        # Get all games for the league
+        response = await client.get(
+            f"{base_url}/games",
+            params={"league": league_id, "season": 2024},
+            headers=headers
+        )
+        response.raise_for_status()
+        data = response.json()
 
-    async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
-        response = await client.get(url, headers=FLASHSCORE_HEADERS)
-        data = response.text
-
-    if not data or data.strip() in ('0', ''):
+    if data.get("errors"):
         return {}
 
-    # Parse matches from the response
-    # Format: ~LMS÷W¬LMU÷win¬LME÷{matchId}¬LMH÷{homeTeamId}¬LMA÷{awayTeamId}¬LMC÷{timestamp}¬LMD÷{status}¬LMF÷{homeScore}¬LMG÷{awayScore}¬LMJ÷{homeTeamName}¬LMK÷{awayTeamName}¬LMN÷0¬
-    # Note: Each match appears multiple times (once per team in standings), so we dedupe by match ID
-    matches_dict = {}  # Use dict to dedupe by match ID
-    current_match = {}
+    games = data.get("response", [])
 
-    for item in data.split('¬'):
-        if '÷' not in item:
-            continue
-        key, value = item.split('÷', 1)
-
-        if key == '~LMS' or key == 'LMS':
-            # New match block starts - save previous if valid
-            match_id = current_match.get('LME')
-            status = current_match.get('LMD')
-            # Accept status 3 (regular win), 10 (OT win for home), 11 (OT win for away)
-            if match_id and status in ('3', '10', '11'):
-                matches_dict[match_id] = current_match
-            current_match = {'LMS': value}
-        elif key.startswith('LM'):
-            current_match[key] = value
-
-    # Don't forget the last match
-    match_id = current_match.get('LME')
-    status = current_match.get('LMD')
-    if match_id and status in ('3', '10', '11'):
-        matches_dict[match_id] = current_match
-
-    matches = list(matches_dict.values())
-
-    # Find team matches - need to match English team name with Russian data
+    # Find team by name (case-insensitive partial match)
     team_name_lower = team_name.lower()
-    # Get Russian name if we have mapping
-    team_ru_full = team_names.get(team_name, team_name)
-    team_ru_short = team_ru_full.split()[0].lower() if team_ru_full else team_name_lower
+    team_info = None
+    team_id = None
 
+    for game in games:
+        for team_key in ["home", "away"]:
+            team_data = game.get("teams", {}).get(team_key, {})
+            api_team_name = team_data.get("name", "")
+
+            # Match by name (partial match)
+            if team_name_lower in api_team_name.lower() or api_team_name.lower() in team_name_lower:
+                team_id = team_data.get("id")
+                team_info = {
+                    "abbrev": api_team_name[:3].upper(),
+                    "name": api_team_name,
+                    "name_ru": names_ru.get(api_team_name, api_team_name),
+                    "logo_url": team_data.get("logo")
+                }
+                break
+        if team_id:
+            break
+
+    if not team_id:
+        return {}
+
+    # Collect matches for this team
     home_matches = []
     away_matches = []
 
-    for m in matches:
-        home = m.get('LMJ', '')
-        away = m.get('LMK', '')
-        home_lower = home.lower()
-        away_lower = away.lower()
-
-        # Check if team played in this match (match by short Russian name or full name)
-        is_home = home_lower == team_ru_short or home_lower == team_ru_full.lower() or home_lower == team_name_lower
-        is_away = away_lower == team_ru_short or away_lower == team_ru_full.lower() or away_lower == team_name_lower
-
-        if not is_home and not is_away:
+    for game in games:
+        # Only finished games
+        if game.get("status", {}).get("short") != "FT":
             continue
 
+        home_data = game.get("teams", {}).get("home", {})
+        away_data = game.get("teams", {}).get("away", {})
+        home_id = home_data.get("id")
+        away_id = away_data.get("id")
+
+        if home_id != team_id and away_id != team_id:
+            continue
+
+        scores = game.get("scores", {})
+        home_score = scores.get("home", 0) or 0
+        away_score = scores.get("away", 0) or 0
+
         try:
-            home_score = int(m.get('LMF', 0) or 0)
-            away_score = int(m.get('LMG', 0) or 0)
-            timestamp = int(m.get('LMC', 0) or 0)
-            game_date = datetime.fromtimestamp(timestamp, tz=timezone.utc).replace(tzinfo=None)
+            game_date_str = game.get("date", "")
+            game_date = datetime.fromisoformat(game_date_str.replace("Z", "+00:00")).replace(tzinfo=None)
         except:
             continue
 
+        is_home = home_id == team_id
         if is_home:
+            opp_name = away_data.get("name", "")
             result = GameResult(
-                m.get('LME', ''),
+                str(game.get("id")),
                 game_date,
-                team_names.get(away, away),
-                away[:3].upper(),
+                names_ru.get(opp_name, opp_name),
+                opp_name[:3].upper(),
                 True,
                 home_score,
                 away_score,
@@ -964,11 +968,12 @@ async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0
             )
             home_matches.append(result)
         else:
+            opp_name = home_data.get("name", "")
             result = GameResult(
-                m.get('LME', ''),
+                str(game.get("id")),
                 game_date,
-                team_names.get(home, home),
-                home[:3].upper(),
+                names_ru.get(opp_name, opp_name),
+                opp_name[:3].upper(),
                 False,
                 away_score,
                 home_score,
@@ -982,13 +987,6 @@ async def get_flashscore_team_stats(team_name: str, league: str, last_n: int = 0
     if last_n > 0:
         home_matches = home_matches[:last_n]
         away_matches = away_matches[:last_n]
-
-    team_info = {
-        "abbrev": team_name[:3].upper(),
-        "name": team_name,
-        "name_ru": team_names.get(team_name, team_name),
-        "logo_url": None
-    }
 
     return {"team": team_info, "stats": get_full_team_stats(home_matches, away_matches)}
 
@@ -1007,7 +1005,7 @@ async def get_team_stats(league: str, team_abbrev: str, last_n: int = 0):
     elif league.upper() == "SWISS":
         return await get_swiss_team_stats(team_abbrev, last_n)
     elif league.upper() in ("KHL", "CZECH", "DENMARK"):
-        return await get_flashscore_team_stats(team_abbrev, league, last_n)
+        return await get_api_sports_team_stats(team_abbrev, league, last_n)
     return {}
 
 

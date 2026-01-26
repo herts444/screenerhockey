@@ -15,6 +15,7 @@ from .ahl_data_service import AHLDataService
 from .liiga_data_service import LiigaDataService
 from .austria_data_service import AustriaDataService
 from .swiss_data_service import SwissDataService
+from .api_sports_data_service import KHLDataService, CzechDataService, DenmarkDataService
 
 
 class SyncService:
@@ -34,6 +35,9 @@ class SyncService:
         self.liiga_service = LiigaDataService()
         self.austria_service = AustriaDataService()
         self.swiss_service = SwissDataService()
+        self.khl_service = KHLDataService()
+        self.czech_service = CzechDataService()
+        self.denmark_service = DenmarkDataService()
 
     def _get_service(self, league: str):
         """Get appropriate service for league"""
@@ -46,6 +50,12 @@ class SyncService:
             return self.austria_service
         elif league_upper == "SWISS":
             return self.swiss_service
+        elif league_upper == "KHL":
+            return self.khl_service
+        elif league_upper == "CZECH":
+            return self.czech_service
+        elif league_upper == "DENMARK":
+            return self.denmark_service
         return self.nhl_service
 
     async def sync_league(self, league: str, force: bool = False) -> dict:
@@ -118,7 +128,7 @@ class SyncService:
     async def sync_all(self, force: bool = False) -> dict:
         """Sync all leagues"""
         results = {}
-        for league in ["NHL", "AHL", "LIIGA", "AUSTRIA", "SWISS"]:
+        for league in ["NHL", "AHL", "LIIGA", "AUSTRIA", "SWISS", "KHL", "CZECH", "DENMARK"]:
             try:
                 results[league] = await self.sync_league(league, force)
             except Exception as e:
@@ -243,6 +253,9 @@ class SyncService:
         await self.liiga_service.close()
         await self.austria_service.close()
         await self.swiss_service.close()
+        await self.khl_service.close()
+        await self.czech_service.close()
+        await self.denmark_service.close()
 
 
 # Global sync service instance
