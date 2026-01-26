@@ -717,11 +717,13 @@ async def parse_flashscore_data(data: str, target_league: str, team_names_ru: di
 
 
 async def get_flashscore_schedule(league: str, days: int) -> list:
-    """Get schedule from Flashscore API for KHL, Czech, Denmark."""
+    """Get schedule from Flashscore API for KHL, Czech, Denmark, Austria, Swiss."""
     league_config = {
         "KHL": ("RUSSIA: KHL", KHL_TEAM_NAMES_RU),
         "CZECH": ("CZECH REPUBLIC: Extraliga", CZECH_TEAM_NAMES_RU),
         "DENMARK": ("DENMARK: Metal Ligaen", DENMARK_TEAM_NAMES_RU),
+        "AUSTRIA": ("AUSTRIA: ICE Hockey League", AUSTRIA_TEAM_NAMES_RU),
+        "SWISS": ("SWITZERLAND: National League", SWISS_TEAM_NAMES_RU),
     }
 
     if league.upper() not in league_config:
@@ -752,11 +754,7 @@ async def get_schedule(league: str, days: int):
         return await get_liiga_schedule(days)
     elif league == "DEL":
         return await get_del_schedule(days)
-    elif league.upper() == "AUSTRIA":
-        return await get_austria_schedule(days)
-    elif league.upper() == "SWISS":
-        return await get_swiss_schedule(days)
-    elif league.upper() in ("KHL", "CZECH", "DENMARK"):
+    elif league.upper() in ("KHL", "CZECH", "DENMARK", "AUSTRIA", "SWISS"):
         return await get_flashscore_schedule(league, days)
     return []
 
