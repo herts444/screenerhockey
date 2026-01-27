@@ -167,6 +167,7 @@
         <div v-for="match in lineupsAllMatches" :key="match.id" class="lineup-match-block">
           <!-- Match Header -->
           <div class="lineup-match-header">
+            <span class="match-time" v-if="match.timestamp">{{ formatKyivTime(match.timestamp) }}</span>
             <span class="match-title">{{ match.home }} — {{ match.away }}</span>
             <span v-if="match.loading" class="loading-indicator">
               <span class="spinner-small"></span> Загрузка составов...
@@ -611,6 +612,18 @@ export default {
     this.selectFirstAvailableDate()
   },
   methods: {
+    formatKyivTime(timestamp) {
+      if (!timestamp) return ''
+      const date = new Date(timestamp * 1000)
+      // Convert to Kyiv time (UTC+2, or UTC+3 during DST)
+      const kyivTime = date.toLocaleString('ru-RU', {
+        timeZone: 'Europe/Kiev',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+      return kyivTime
+    },
+
     async loadStatus() {
       try {
         this.status = await hockeyApi.getStatus(this.selectedLeague)
@@ -1354,6 +1367,14 @@ export default {
   padding: 12px 16px;
   background: var(--bg-tertiary);
   border-bottom: 1px solid var(--border-color);
+}
+
+.match-time {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--accent-blue);
+  margin-right: 12px;
+  min-width: 45px;
 }
 
 .match-title {

@@ -20,9 +20,10 @@ LEAGUE_NAME_PATTERNS = {
     "AHL": ["AHL"],
     "LIIGA": ["Liiga"],
     "DEL": ["DEL"],
-    "CZECH": ["Maxa liga"],  # Was renamed from Extraliga
+    "CZECH": ["Extraliga"],
     "DENMARK": ["Metal Ligaen"],
     "AUSTRIA": ["ICE Hockey League"],
+    "SWISS": ["National League"],
 }
 
 
@@ -96,6 +97,7 @@ async def get_matches_list(league: str, day_offset: int = 0) -> list:
             match_url = f'https://www.flashscore.com.ua/match/{event_id}/#/match-summary/match-summary'
             team_1 = game.get("AE", "")
             team_2 = game.get("AF", "")
+            timestamp = game.get("AD", "")
 
             result.append({
                 'id': event_id,
@@ -103,7 +105,8 @@ async def get_matches_list(league: str, day_offset: int = 0) -> list:
                 'home': team_1,
                 'away': team_2,
                 'league': league_name,
-                'league_id': league_id
+                'league_id': league_id,
+                'timestamp': int(timestamp) if timestamp else None
             })
 
     return result
