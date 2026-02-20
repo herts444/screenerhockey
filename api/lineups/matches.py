@@ -6,16 +6,85 @@ GET /api/lineups/matches?league=KHL&day=0
 from http.server import BaseHTTPRequestHandler
 import json
 import asyncio
-import sys
-import os
-sys.path.insert(0, os.path.dirname(__file__))
-from _flashscore_service import get_matches_list
+import httpx
+
+
+# Flashscore config
+HEADERS = {"x-fsign": "SW9D1eZo"}
+
+LEAGUE_NAME_PATTERNS = {
+    "KHL": ["KHL"],
+    "NHL": ["NHL"],
+    "AHL": ["AHL"],
+    "LIIGA": ["Liiga"],
+    "DEL": ["DEL"],
+    "CZECH": ["Extraliga"],
+    "DENMARK": ["Metal Ligaen"],
+    "AUSTRIA": ["ICE Hockey League"],
+    "SWISS": ["National League"],
+}
+
+
+async def get_matches_list(league, day_offset=0):
+    feed = f'f_4_{day_offset}_3_en_5'
+    url = f'https://2.flashscore.ninja/2/x/feed/{feed}'
+    target_patterns = LEAGUE_NAME_PATTERNS.get(league.upper(), [])
+
+    try:
+        async with httpx.AsyncClient(follow_redirects=True, timeout=30.0) as client:
+            response = await client.get(url, headers=HEADERS)
+            data = response.text
+            if not data or data.strip() in ('0', ''):
+                return []
+            data = data.split('¬')
+    except Exception as e:
+        print(f"Error fetching feed: {e}")
+        return []
+
+    data_list = [{}]
+    result = []
+
+    for item in data:
+        parts = item.split('÷')
+        key = parts[0]
+        value = parts[-1] if len(parts) > 1 else ''
+        if '~' in key:
+            data_list.append({key: value})
+        else:
+            data_list[-1].update({key: value})
+
+    league_name = ''
+    league_id = ''
+
+    for game in data_list:
+        keys = list(game.keys())
+        if not keys:
+            continue
+        if '~ZA' in keys[0]:
+            league_name = game.get('~ZA', '')
+            league_id = game.get('ZC', '')
+        if 'AA' in keys[0]:
+            is_target_league = any(p.lower() in league_name.lower() for p in target_patterns)
+            if not is_target_league:
+                continue
+            event_id = game.get("~AA", "")
+            match_url = f'https://www.flashscore.com/match/{event_id}/#/match-summary/match-summary'
+            result.append({
+                'id': event_id,
+                'url': match_url,
+                'home': game.get("AE", ""),
+                'away': game.get("AF", ""),
+                'league': league_name,
+                'league_id': league_id,
+                'timestamp': int(game.get("AD", "")) if game.get("AD", "") else None
+            })
+
+    return result
 
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         try:
-            # Parse query parameters
             from urllib.parse import urlparse, parse_qs
             parsed = urlparse(self.path)
             params = parse_qs(parsed.query)
@@ -23,13 +92,11 @@ class handler(BaseHTTPRequestHandler):
             league = params.get('league', ['KHL'])[0].upper()
             day = int(params.get('day', ['0'])[0])
 
-            # Get matches
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             matches = loop.run_until_complete(get_matches_list(league, day))
             loop.close()
 
-            # Group by league
             leagues = {}
             for match in matches:
                 league_name = match.get('league', 'Unknown')
