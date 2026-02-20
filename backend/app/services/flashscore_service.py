@@ -264,7 +264,7 @@ def categorize_players(players: list) -> dict:
     absent = []              # Red: injured/not available
     others = []              # No color: low-efficiency players
 
-    EFFICIENCY_THRESHOLD = 0.5
+    EFFICIENCY_THRESHOLD = 0.3
 
     for player in players:
         efficiency = player.get('efficiency', 0)

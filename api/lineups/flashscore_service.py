@@ -286,7 +286,7 @@ def categorize_players(players: list) -> dict:
     absent = []
     others = []
 
-    EFFICIENCY_THRESHOLD = 0.5
+    EFFICIENCY_THRESHOLD = 0.3
 
     for player in players:
         efficiency = player.get('efficiency', 0)
