@@ -1,1 +1,1 @@
-# Lineups API package
+# Lineups API package - v2
