@@ -7,7 +7,10 @@ GET /api/lineups/lineup?type=team&url=<team_url>    - Get single team
 from http.server import BaseHTTPRequestHandler
 import json
 import asyncio
-from .flashscore_service import get_team_lineup, get_match_lineups
+import sys
+import os
+sys.path.insert(0, os.path.dirname(__file__))
+from _flashscore_service import get_team_lineup, get_match_lineups
 
 
 class handler(BaseHTTPRequestHandler):
