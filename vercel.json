@@ -5,6 +5,8 @@
   "framework": "vue",
   "installCommand": "echo 'skip npm install'",
   "rewrites": [
+    { "source": "/api/lineups/matches", "destination": "/api/lineups-matches" },
+    { "source": "/api/lineups/lineup", "destination": "/api/lineups-lineup" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/value-bets", "destination": "/index.html" },
     { "source": "/lineups", "destination": "/index.html" },
