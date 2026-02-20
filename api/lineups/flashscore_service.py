@@ -41,7 +41,7 @@ def is_in_season(season: str) -> bool:
 async def get_matches_list(league: str, day_offset: int = 0) -> list:
     """
     Get list of matches for a league on a specific day.
-    Uses same endpoint as working bot: d.flashscore.ru.com
+    Uses same endpoint as working bot: 2.flashscore.ninja
     """
     # Feed format: f_4_{day}_3_en_5 for hockey
     feed = f'f_4_{day_offset}_3_en_5'
@@ -94,7 +94,7 @@ async def get_matches_list(league: str, day_offset: int = 0) -> list:
                 continue
 
             event_id = game.get("~AA", "")
-            match_url = f'https://www.flashscore.com.ua/match/{event_id}/#/match-summary/match-summary'
+            match_url = f'https://www.flashscore.com/match/{event_id}/#/match-summary/match-summary'
             team_1 = game.get("AE", "")
             team_2 = game.get("AF", "")
             timestamp = game.get("AD", "")
@@ -135,8 +135,8 @@ async def get_team_urls(match_url: str) -> dict:
         home_link = json_data['participantsData']['home'][0]['detail_link']
         away_link = json_data['participantsData']['away'][0]['detail_link']
         result_dict = {
-            'home': f'https://www.flashscore.com.ua{home_link}',
-            'away': f'https://www.flashscore.com.ua{away_link}'
+            'home': f'https://www.flashscore.com{home_link}',
+            'away': f'https://www.flashscore.com{away_link}'
         }
 
     return result_dict
@@ -241,7 +241,7 @@ async def get_team_lineup(team_url: str) -> dict:
 
     for player_elem in players_elements:
         player_name = player_elem.get_text(strip=True)
-        player_link = f'https://www.flashscore.com.ua{player_elem.get("href", "")}'
+        player_link = f'https://www.flashscore.com{player_elem.get("href", "")}'
 
         if player_link in seen_links:
             continue

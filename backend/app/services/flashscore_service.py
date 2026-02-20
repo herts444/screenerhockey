@@ -48,7 +48,7 @@ async def get_matches_list(league: str, day_offset: int = 0) -> list:
     # Replace day offset in feed code
     feed = base_feed.replace("_0_", f"_{day_offset}_")
 
-    url = f'https://d.flashscore.ru.com/x/feed/{feed}'
+    url = f'https://2.flashscore.ninja/2/x/feed/{feed}'
 
     async with httpx.AsyncClient() as client:
         response = await client.get(url, headers=HEADERS, timeout=30.0)
@@ -81,7 +81,7 @@ async def get_matches_list(league: str, day_offset: int = 0) -> list:
 
         if 'AA' in keys[0]:
             event_id = game.get("~AA", "")
-            match_url = f'https://www.flashscore.com.ua/match/{event_id}/#/match-summary/match-summary'
+            match_url = f'https://www.flashscore.com/match/{event_id}/#/match-summary/match-summary'
             team_1 = game.get("AE", "")
             team_2 = game.get("AF", "")
 
@@ -122,8 +122,8 @@ async def get_team_urls(match_url: str) -> dict:
         away_link = json_data.get('participantsData', {}).get('away', [{}])[0].get('detail_link', '')
 
         return {
-            'home': f'https://www.flashscore.com.ua{home_link}' if home_link else '',
-            'away': f'https://www.flashscore.com.ua{away_link}' if away_link else ''
+            'home': f'https://www.flashscore.com{home_link}' if home_link else '',
+            'away': f'https://www.flashscore.com{away_link}' if away_link else ''
         }
 
     return {}
@@ -227,7 +227,7 @@ async def get_team_lineup(team_url: str) -> dict:
 
     for player_elem in players_elements:
         player_name = player_elem.get_text(strip=True)
-        player_link = f'https://www.flashscore.com.ua{player_elem.get("href", "")}'
+        player_link = f'https://www.flashscore.com{player_elem.get("href", "")}'
 
         if player_link in seen_links:
             continue

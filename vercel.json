@@ -6,6 +6,8 @@
   "installCommand": "echo 'skip npm install'",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/value-bets", "destination": "/index.html" },
+    { "source": "/lineups", "destination": "/index.html" },
     { "source": "/winners", "destination": "/index.html" }
   ],
   "headers": [
