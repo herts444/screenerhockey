@@ -89,22 +89,22 @@ async def get_player_stats(player_url, player_name, team_name):
     points = 0
     season_name = ''
 
-    try:
-        seasons = json_data.get('careerTables', [{}])[0].get('seasons', [])
-    except (IndexError, KeyError):
-        seasons = []
+    career_tables = json_data.get('careerTables', [])
 
-    for season in seasons:
-        try:
-            if is_in_season(season.get('season_name', '')) and season.get('team_name') == team_name:
-                matches_played = int(season.get('matches_played', 0) or 0)
-                goals = int(season.get('goals', 0) or 0)
-                assists = int(season.get('assists', 0) or 0)
-                points = int(season.get('points', 0) or 0)
-                season_name = season.get('season_name', '')
-                break
-        except (ValueError, TypeError):
-            continue
+    for table in career_tables:
+        for season in table.get('seasons', []):
+            try:
+                if is_in_season(season.get('season_name', '')) and season.get('team_name') == team_name:
+                    matches_played = int(season.get('matches_played', 0) or 0)
+                    goals = int(season.get('goals', 0) or 0)
+                    assists = int(season.get('assists', 0) or 0)
+                    points = int(season.get('points', 0) or 0)
+                    season_name = season.get('season_name', '')
+                    break
+            except (ValueError, TypeError):
+                continue
+        if matches_played > 0:
+            break
 
     efficiency = round(points / matches_played, 2) if matches_played > 0 else 0.0
 
