@@ -3,24 +3,38 @@
 import os
 import json
 import time
-import bcrypt
+import hashlib
+import secrets
 import jwt
 from upstash_redis import Redis
 
 
 def get_redis():
-    return Redis(
-        url=os.environ.get("KV_REST_API_URL", ""),
-        token=os.environ.get("KV_REST_API_TOKEN", ""),
+    url = (
+        os.environ.get("KV_REST_API_URL")
+        or os.environ.get("UPSTASH_REDIS_REST_URL")
+        or ""
     )
+    token = (
+        os.environ.get("KV_REST_API_TOKEN")
+        or os.environ.get("UPSTASH_REDIS_REST_TOKEN")
+        or ""
+    )
+    return Redis(url=url, token=token)
 
 
 def hash_password(password):
-    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+    salt = secrets.token_hex(16)
+    h = hashlib.sha256((salt + password).encode("utf-8")).hexdigest()
+    return f"{salt}${h}"
 
 
 def verify_password(password, password_hash):
-    return bcrypt.checkpw(password.encode("utf-8"), password_hash.encode("utf-8"))
+    try:
+        salt, h = password_hash.split("$", 1)
+        return hashlib.sha256((salt + password).encode("utf-8")).hexdigest() == h
+    except (ValueError, AttributeError):
+        return False
 
 
 def get_jwt_secret():
