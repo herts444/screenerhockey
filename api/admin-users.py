@@ -4,6 +4,8 @@ POST /api/admin/users — Update user role (admin only)
 """
 
 from http.server import BaseHTTPRequestHandler
+import sys, os
+sys.path.insert(0, os.path.dirname(__file__))
 import json
 from auth_helpers import get_redis, get_current_user, send_json, handle_options
 

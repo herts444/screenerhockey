@@ -1,5 +1,7 @@
 """API endpoints for value bet predictions tracking"""
 from http.server import BaseHTTPRequestHandler
+import sys, os
+sys.path.insert(0, os.path.dirname(__file__))
 import json
 import sys
 import os

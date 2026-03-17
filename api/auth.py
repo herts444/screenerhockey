@@ -40,35 +40,12 @@ class handler(BaseHTTPRequestHandler):
         except Exception:
             return None
 
-    def _send_json(self, status, data):
-        self.send_response(status)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.end_headers()
-        self.wfile.write(json.dumps(data, indent=2).encode())
-
     def do_GET(self):
-        action = self._parse_action()
-
-        if action == "debug":
-            info = {"auth_import_error": _auth_error}
-            for mod in ["upstash_redis", "jwt", "hashlib"]:
-                try:
-                    __import__(mod)
-                    info[mod] = "OK"
-                except Exception as e:
-                    info[mod] = str(e)
-            info["KV_REST_API_URL"] = "set" if os.environ.get("KV_REST_API_URL") else "MISSING"
-            info["KV_REST_API_TOKEN"] = "set" if os.environ.get("KV_REST_API_TOKEN") else "MISSING"
-            info["UPSTASH_REDIS_REST_URL"] = "set" if os.environ.get("UPSTASH_REDIS_REST_URL") else "MISSING"
-            info["UPSTASH_REDIS_REST_TOKEN"] = "set" if os.environ.get("UPSTASH_REDIS_REST_TOKEN") else "MISSING"
-            info["JWT_SECRET"] = "set" if os.environ.get("JWT_SECRET") else "MISSING"
-            self._send_json(200, info)
-            return
-
         if _auth_error:
-            self._send_json(500, {"error": "Auth module failed to load", "details": _auth_error})
+            send_json(self, 500, {"error": "Auth module failed", "details": _auth_error})
             return
+
+        action = self._parse_action()
 
         if action == "me":
             user = get_current_user(self.headers)
@@ -81,7 +58,7 @@ class handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         if _auth_error:
-            self._send_json(500, {"error": "Auth module failed to load", "details": _auth_error})
+            send_json(self, 500, {"error": "Auth module failed", "details": _auth_error})
             return
 
         action = self._parse_action()

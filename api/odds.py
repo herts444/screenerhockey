@@ -1,5 +1,7 @@
 """GET /api/odds - Get bookmaker odds from JetTon"""
 from http.server import BaseHTTPRequestHandler
+import sys, os
+sys.path.insert(0, os.path.dirname(__file__))
 import json
 import httpx
 from urllib.parse import urlparse, parse_qs

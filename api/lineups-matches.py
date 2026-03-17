@@ -4,6 +4,8 @@ GET /api/lineups/matches?league=KHL&day=0
 """
 
 from http.server import BaseHTTPRequestHandler
+import sys, os
+sys.path.insert(0, os.path.dirname(__file__))
 import json
 import asyncio
 import httpx

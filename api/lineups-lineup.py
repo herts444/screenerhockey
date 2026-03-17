@@ -5,6 +5,8 @@ GET /api/lineups/lineup?type=team&url=<team_url>    - Get single team
 """
 
 from http.server import BaseHTTPRequestHandler
+import sys, os
+sys.path.insert(0, os.path.dirname(__file__))
 import json
 import re
 import asyncio
