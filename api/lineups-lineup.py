@@ -209,6 +209,13 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         try:
             from urllib.parse import urlparse, parse_qs, unquote
+            from _auth import require_approved, send_json
+
+            user = require_approved(self.headers)
+            if not user:
+                send_json(self, 401, {"error": "Unauthorized"})
+                return
+
             parsed = urlparse(self.path)
             params = parse_qs(parsed.query)
 
@@ -263,8 +270,5 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(error_details, ensure_ascii=False).encode('utf-8'))
 
     def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.end_headers()
+        from _auth import handle_options
+        handle_options(self)

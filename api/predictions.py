@@ -28,6 +28,11 @@ def ensure_db():
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         """Save predictions"""
+        from _auth import require_approved, send_json
+        user = require_approved(self.headers)
+        if not user:
+            send_json(self, 401, {"error": "Unauthorized"})
+            return
         try:
             ensure_db()
             from app.models.database import SessionLocal, ValueBetPrediction
@@ -96,6 +101,11 @@ class handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         """Get prediction history or check results"""
+        from _auth import require_approved, send_json
+        user = require_approved(self.headers)
+        if not user:
+            send_json(self, 401, {"error": "Unauthorized"})
+            return
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
 
@@ -249,8 +259,5 @@ class handler(BaseHTTPRequestHandler):
         }
 
     def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
-        self.end_headers()
+        from _auth import handle_options
+        handle_options(self)

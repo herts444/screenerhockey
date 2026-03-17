@@ -5,9 +5,17 @@
   "framework": "vue",
   "installCommand": "echo 'skip npm install'",
   "rewrites": [
+    { "source": "/api/auth/register", "destination": "/api/auth-register" },
+    { "source": "/api/auth/login", "destination": "/api/auth-login" },
+    { "source": "/api/auth/me", "destination": "/api/auth-me" },
+    { "source": "/api/admin/users", "destination": "/api/admin-users" },
     { "source": "/api/lineups/matches", "destination": "/api/lineups-matches" },
     { "source": "/api/lineups/lineup", "destination": "/api/lineups-lineup" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/register", "destination": "/index.html" },
+    { "source": "/no-access", "destination": "/index.html" },
+    { "source": "/admin", "destination": "/index.html" },
     { "source": "/value-bets", "destination": "/index.html" },
     { "source": "/lineups", "destination": "/index.html" },
     { "source": "/winners", "destination": "/index.html" }
@@ -18,7 +26,7 @@
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "*" },
         { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
       ]
     }
   ],

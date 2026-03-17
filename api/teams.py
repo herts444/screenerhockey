@@ -284,6 +284,13 @@ async def get_teams(league: str):
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
+        from _auth import require_approved, send_json
+
+        user = require_approved(self.headers)
+        if not user:
+            send_json(self, 401, {"error": "Unauthorized"})
+            return
+
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
         league = params.get("league", ["NHL"])[0].upper()
@@ -304,8 +311,5 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({"error": str(e)}).encode())
 
     def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
-        self.end_headers()
+        from _auth import handle_options
+        handle_options(self)

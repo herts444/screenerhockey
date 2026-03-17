@@ -8,6 +8,15 @@ const api = axios.create({
   timeout: 30000
 })
 
+// Attach auth token to all requests
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('auth_token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
 export const hockeyApi = {
   // Get all teams
   async getTeams(league = 'NHL') {
