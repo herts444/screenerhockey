@@ -10,8 +10,12 @@ from http.server import BaseHTTPRequestHandler
 import json
 import re
 import os
+import sys
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs
+
+# Ensure api/ directory is on Python path for shared module imports
+sys.path.insert(0, os.path.dirname(__file__))
 
 _auth_error = None
 try:
