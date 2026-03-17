@@ -3,17 +3,25 @@ Auth endpoint — handles register, login, and me via query param.
 POST /api/auth?action=register
 POST /api/auth?action=login
 GET  /api/auth?action=me
+GET  /api/auth?action=debug  (temporary)
 """
 
 from http.server import BaseHTTPRequestHandler
 import json
 import re
+import os
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs
-from _auth import (
-    get_redis, hash_password, verify_password, create_token,
-    get_current_user, send_json, handle_options,
-)
+
+_auth_error = None
+try:
+    from _auth import (
+        get_redis, hash_password, verify_password, create_token,
+        get_current_user, send_json, handle_options,
+    )
+except Exception as e:
+    import traceback
+    _auth_error = traceback.format_exc()
 
 
 class handler(BaseHTTPRequestHandler):
@@ -28,8 +36,35 @@ class handler(BaseHTTPRequestHandler):
         except Exception:
             return None
 
+    def _send_json(self, status, data):
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+        self.wfile.write(json.dumps(data, indent=2).encode())
+
     def do_GET(self):
         action = self._parse_action()
+
+        if action == "debug":
+            info = {"auth_import_error": _auth_error}
+            for mod in ["upstash_redis", "jwt", "hashlib"]:
+                try:
+                    __import__(mod)
+                    info[mod] = "OK"
+                except Exception as e:
+                    info[mod] = str(e)
+            info["KV_REST_API_URL"] = "set" if os.environ.get("KV_REST_API_URL") else "MISSING"
+            info["KV_REST_API_TOKEN"] = "set" if os.environ.get("KV_REST_API_TOKEN") else "MISSING"
+            info["UPSTASH_REDIS_REST_URL"] = "set" if os.environ.get("UPSTASH_REDIS_REST_URL") else "MISSING"
+            info["UPSTASH_REDIS_REST_TOKEN"] = "set" if os.environ.get("UPSTASH_REDIS_REST_TOKEN") else "MISSING"
+            info["JWT_SECRET"] = "set" if os.environ.get("JWT_SECRET") else "MISSING"
+            self._send_json(200, info)
+            return
+
+        if _auth_error:
+            self._send_json(500, {"error": "Auth module failed to load", "details": _auth_error})
+            return
 
         if action == "me":
             user = get_current_user(self.headers)
@@ -41,6 +76,10 @@ class handler(BaseHTTPRequestHandler):
             send_json(self, 400, {"error": "Unknown action"})
 
     def do_POST(self):
+        if _auth_error:
+            self._send_json(500, {"error": "Auth module failed to load", "details": _auth_error})
+            return
+
         action = self._parse_action()
 
         if action == "register":
