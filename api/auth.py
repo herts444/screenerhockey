@@ -15,7 +15,7 @@ from urllib.parse import urlparse, parse_qs
 
 _auth_error = None
 try:
-    from _auth import (
+    from auth_helpers import (
         get_redis, hash_password, verify_password, create_token,
         get_current_user, send_json, handle_options,
     )

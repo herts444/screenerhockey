@@ -240,7 +240,7 @@ def format_event(event_id: str, event_data: dict, tournaments: dict):
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         import asyncio
-        from _auth import require_approved, send_json
+        from auth_helpers import require_approved, send_json
 
         user = require_approved(self.headers)
         if not user:
@@ -299,5 +299,5 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({"error": str(e)}).encode())
 
     def do_OPTIONS(self):
-        from _auth import handle_options
+        from auth_helpers import handle_options
         handle_options(self)
