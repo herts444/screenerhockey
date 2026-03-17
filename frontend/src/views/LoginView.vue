@@ -1,8 +1,10 @@
 <template>
   <div class="auth-page">
     <div class="auth-card">
-      <h1 class="auth-title">Hockey Screener</h1>
-      <h2 class="auth-subtitle">Вход</h2>
+      <div class="auth-header">
+        <h1>HOCKEY SCREENER</h1>
+        <p>Вход в систему</p>
+      </div>
 
       <form @submit.prevent="handleLogin" class="auth-form">
         <div class="form-group">
@@ -20,7 +22,7 @@
           <input
             v-model="password"
             type="password"
-            placeholder="Минимум 6 символов"
+            placeholder="Введите пароль"
             required
             autocomplete="current-password"
           />
@@ -28,12 +30,12 @@
 
         <div v-if="error" class="auth-error">{{ error }}</div>
 
-        <button type="submit" class="auth-btn" :disabled="loading">
+        <button type="submit" class="btn-primary" :disabled="loading">
           {{ loading ? 'Вход...' : 'Войти' }}
         </button>
       </form>
 
-      <p class="auth-link">
+      <p class="auth-footer">
         Нет аккаунта? <router-link to="/register">Зарегистрироваться</router-link>
       </p>
     </div>
@@ -47,12 +49,7 @@ import { useRouter } from 'vue-router'
 export default {
   name: 'LoginView',
   data() {
-    return {
-      email: '',
-      password: '',
-      error: '',
-      loading: false
-    }
+    return { email: '', password: '', error: '', loading: false }
   },
   setup() {
     const auth = useAuth()
@@ -87,38 +84,40 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0a0e17;
+  background: var(--bg-primary);
   padding: 20px;
 }
 
 .auth-card {
-  background: #141925;
-  border: 1px solid #1e2736;
-  border-radius: 12px;
-  padding: 40px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 48px 40px;
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
 }
 
-.auth-title {
-  color: #4fc3f7;
-  font-size: 24px;
-  text-align: center;
-  margin: 0 0 4px;
+.auth-header {
+  margin-bottom: 32px;
 }
 
-.auth-subtitle {
-  color: #8899aa;
-  font-size: 16px;
-  font-weight: 400;
-  text-align: center;
-  margin: 0 0 28px;
+.auth-header h1 {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin: 0 0 6px;
+}
+
+.auth-header p {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 0;
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .form-group {
@@ -128,68 +127,78 @@ export default {
 }
 
 .form-group label {
-  color: #8899aa;
-  font-size: 13px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form-group input {
-  background: #0d1117;
-  border: 1px solid #1e2736;
-  border-radius: 8px;
-  padding: 10px 14px;
-  color: #e0e0e0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  padding: 10px 12px;
+  color: var(--text-primary);
   font-size: 14px;
+  font-family: inherit;
   outline: none;
   transition: border-color 0.2s;
 }
 
 .form-group input:focus {
-  border-color: #4fc3f7;
+  border-color: var(--text-secondary);
+}
+
+.form-group input::placeholder {
+  color: var(--text-muted);
 }
 
 .auth-error {
-  background: rgba(244, 67, 54, 0.1);
-  border: 1px solid rgba(244, 67, 54, 0.3);
-  color: #f44336;
-  padding: 10px 14px;
-  border-radius: 8px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: var(--accent-red);
+  padding: 10px 12px;
   font-size: 13px;
 }
 
-.auth-btn {
-  background: #4fc3f7;
-  color: #0a0e17;
+.btn-primary {
+  background: var(--text-primary);
+  color: var(--bg-primary);
   border: none;
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 15px;
+  padding: 11px;
+  font-size: 13px;
   font-weight: 600;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   cursor: pointer;
   transition: opacity 0.2s;
 }
 
-.auth-btn:hover:not(:disabled) {
+.btn-primary:hover:not(:disabled) {
   opacity: 0.85;
 }
 
-.auth-btn:disabled {
-  opacity: 0.5;
+.btn-primary:disabled {
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-.auth-link {
+.auth-footer {
   text-align: center;
-  margin-top: 20px;
-  color: #8899aa;
-  font-size: 14px;
+  margin-top: 24px;
+  color: var(--text-muted);
+  font-size: 13px;
 }
 
-.auth-link a {
-  color: #4fc3f7;
+.auth-footer a {
+  color: var(--text-primary);
   text-decoration: none;
+  border-bottom: 1px solid var(--border-light);
+  transition: border-color 0.2s;
 }
 
-.auth-link a:hover {
-  text-decoration: underline;
+.auth-footer a:hover {
+  border-color: var(--text-primary);
 }
 </style>

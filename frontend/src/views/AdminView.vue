@@ -6,23 +6,26 @@
 
     <main class="main-content">
       <div class="admin-container">
-        <h2 class="admin-title">Управление пользователями</h2>
+        <div class="admin-header">
+          <h2>Пользователи</h2>
+          <span class="user-count" v-if="users.length">{{ users.length }}</span>
+        </div>
 
-        <div v-if="loading" class="admin-loading">Загрузка...</div>
-        <div v-else-if="error" class="admin-error">{{ error }}</div>
+        <div v-if="loading" class="admin-status">Загрузка...</div>
+        <div v-else-if="error" class="admin-status error">{{ error }}</div>
 
         <table v-else class="admin-table">
           <thead>
             <tr>
               <th>Email</th>
-              <th>Дата регистрации</th>
+              <th>Дата</th>
               <th>Роль</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="user in users" :key="user.email">
-              <td>{{ user.email }}</td>
-              <td>{{ formatDate(user.created_at) }}</td>
+              <td class="cell-email">{{ user.email }}</td>
+              <td class="cell-date">{{ formatDate(user.created_at) }}</td>
               <td>
                 <select
                   :value="user.role"
@@ -53,11 +56,7 @@ export default {
   name: 'AdminView',
   components: { AppNav },
   data() {
-    return {
-      users: [],
-      loading: true,
-      error: ''
-    }
+    return { users: [], loading: true, error: '' }
   },
   async mounted() {
     await this.loadUsers()
@@ -81,18 +80,15 @@ export default {
         const user = this.users.find(u => u.email === email)
         if (user) user.role = role
       } catch (e) {
-        alert(e.response?.data?.error || 'Ошибка обновления роли')
+        alert(e.response?.data?.error || 'Ошибка')
         await this.loadUsers()
       }
     },
     formatDate(dateStr) {
-      if (!dateStr) return '-'
+      if (!dateStr) return '—'
       try {
-        const d = new Date(dateStr)
-        return d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
-      } catch {
-        return dateStr
-      }
+        return new Date(dateStr).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
+      } catch { return dateStr }
     }
   }
 }
@@ -100,78 +96,106 @@ export default {
 
 <style scoped>
 .admin-container {
-  max-width: 700px;
+  max-width: 640px;
   margin: 0 auto;
   padding: 24px 16px;
 }
 
-.admin-title {
-  color: #e0e0e0;
-  font-size: 20px;
-  margin: 0 0 20px;
+.admin-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-.admin-loading,
-.admin-error {
-  color: #8899aa;
-  padding: 40px;
+.admin-header h2 {
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.user-count {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border: 1px solid var(--border-color);
+}
+
+.admin-status {
+  color: var(--text-muted);
+  font-size: 14px;
+  padding: 40px 0;
   text-align: center;
 }
 
-.admin-error {
-  color: #f44336;
+.admin-status.error {
+  color: var(--accent-red);
 }
 
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  background: #141925;
-  border-radius: 8px;
-  overflow: hidden;
 }
 
 .admin-table th {
-  background: #1a2030;
-  color: #8899aa;
-  font-size: 12px;
+  color: var(--text-muted);
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding: 12px 16px;
+  padding: 10px 12px;
   text-align: left;
-  border-bottom: 1px solid #1e2736;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .admin-table td {
-  padding: 12px 16px;
-  color: #e0e0e0;
-  font-size: 14px;
-  border-bottom: 1px solid #1e2736;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cell-email {
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.cell-date {
+  color: var(--text-muted);
+  font-size: 13px;
 }
 
 .role-select {
-  background: #0d1117;
-  border: 1px solid #1e2736;
-  border-radius: 6px;
-  padding: 6px 10px;
-  color: #e0e0e0;
-  font-size: 13px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 5px 8px;
+  font-size: 12px;
+  font-family: inherit;
   cursor: pointer;
   outline: none;
+  transition: border-color 0.2s;
+}
+
+.role-select:hover {
+  border-color: var(--text-muted);
 }
 
 .role-select.role-admin {
-  border-color: #4fc3f7;
-  color: #4fc3f7;
+  color: var(--text-primary);
+  border-color: var(--text-muted);
 }
 
 .role-select.role-approved {
-  border-color: #4caf50;
-  color: #4caf50;
+  color: var(--accent-green);
+  border-color: rgba(16, 185, 129, 0.3);
 }
 
 .role-select.role-pending {
-  border-color: #f4a623;
-  color: #f4a623;
+  color: var(--accent-yellow);
+  border-color: rgba(245, 158, 11, 0.3);
 }
 </style>
